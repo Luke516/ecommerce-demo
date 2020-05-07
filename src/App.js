@@ -4,9 +4,11 @@ import './App.css';
 import data from './metadata_all.json';
 import Home from './Home'
 
-import { Nav, Navbar, NavDropdown, Form, FormControl, Button, SplitButton, Dropdown, Badge } from 'react-bootstrap';
+import { withCookies, Cookies } from 'react-cookie';
+import { Nav, Navbar, NavDropdown, Form, FormControl, Button, SplitButton, Dropdown, Badge,
+  OverlayTrigger, Popover, ListGroup, InputGroup, Modal} from 'react-bootstrap';
 
-export default class App extends React.Component {
+class App extends React.Component {
 
   getInitState() {
 
@@ -14,11 +16,17 @@ export default class App extends React.Component {
 
   constructor(props) {
     super(props);
+    const { cookies } = props;
+    console.log(cookies.get('products'))
     this.state = {
-      navbarToggle: false
+      navbarToggle: false,
+      showLogin: false,
+      productsInCart: cookies.get('products')? cookies.get('products') : []
     };
-
+    this.addProductToCart = this.addProductToCart.bind(this);
+    this.clearCart = this.clearCart.bind(this);
     this.handleNavbarToggle = this.handleNavbarToggle.bind(this);
+    this.closeDialog = this.closeDialog.bind(this)
     console.log(data)
   }
 
@@ -42,9 +50,35 @@ export default class App extends React.Component {
               <FormControl type="text" placeholder="Search" className="col-sm-10 mr-sm-2" />
               <Button variant="outline-info">Search</Button>
             </Form>
-            <Nav.Link href="#home">Log In</Nav.Link>
-            <Nav.Link href="#link">Cart <Badge variant="secondary">0</Badge>
-            </Nav.Link>
+            <Nav.Link href="#home" onClick={() => {this.setState({showLogin: true})}}>Log In</Nav.Link>
+            <OverlayTrigger
+              trigger="click"
+              key={'bottom'}
+              placement={'bottom'}
+              overlay={
+                <Popover id={`popover-positioned-${'bottom'}`}>
+                  <ListGroup>
+                  {
+                    this.state.productsInCart.map(product => {
+                        return (<ListGroup.Item>
+                          <strong key={product.id}>{product.name}</strong>
+                        </ListGroup.Item>)
+                      }
+                    )
+                  }
+                  <ListGroup.Item action onClick={this.clearCart}>
+                    Clear All
+                  </ListGroup.Item>
+                  </ListGroup>
+                </Popover>
+              }
+            >
+              <Button variant="">Cart
+                <Badge variant="secondary">{this.state.productsInCart.length}</Badge>
+              </Button>
+            </OverlayTrigger>
+            {/* <Nav.Link href="#link">Cart <Badge variant="secondary">{this.state.productsInCart.length}</Badge>
+            </Nav.Link> */}
           </Navbar.Collapse>
         </Navbar>
         <Navbar bg="light" expand="lg">
@@ -117,7 +151,75 @@ export default class App extends React.Component {
             </Nav>
           </Navbar.Collapse>
         </Navbar>
-        <Home/>
+        {/* <div className="full-window" style={{display: this.state.showLogin? "block": "none"}}>
+            <Form className="login-form">
+                <label htmlFor="basic-url">Username</label>                
+                <InputGroup className="mb-3">
+                    <FormControl
+                    placeholder="Enter username..."
+                    aria-label="username"
+                    aria-describedby="basic-addon"
+                    />
+                </InputGroup>
+                <label htmlFor="basic-url">Password</label>                
+                <InputGroup className="mb-3">
+                    <FormControl
+                    placeholder="Enter password..."
+                    aria-label="password"
+                    aria-describedby="basic-addon2"
+                    />
+                </InputGroup>
+                <img
+                className="d-block"
+                src="captcha.png"
+                alt="First slide"
+                width="440px"
+                />
+                <Button variant="primary" type="submit">
+                    Submit
+                </Button>
+            </Form>
+        </div>   */}
+        <Modal show={this.state.showLogin} onHide={this.closeDialog}>
+          <Modal.Header closeButton>
+            <Modal.Title>Login Your Account</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form >
+              <label htmlFor="basic-url">Username</label>                
+              <InputGroup className="mb-3">
+                  <FormControl
+                  placeholder="Enter username..."
+                  aria-label="username"
+                  aria-describedby="basic-addon"
+                  />
+              </InputGroup>
+              <label htmlFor="basic-url">Password</label>                
+              <InputGroup className="mb-3">
+                  <FormControl
+                  placeholder="Enter password..."
+                  aria-label="password"
+                  aria-describedby="basic-addon2"
+                  />
+              </InputGroup>
+              <img
+              className="d-block"
+              src="captcha.png"
+              alt="First slide"
+              width="440px"
+              />
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.closeDialog}>
+              Cancel
+            </Button>
+            <Button variant="primary" onClick={this.closeDialog}>
+              Login
+            </Button>
+          </Modal.Footer>
+        </Modal>
+        <Home addProductToCart={this.addProductToCart}/>
       </div>
     );
   }
@@ -127,4 +229,29 @@ export default class App extends React.Component {
         navbarToggle: !prevState.navbarToggle
     }));
   }
+
+  addProductToCart(product) {
+    console.log("add to cart:")
+    console.log(product)
+    const { cookies } = this.props;
+    this.state.productsInCart.push(product)
+    cookies.set('products', JSON.stringify(this.state.productsInCart))
+  }
+
+  clearCart() {
+    const { cookies } = this.props;
+    this.setState({
+      productsInCart: []
+    }, ()=>{
+      cookies.set('products', JSON.stringify(this.state.productsInCart))
+    })
+  }
+
+  closeDialog() {
+    this.setState({
+      showLogin: false
+    })
+  }
 }
+
+export default withCookies(App)

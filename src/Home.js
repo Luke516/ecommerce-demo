@@ -3,24 +3,53 @@ import './App.css';
 import data from './metadata_all.json';
 
 import { Container, Row, Col, Carousel, Button, Card, CardDeck, InputGroup, Form, FormControl } from 'react-bootstrap';
+import ProductCell from './ProductCell'
 
 export default class Home extends React.Component {
 
+    getRandomProduct(data) {
+        let obj_keys = Object.keys(data);
+        let ran_key = obj_keys[Math.floor(Math.random() *obj_keys.length)];
+        let selected_object = data[ran_key];
+        if(selected_object.hasOwnProperty('name')){
+            selected_object['id'] = ran_key
+            selected_object['category'] = []
+            return selected_object
+        }
+        else {
+            let return_object = this.getRandomProduct(selected_object)
+            return_object['category'].unshift(ran_key)
+            return return_object
+        }
+    }
+
     getInitState() {
-  
+        let list1 = []
+        let list2 = []
+        for(let i=0; i<10; i++){
+            list1.push(this.getRandomProduct(data))
+        }
+        for(let i=0; i<10; i++){
+            list2.push(this.getRandomProduct(data))
+        }
+        // console.log(this.getRandomProduct(data))
+        // console.log(this.getRandomProduct(data))
+        return {
+            list1,
+            list2
+        }
     }
   
     constructor(props) {
       super(props);
-      this.state = {
-        
-      };
-  
+      this.getInitState = this.getInitState.bind(this);
+      this.getRandomProduct = this.getRandomProduct.bind(this)
+      this.state = this.getInitState()
     }
   
     render (){
       return (
-        <>
+        <Container>
         <Row className="my-4">
             <Col >
                 <Carousel>
@@ -50,104 +79,15 @@ export default class Home extends React.Component {
             <hr/>
         </Row>
         <Row className="ml-4 mt-2">
-            <CardDeck>
-                <Card style={{ width: '18rem', padding: '1rem' }}>
-                    <Card.Img fluid variant="top" height="300px" src="https://youcaptcha.s3-us-west-2.amazonaws.com/seed/Men's+Fashion/Clothing/Jackets+%26+Coats/B07HF4ZQRT.jpg" />
-                    <Card.Body>
-                        <Card.Title>Card Title</Card.Title>
-                        {/* <Card.Text>
-                        Some quick example text to build on the card title and make up the bulk of
-                        the card's content.
-                        </Card.Text> */}
-                        <Button variant="warning" className="my-1">Product Detail</Button>
-                        <br />
-                        <Button variant="info">Add To Cart</Button>
-                    </Card.Body>
-                </Card>
-                <Card style={{ width: '18rem', padding: '1rem' }}>
-                    <Card.Img variant="top" height="300px" src="https://youcaptcha.s3-us-west-2.amazonaws.com/seed/Men's+Fashion/Clothing/Jackets+%26+Coats/B014JOPIUY.jpg" />
-                    <Card.Body>
-                        <Card.Title>Card Title</Card.Title>
-                        {/* <Card.Text>
-                        Some quick example text to build on the card title and make up the bulk of
-                        the card's content.
-                        </Card.Text> */}
-                        <Button variant="warning" className="my-1">Product Detail</Button>
-                        <br />
-                        <Button variant="info">Add To Cart</Button>
-                    </Card.Body>
-                </Card>
-                <Card style={{ width: '18rem', padding: '1rem' }}>
-                    <Card.Img variant="top" height="300px" src="https://youcaptcha.s3-us-west-2.amazonaws.com/seed/Men's+Fashion/Clothing/Jackets+%26+Coats/B07539S9G3.jpg" />
-                    <Card.Body>
-                        <Card.Title>Card Title</Card.Title>
-                        {/* <Card.Text>
-                        Some quick example text to build on the card title and make up the bulk of
-                        the card's content.
-                        </Card.Text> */}
-                        <Button variant="warning" className="my-1">Product Detail</Button>
-                        <br />
-                        <Button variant="info">Add To Cart</Button>
-                    </Card.Body>
-                </Card>
-                <Card style={{ width: '18rem', padding: '1rem' }}>
-                    <Card.Img variant="top" height="300px" src="https://youcaptcha.s3-us-west-2.amazonaws.com/seed/Men's+Fashion/Clothing/Jackets+%26+Coats/B07FKDHBRX.jpg" />
-                    <Card.Body>
-                        <Card.Title>Card Title</Card.Title>
-                        {/* <Card.Text>
-                        Some quick example text to build on the card title and make up the bulk of
-                        the card's content.
-                        </Card.Text> */}
-                        <Button variant="warning" className="my-1">Product Detail</Button>
-                        <br />
-                        <Button variant="info">Add To Cart</Button>
-                    </Card.Body>
-                </Card>
-                <Card style={{ width: '18rem', padding: '1rem' }}>
-                    <Card.Img variant="top" height="300px" src="https://youcaptcha.s3-us-west-2.amazonaws.com/seed/Men's+Fashion/Clothing/Jackets+%26+Coats/B07G4W6GS6.jpg" />
-                    <Card.Body>
-                        <Card.Title>Card Title</Card.Title>
-                        {/* <Card.Text>
-                        Some quick example text to build on the card title and make up the bulk of
-                        the card's content.
-                        </Card.Text> */}
-                        <Button variant="warning" className="my-1">Product Detail</Button>
-                        <br />
-                        <Button variant="info">Add To Cart</Button>
-                    </Card.Body>
-                </Card>
-            </CardDeck>
+            {/* <CardDeck> */}
+                {
+                    this.state.list1.map(element => {
+                        return <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart}/>
+                    })
+                }
+            {/* </CardDeck> */}
         </Row>
-        <div>
-            <Form>
-                <label htmlFor="basic-url">Username</label>                
-                <InputGroup className="mb-3">
-                    <FormControl
-                    placeholder="Enter username..."
-                    aria-label="username"
-                    aria-describedby="basic-addon"
-                    />
-                </InputGroup>
-                <label htmlFor="basic-url">Password</label>                
-                <InputGroup className="mb-3">
-                    <FormControl
-                    placeholder="Enter password..."
-                    aria-label="password"
-                    aria-describedby="basic-addon2"
-                    />
-                </InputGroup>
-                <img
-                className="d-block"
-                src="captcha.png"
-                alt="First slide"
-                width="440px"
-                />
-                <Button variant="primary" type="submit">
-                    Submit
-                </Button>
-            </Form>
-        </div>  
-        </>
+        </Container>
       );
     }
   }
