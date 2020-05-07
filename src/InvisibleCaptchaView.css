@@ -1,0 +1,110 @@
+.youcaptcha-checkbox-container {
+    margin-right: 10px;
+    margin-left: 20px;
+    border-radius: 2px;
+    background-color: #fff;
+    border: 2px solid #c1c1c1;
+    font-size: 1px;
+    height: 32px;
+    width: 32px;
+    z-index: 1;
+}
+
+.youcaptcha-checkbox {
+    margin-right: 10px;
+    margin-left: 20px;
+    border-radius: 2px;
+    background-color: #fff;
+    border: 2px solid #c1c1c1;
+    font-size: 1px;
+    height: 32px;
+    width: 32px;
+    z-index: 1;
+}
+
+.youcaptcha-spinner {
+    margin-right: 10px;
+    margin-left: 20px;
+    height: 32px;
+    width: 32px;
+    z-index: 1;
+}
+
+.small-text {
+    font-size: 8px;
+}
+
+.checkbox-container {
+    display: flex;
+    min-width: 32px;
+    min-height: 32px;
+}
+
+.checkbox-container > svg {
+    position: absolute;
+    display: inline-block;
+    margin-top: -15px;
+    margin-left: 10px;
+    width: 60px;
+    height: 60px;
+    z-index: 100;
+}
+
+.youcaptcha-hide {
+    /* display: none !important; */
+    visibility: hidden;
+}
+
+.sponser {
+    display: flex;
+    margin-right: 1rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.sponser > div {
+    min-width: 40px;
+    min-height: 40px;
+}
+
+.sponser > div > img {
+    position: absolute;
+    display: block;
+    opacity: 1;
+    margin: 0;
+    margin-left: 5px;
+}
+
+  
+.slide2 {
+    animation: slideAnimation2 1s forwards;
+    animation-delay: 1s;
+}
+
+@keyframes slideAnimation2 {
+    0% {
+        margin-left: 5px;
+      }
+      100% {
+        margin-left: 5px;
+      }
+}
+
+.slideFade2 {
+    animation: slideFadeAnimation2 1s forwards;
+    animation-delay: 1s;
+}
+
+@keyframes slideFadeAnimation2 {
+    0% {
+        margin-left: 5px;
+        opacity: 1;
+    }
+    100% {
+        margin-left: 5px;
+        opacity: 0;
+    }
+}
+
+

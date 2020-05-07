@@ -1,12 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ApolloClient, { InMemoryCache } from 'apollo-boost';
+import { ApolloProvider, Query, Mutation, useQuery } from 'react-apollo';
+
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.css';
 
+const client = new ApolloClient({
+  uri: 'http://140.114.85.27:4000',
+});
+
+
 ReactDOM.render(
-    <App />,
+  <ApolloProvider client={client}>
+    <App />
+  </ApolloProvider>,
   document.getElementById('root')
 );
 

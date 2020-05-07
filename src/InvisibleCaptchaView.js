@@ -1,0 +1,84 @@
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { Container, Row, Col, Button, Spinner } from 'react-bootstrap';
+import { useQuery } from 'react-apollo';
+import { gql } from "apollo-boost";
+import './InvisibleCaptchaView.css';
+
+const GET_CAPTCHAS = gql`
+  query Captchas {
+    captcha {
+      question,
+      candidates
+    }
+  }
+`;
+
+function InvisibleCaptchaView(props) {
+    const [checkAnimation, setCheckAnimation] = useState(false);
+
+    const { loading, error, data } = useQuery(GET_CAPTCHAS);
+
+    let width = "120px";
+    let height = "120px";
+    
+    if(loading){
+        return(
+            <div>
+                loading...
+            </div>
+        )
+    }
+    if(error){
+        return(
+            <div>
+                error...
+            </div>
+        )
+    }
+    return (
+        <>
+        <Row className="mt-3 captcha-row justify-content-between align-items-center">
+            <div className="checkbox-container">
+                {checkAnimation?
+                <Spinner className="youcaptcha-spinner" animation="border" role="status" variant="success">
+                    <span className="sr-only">Loading...</span>
+                </Spinner>:
+                <div className="youcaptcha-checkbox"
+                    // onClick={this.props.toggleCaptcha}
+                    onClick={() => {
+                        setCheckAnimation(true); 
+                        setTimeout(() => {
+                            props.toggleCaptcha();
+                        }, 1000);
+                    }/*this.props.checkCaptcha*/}
+                    style={{display: /*this.props.captcha.success? "none": */"block"}}
+                    aria-controls="captchaBody"
+                    aria-expanded={false/*this.props.captcha.start*/}
+                />
+                }
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" style={{display: /*this.props.captcha.success? "inline-block":*/ "none"}}>
+                    {/* <circle className="path circle" fill="none" stroke="#73AF55" strokeWidth="6" strokeMiterlimit="10" cx="65.1" cy="65.1" r="62.1"/> */}
+                    {/* <polyline className={this.props.captcha.success? "path check" : ""} fill="none" stroke="#73AF55" strokeWidth="10" strokeLinecap="round" strokeMiterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/> */}
+                </svg>
+            </div>
+            <span>I'm not a robot</span>
+            <div className="sponser">
+                {/* <span className="small-text">YouCaptcha</span> */}
+                {/* <img src={icon} width="40px" height="40px"/> */}
+                <span className="small-text" style={{color:"gray", marginLeft:"5px"}}>sponser</span>
+                <div>
+                    <img className={/*this.props.captcha.success? "" :*/ ""} src={data.captcha.question} width="40px" height="40px"/> 
+                    <img className={/*this.props.captcha.success? "slideFade2" :*/ ""} src={data.captcha.question} width="40px" height="40px"/>
+                </div>
+                <span className="small-text" style={{visibility: "hidden"}}>Sponser</span>
+            </div>
+        </Row>
+        <Row className="mb-2 captcha-row">
+            <span className="small-text"><a href="#">Privacy</a> - <a href="#">Terms</a></span>
+        </Row>
+        </>
+    );
+}
+
+export default InvisibleCaptchaView;

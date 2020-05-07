@@ -1,11 +1,10 @@
 import React from 'react';
 import './App.css';
-import data from './metadata_all.json';
 
 import { Container, Row, Col, Carousel, Button, Card, CardDeck, InputGroup, Form, FormControl } from 'react-bootstrap';
 import ProductCell from './ProductCell'
 
-export default class Home extends React.Component {
+export default class Category extends React.Component {
 
     getRandomProduct(data) {
         let obj_keys = Object.keys(data);
@@ -34,10 +33,14 @@ export default class Home extends React.Component {
         let list1 = []
         let list2 = []
         for(let i=0; i<12; i++){
-            list1.push(this.getRandomProduct(data))
+            let product = this.getRandomProduct(this.props.data)
+            product['category'].unshift(this.props.name)
+            list1.push(product)
         }
         for(let i=0; i<12; i++){
-            list2.push(this.getRandomProduct(data))
+            let product = this.getRandomProduct(this.props.data)
+            product['category'].unshift(this.props.name)
+            list2.push(product)
         }
         // console.log(this.getRandomProduct(data))
         // console.log(this.getRandomProduct(data))
@@ -57,32 +60,8 @@ export default class Home extends React.Component {
     render (){
       return (
         <Container>
-        <Row className="my-4">
-            <Col >
-                <Carousel>
-                    <Carousel.Item>
-                        <Row className="mt-2 justify-content-center">
-                            <Col sm={3}>
-                                <img
-                                className="d-block"
-                                src="https://youcaptcha.s3-us-west-2.amazonaws.com/seed/Men's+Fashion/Clothing/Jackets+%26+Coats/B0007P21QY.jpg"
-                                alt="First slide"
-                                height="320px"
-                                />
-                            </Col>
-                            <Col sm={5} className="d-flex flex-column text-center justify-content-center">
-                                <h3>Marmot PreCip Men's Lightweight Waterproof Rain Jacket</h3>
-                                <div className="d-flex flex-row justify-content-center">
-                                    <Button variant="info" size="lg" className="w-50">Check It Out</Button>
-                                </div>
-                            </Col>
-                        </Row>
-                    </Carousel.Item>
-                </Carousel>
-            </Col>
-        </Row>
         <Row>
-            <h3 className="ml-4 mt-4">Best Sellers</h3>
+            <h3 className="ml-4 mt-4">{this.props.name}</h3>
             <hr/>
         </Row>
         <Row className="ml-4 mt-2">
