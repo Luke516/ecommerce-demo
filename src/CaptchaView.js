@@ -5,8 +5,8 @@ import { gql } from "apollo-boost";
 import './CaptchaView.css';
 
 const GET_CAPTCHAS = gql`
-  query Captchas {
-    captcha {
+  query Captchas($id: Int!) {
+    targetCaptcha(id: $id) {
       id,
       question,
       candidates
@@ -15,7 +15,15 @@ const GET_CAPTCHAS = gql`
 `;
 
 function CaptchaView(props) {
-    const { loading, error, data, refetch} = useQuery(GET_CAPTCHAS);
+    // const { loading, error, data, refetch} = useQuery(GET_CAPTCHAS);
+    const { loading, error, data, refetch } = useQuery(
+        GET_CAPTCHAS,{
+          variables: {
+            id: props.captchaId,
+          },
+          errorPolicy: 'all'
+        }
+    );
     const [selected, setSelected] = useState([false, false, false, false, false, false, false, false, false]);
     const [captchaUrls, setCaptchaUrls] = useState(["","","","","","","","","",""]);
 
@@ -34,7 +42,7 @@ function CaptchaView(props) {
                 selectedIds.push(i);
             }
         }
-        props.verifyCaptcha(data.captcha.id, selectedIds);
+        props.verifyCaptcha(data.targetCaptcha.id, selectedIds);
     }
   
     let width = "120px";
@@ -56,19 +64,19 @@ function CaptchaView(props) {
     return (
         <div id="captchaBody">
         <Row className="captcha-row">
-            <img id="captcha1" className={selected[0]? "selected youcaptcha-img": "youcaptcha-img"} src={data.captcha.candidates[0]} onClick={() => {toggleSelection(0)}/*this.props.selectCaptcha(1)*/}/>
-            <img id="captcha2" className={selected[1]? "selected youcaptcha-img": "youcaptcha-img"} src={data.captcha.candidates[1]} onClick={() => {toggleSelection(1)}/*this.props.selectCaptcha(2)*/}/>
-            <img id="captcha3" className={selected[2]? "selected youcaptcha-img": "youcaptcha-img"} src={data.captcha.candidates[2]} onClick={() => {toggleSelection(2)}/*this.props.selectCaptcha(3)*/}/>
+            <img id="captcha1" className={selected[0]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[0]} onClick={() => {toggleSelection(0)}/*this.props.selectCaptcha(1)*/}/>
+            <img id="captcha2" className={selected[1]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[1]} onClick={() => {toggleSelection(1)}/*this.props.selectCaptcha(2)*/}/>
+            <img id="captcha3" className={selected[2]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[2]} onClick={() => {toggleSelection(2)}/*this.props.selectCaptcha(3)*/}/>
         </Row>
         <Row className="captcha-row">
-            <img id="captcha4" className={selected[3]? "selected youcaptcha-img": "youcaptcha-img"} src={data.captcha.candidates[3]} onClick={() => {toggleSelection(3)}/*this.props.selectCaptcha(4)*/}/>
-            <img id="captcha5" className={selected[4]? "selected youcaptcha-img": "youcaptcha-img"} src={data.captcha.candidates[4]} onClick={() => {toggleSelection(4)}/*this.props.selectCaptcha(5)*/}/>
-            <img id="captcha6" className={selected[5]? "selected youcaptcha-img": "youcaptcha-img"} src={data.captcha.candidates[5]} onClick={() => {toggleSelection(5)}/*this.props.selectCaptcha(6)*/}/>
+            <img id="captcha4" className={selected[3]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[3]} onClick={() => {toggleSelection(3)}/*this.props.selectCaptcha(4)*/}/>
+            <img id="captcha5" className={selected[4]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[4]} onClick={() => {toggleSelection(4)}/*this.props.selectCaptcha(5)*/}/>
+            <img id="captcha6" className={selected[5]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[5]} onClick={() => {toggleSelection(5)}/*this.props.selectCaptcha(6)*/}/>
         </Row>
         <Row className="captcha-row">
-            <img id="captcha7" className={selected[6]? "selected youcaptcha-img": "youcaptcha-img"} src={data.captcha.candidates[6]} onClick={() => {toggleSelection(6)}/*this.props.selectCaptcha(7)*/}/>
-            <img id="captcha8" className={selected[7]? "selected youcaptcha-img": "youcaptcha-img"} src={data.captcha.candidates[7]} onClick={() => {toggleSelection(7)}/*this.props.selectCaptcha(8)*/}/>
-            <img id="captcha9" className={selected[8]? "selected youcaptcha-img": "youcaptcha-img"} src={data.captcha.candidates[8]} onClick={() => {toggleSelection(8)}/*this.props.selectCaptcha(9)*/}/>
+            <img id="captcha7" className={selected[6]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[6]} onClick={() => {toggleSelection(6)}/*this.props.selectCaptcha(7)*/}/>
+            <img id="captcha8" className={selected[7]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[7]} onClick={() => {toggleSelection(7)}/*this.props.selectCaptcha(8)*/}/>
+            <img id="captcha9" className={selected[8]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[8]} onClick={() => {toggleSelection(8)}/*this.props.selectCaptcha(9)*/}/>
         </Row>
         <Row className="captcha-row ending align-items-center">
             <div className="ml-2 text-muted cell" onClick={() => {refetch(0)}/*this.props.getCaptcha*/}>

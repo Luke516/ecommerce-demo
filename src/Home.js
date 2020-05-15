@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import data from './metadata_all.json';
+import productIdToPath from './productIdToPath.json'
 
 import { Container, Row, Col, Carousel, Button, Card, CardDeck, InputGroup, Form, FormControl } from 'react-bootstrap';
 import ProductCell from './ProductCell'
@@ -39,9 +40,11 @@ export default class Home extends React.Component {
         for(let i=0; i<12; i++){
             list2.push(this.getRandomProduct(data))
         }
-        // console.log(this.getRandomProduct(data))
-        // console.log(this.getRandomProduct(data))
+        
+        let targetPath = productIdToPath[this.props.targetProductId];
+        console.log(targetPath)
         return {
+            targetPath,
             list1,
             list2
         }
@@ -62,10 +65,10 @@ export default class Home extends React.Component {
                 <Carousel>
                     <Carousel.Item>
                         <Row className="mt-2 justify-content-center">
-                            <Col sm={3}>
+                            <Col sm={4}>
                                 <img
                                 className="d-block"
-                                src="https://youcaptcha.s3-us-west-2.amazonaws.com/seed/Men's+Fashion/Clothing/Jackets+%26+Coats/B0007P21QY.jpg"
+                                src={"https://youcaptcha.s3-us-west-2.amazonaws.com/seed/" + this.state.targetPath}
                                 alt="First slide"
                                 height="320px"
                                 />

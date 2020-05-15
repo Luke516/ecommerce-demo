@@ -7,8 +7,8 @@ import './CaptchaView.css';
 import './CaptchaHeaderView.css'
 
 const GET_CAPTCHAS = gql`
-  query Captchas {
-    captcha {
+  query Captchas($id: Int!) {
+    targetCaptcha(id: $id) {
       id,
       question,
       candidates
@@ -19,7 +19,15 @@ const GET_CAPTCHAS = gql`
 function CaptchaHeaderView(props) {
     const [showAd, setShowAd] = useState(false);
 
-    const { loading, error, data } = useQuery(GET_CAPTCHAS);
+    // const { loading, error, data } = useQuery(GET_CAPTCHAS);
+    const { loading, error, data, refetch } = useQuery(
+        GET_CAPTCHAS,{
+          variables: {
+            id: props.captchaId,
+          },
+          errorPolicy: 'all'
+        }
+    );
 
     useEffect(() => {
         if(props.success && !showAd){
@@ -41,7 +49,7 @@ function CaptchaHeaderView(props) {
         <Row className="title captcha-row">
             <div className="youcaptcha-image-container" style={{width: showAd? "260px": "130px"}}>
                 <img className={props.success? "slide youcaptcha-img" : "youcaptcha-hide"} src={props.result.origin} />
-                <img className={props.success? "slideFade youcaptcha-img" : "youcaptcha-img"} src={loading? "": data.captcha.question} />
+                <img className={props.success? "slideFade youcaptcha-img" : "youcaptcha-img"} src={loading? "": data.targetCaptcha.question} />
                 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" style={{display: props.success? "inline-block": "none"}}>
                     <polyline className={props.success? "path check" : ""} fill="none" stroke="#73AF55" strokeWidth="10" strokeLinecap="round" strokeMiterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
                 </svg> 

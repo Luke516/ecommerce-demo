@@ -21,7 +21,7 @@ const GET_CAPTCHAS = gql`
 function YouCaptchaApp(props) {
   const [showCaptcha, setShowCaptcha] = useState(false);
   const [startCaptcha, setStartCaptcha] = useState(false);
-  const [captchaId, setCaptchaId] = useState(0);
+  const [captchaId, setCaptchaId] = useState(props.captchaId);
   const [captchaAnswer, setCaptchaAnswer] = useState([]);
   const defaultResult = {
     status: "incorrect",
@@ -92,9 +92,9 @@ function YouCaptchaApp(props) {
         </a>
       </header> */}
       <Container id="demo" className="device px-4" style={{display: "block"}}>
-        <HeaderView toggleCaptcha={toggleCaptcha} showCaptcha={startCaptcha} result={loading? defaultResult: data.result}/>
+        <HeaderView captchaId={props.captchaId} toggleCaptcha={toggleCaptcha} showCaptcha={startCaptcha} result={loading? defaultResult: data.result}/>
         <Collapse in={showCaptcha}>
-          <div><CaptchaView verifyCaptcha={verifyCaptcha}/></div>
+          <div><CaptchaView captchaId={props.captchaId} verifyCaptcha={verifyCaptcha}/></div>
         </Collapse>
       </Container>
     </div>

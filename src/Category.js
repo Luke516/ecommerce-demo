@@ -1,10 +1,12 @@
 import React from 'react';
 import './App.css';
 
+import queryString from 'query-string';
 import { Container, Row, Col, Carousel, Button, Card, CardDeck, InputGroup, Form, FormControl } from 'react-bootstrap';
 import ProductCell from './ProductCell'
+import ProductRow from './ProductRow'
 
-export default class Category extends React.Component {
+class Category extends React.Component {
 
     getRandomProduct(data) {
         let obj_keys = Object.keys(data);
@@ -29,56 +31,77 @@ export default class Category extends React.Component {
         }
     }
 
+    getAllSubCategoryData(data) {
+        let obj_keys = Object.keys(data);
+        let allSubCategoryData = []
+        for(let key of obj_keys){
+            let selected_data = data[key];
+            if (typeof selected_data == "undefined"){
+            }
+            else if(!selected_data.hasOwnProperty('name')){
+                allSubCategoryData.push({
+                    displayName: key,
+                    name: this.props.name + '/' +key,
+                    data: selected_data
+                })
+            }
+        }
+        return allSubCategoryData
+    }
+
     getInitState() {
-        let list1 = []
-        let list2 = []
-        for(let i=0; i<12; i++){
-            let product = this.getRandomProduct(this.props.data)
-            product['category'].unshift(this.props.name)
-            list1.push(product)
-        }
-        for(let i=0; i<12; i++){
-            let product = this.getRandomProduct(this.props.data)
-            product['category'].unshift(this.props.name)
-            list2.push(product)
-        }
-        // console.log(this.getRandomProduct(data))
-        // console.log(this.getRandomProduct(data))
+        let subCategoryList = this.getAllSubCategoryData(this.props.data);
         return {
-            list1,
-            list2
+            subCategoryList
         }
     }
   
     constructor(props) {
       super(props);
+      let params = queryString.parse(this.props.location.search)
+      console.log(params)
       this.getInitState = this.getInitState.bind(this);
       this.getRandomProduct = this.getRandomProduct.bind(this)
-      this.state = this.getInitState()
+      this.getAllSubCategoryData = this.getAllSubCategoryData.bind(this)
+      this.state = {
+        ...this.getInitState(),
+        subCategory: params.subCategory
+      }
     }
   
     render (){
-      return (
-        <Container>
-        <Row>
-            <h3 className="ml-4 mt-4">{this.props.name}</h3>
-            <hr/>
-        </Row>
-        <Row className="ml-4 mt-2">
-            {
-                this.state.list1.map(element => {
-                    return <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart}/>
-                })
+        if(!this.state.subCategory){
+            return (
+                <Container>
+                <Row>
+                    <h2 className="ml-4 mt-4">{this.props.name}</h2>
+                    <hr/>
+                </Row>
+                {
+                    this.state.subCategoryList.map(subCategoryData => {
+                        return <ProductRow key={subCategoryData.name} name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart}/>
+                    })
+                }
+                </Container>
+            );
+        }else{
+            for(let subCategoryData of this.state.subCategoryList){
+                // console.log(subCategoryData.name)
+                // console.log(this.props.name + '/' + this.state.subCategory)
+                if(subCategoryData.name.includes(this.props.name + '/' + this.state.subCategory)){
+                    return(
+                        <Container>
+                            <Row>
+                                <h2 className="ml-4 mt-4">{this.props.name}</h2>
+                                <hr/>
+                            </Row>
+                            <ProductRow key={subCategoryData.name} name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart}/>
+                        </Container>
+                    )
+                }
             }
-        </Row>
-        <Row className="ml-4 mt-2">
-            {
-                this.state.list2.map(element => {
-                    return <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart}/>
-                })
-            }
-        </Row>
-        </Container>
-      );
+        }
     }
-  }
+}
+
+export default Category;

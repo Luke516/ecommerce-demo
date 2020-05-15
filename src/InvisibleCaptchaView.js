@@ -6,8 +6,9 @@ import { gql } from "apollo-boost";
 import './InvisibleCaptchaView.css';
 
 const GET_CAPTCHAS = gql`
-  query Captchas {
-    captcha {
+  query Captchas($id: Int!) {
+    targetCaptcha(id: $id) {
+      id,
       question,
       candidates
     }
@@ -17,7 +18,15 @@ const GET_CAPTCHAS = gql`
 function InvisibleCaptchaView(props) {
     const [checkAnimation, setCheckAnimation] = useState(false);
 
-    const { loading, error, data } = useQuery(GET_CAPTCHAS);
+    // const { loading, error, data } = useQuery(GET_CAPTCHAS);
+    const { loading, error, data, refetch } = useQuery(
+        GET_CAPTCHAS,{
+          variables: {
+            id: props.captchaId,
+          },
+          errorPolicy: 'all'
+        }
+    );
 
     let width = "120px";
     let height = "120px";
@@ -68,8 +77,8 @@ function InvisibleCaptchaView(props) {
                 {/* <img src={icon} width="40px" height="40px"/> */}
                 <span className="small-text" style={{color:"gray", marginLeft:"5px"}}>sponser</span>
                 <div>
-                    <img className={/*this.props.captcha.success? "" :*/ ""} src={data.captcha.question} width="40px" height="40px"/> 
-                    <img className={/*this.props.captcha.success? "slideFade2" :*/ ""} src={data.captcha.question} width="40px" height="40px"/>
+                    <img className={/*this.props.captcha.success? "" :*/ ""} src={data.targetCaptcha.question} width="40px" height="40px"/> 
+                    <img className={/*this.props.captcha.success? "slideFade2" :*/ ""} src={data.targetCaptcha.question} width="40px" height="40px"/>
                 </div>
                 <span className="small-text" style={{visibility: "hidden"}}>Sponser</span>
             </div>
