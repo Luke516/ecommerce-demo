@@ -10,6 +10,19 @@ export default class ProductRow extends React.Component {
         let obj_keys = Object.keys(data);
         let ran_key = obj_keys[Math.floor(Math.random() *obj_keys.length)];
         let selected_object = data[ran_key];
+        for(let i=0; i<100; i++){
+            if(typeof selected_object == "undefined"){
+                ran_key = obj_keys[Math.floor(Math.random() *obj_keys.length)];
+                selected_object = data[ran_key];
+            }
+            else if (Object.keys(selected_object).length < 1){
+                ran_key = obj_keys[Math.floor(Math.random() *obj_keys.length)];
+                selected_object = data[ran_key];
+            }
+            else{
+                break;
+            }
+        }
         if (typeof selected_object == "undefined"){
             return {
                 id: '',
@@ -63,7 +76,7 @@ export default class ProductRow extends React.Component {
         <Row className="ml-4 mt-2">
             {
                 this.state.list1.map(element => {
-                    return <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart}/>
+                    return <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
                 })
             }
         </Row>

@@ -12,6 +12,19 @@ class Category extends React.Component {
         let obj_keys = Object.keys(data);
         let ran_key = obj_keys[Math.floor(Math.random() *obj_keys.length)];
         let selected_object = data[ran_key];
+        for(let i=0; i<100; i++){
+            if(typeof selected_object == "undefined"){
+                ran_key = obj_keys[Math.floor(Math.random() *obj_keys.length)];
+                selected_object = data[ran_key];
+            }
+            else if (Object.keys(selected_object).length < 1){
+                ran_key = obj_keys[Math.floor(Math.random() *obj_keys.length)];
+                selected_object = data[ran_key];
+            }
+            else{
+                break;
+            }
+        }
         if (typeof selected_object == "undefined"){
             return {
                 id: '',
@@ -79,7 +92,7 @@ class Category extends React.Component {
                 </Row>
                 {
                     this.state.subCategoryList.map(subCategoryData => {
-                        return <ProductRow key={subCategoryData.name} name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart}/>
+                        return <ProductRow key={subCategoryData.name} name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
                     })
                 }
                 </Container>
@@ -95,7 +108,7 @@ class Category extends React.Component {
                                 <h2 className="ml-4 mt-4">{this.props.name}</h2>
                                 <hr/>
                             </Row>
-                            <ProductRow key={subCategoryData.name} name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart}/>
+                            <ProductRow key={subCategoryData.name} name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
                         </Container>
                     )
                 }

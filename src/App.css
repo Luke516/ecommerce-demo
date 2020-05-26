@@ -17,6 +17,13 @@
   border-radius: 1rem;
 }
 
+.modal-90w {
+  width: 60%;
+  max-width: 70% !important;
+  height: 90%;
+  max-height: 90% !important;
+}
+
 .App {
   text-align: center;
 }

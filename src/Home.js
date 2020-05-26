@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import data from './metadata_all.json';
+import data from './metadata_all_with_detail_img_2_empty.json';
 import productIdToPath from './productIdToPath.json'
 
 import { Container, Row, Col, Carousel, Button, Card, CardDeck, InputGroup, Form, FormControl } from 'react-bootstrap';
@@ -12,6 +12,19 @@ export default class Home extends React.Component {
         let obj_keys = Object.keys(data);
         let ran_key = obj_keys[Math.floor(Math.random() *obj_keys.length)];
         let selected_object = data[ran_key];
+        for(let i=0; i<100; i++){
+            if(typeof selected_object == "undefined"){
+                ran_key = obj_keys[Math.floor(Math.random() *obj_keys.length)];
+                selected_object = data[ran_key];
+            }
+            else if (Object.keys(selected_object).length < 1){
+                ran_key = obj_keys[Math.floor(Math.random() *obj_keys.length)];
+                selected_object = data[ran_key];
+            }
+            else{
+                break;
+            }
+        }
         if (typeof selected_object == "undefined"){
             return {
                 id: '',
@@ -64,14 +77,16 @@ export default class Home extends React.Component {
             <Col >
                 <Carousel>
                     <Carousel.Item>
-                        <Row className="mt-2 justify-content-center">
-                            <Col sm={4}>
+                        <Row className="mt-2 justify-content-center" style={{minHeight: "320px"}}>
+                            <Col sm={4} className={"d-flex justify-content-center flex-column"} 
+                            style={{maxHeight: "320px", maxWidth: "320px", padding: "1rem"}}>
+                                <div className="d-flex"></div>
                                 <img
-                                className="d-block"
                                 src={"https://youcaptcha.s3-us-west-2.amazonaws.com/seed/" + this.state.targetPath}
                                 alt="First slide"
-                                height="320px"
+                                style={{maxWidth: "320px", maxHeight:"320px", width: "auto", height: "auto"}}
                                 />
+                                <div className="d-flex" ></div>
                             </Col>
                             <Col sm={5} className="d-flex flex-column text-center justify-content-center">
                                 <h3>Marmot PreCip Men's Lightweight Waterproof Rain Jacket</h3>
@@ -91,14 +106,14 @@ export default class Home extends React.Component {
         <Row className="ml-4 mt-2">
             {
                 this.state.list1.map(element => {
-                    return <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart}/>
+                    return <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
                 })
             }
         </Row>
         <Row className="ml-4 mt-2">
             {
                 this.state.list2.map(element => {
-                    return <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart}/>
+                    return <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
                 })
             }
         </Row>

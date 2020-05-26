@@ -1,20 +1,23 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import data from './metadata_all.json';
+import data from './metadata_all_with_detail_img_2_empty.json';
 import productIdToCaptchaId from './productIdToCaptchaId.json'
 import Home from './Home'
 import RCG from 'react-captcha-generator';
 import YouCaptchaApp from './YouCaptchaApp'
 import Category from './Category'
+import Checkout from './Checkout'
+import ProductDetail from './ProductDetail'
 
 import {
   BrowserRouter as Router,
+  withRouter,
   Route,
   Link
 } from 'react-router-dom'
 import { withCookies, Cookies } from 'react-cookie';
-import { Nav, Navbar, NavDropdown, Form, FormControl, Button, SplitButton, Dropdown, Badge,
+import { Row, Nav, Navbar, NavDropdown, Form, FormControl, Button, SplitButton, Dropdown, Badge,
   OverlayTrigger, Popover, ListGroup, InputGroup, Modal} from 'react-bootstrap';
 
 class App extends React.Component {
@@ -35,6 +38,7 @@ class App extends React.Component {
     // console.log(ran_key)
     this.state = {
       navbarToggle: false,
+      showCategoryNav: true,
       showLogin: false,
       captchaVerified: false,
       targetProductId: targetProductId,
@@ -42,7 +46,9 @@ class App extends React.Component {
       captcha: "",
       username: cookies.get('username')? cookies.get('username') : "",
       userLogin: cookies.get('username')? cookies.get('username') != "" ? true: false: false,
-      productsInCart: cookies.get('products')? cookies.get('products') : []
+      productsInCart: cookies.get('products')? cookies.get('products') : [],
+      showProductDetail: false,
+      curProduct: null
     };
     this.addProductToCart = this.addProductToCart.bind(this);
     this.clearCart = this.clearCart.bind(this);
@@ -52,6 +58,9 @@ class App extends React.Component {
     this.userLogout = this.userLogout.bind(this);
     this.result = this.result.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.closeProductDetailDialog = this.closeProductDetailDialog.bind(this);
+    this.showProduct = this.showProduct.bind(this);
+    this.toggleCategoryNav = this.toggleCategoryNav.bind(this);
     console.log(data)
   }
 
@@ -104,8 +113,9 @@ class App extends React.Component {
                     <>
                       <ListGroup.Item action onClick={this.clearCart}>
                         Clear All
-                      </ListGroup.Item><ListGroup.Item action onClick={this.clearCart}>
-                        <strong>Checkout</strong>
+                      </ListGroup.Item>
+                      <ListGroup.Item>
+                        <a href="Checkout"><strong>Checkout</strong></a>
                       </ListGroup.Item>
                     </>:
                     <ListGroup.Item>
@@ -124,6 +134,7 @@ class App extends React.Component {
             </Nav.Link> */}
           </Navbar.Collapse>
         </Navbar>
+        { this.state.showCategoryNav &&
         <Navbar bg="light" expand="lg">
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
@@ -196,6 +207,7 @@ class App extends React.Component {
             </Nav>
           </Navbar.Collapse>
         </Navbar>
+        }
         <Modal show={this.state.showLogin} onHide={this.closeDialog}>
           <Modal.Header closeButton>
             <Modal.Title>Login Your Account</Modal.Title>
@@ -222,8 +234,8 @@ class App extends React.Component {
               
               {/* <RCG
                 result={this.result} // Callback function with code
-              />
-              <form onSubmit={this.handleClick}>
+              /> */}
+              {/* <form onSubmit={this.handleClick}>
                 <input type='text' className={'xxx'} ref={ref => this.captchaEnter = ref} />
                 <input type='submit' />
               </form> */}
@@ -239,29 +251,46 @@ class App extends React.Component {
             </Button>
           </Modal.Footer>
         </Modal>
+        {/* <Modal dialogClassName="modal-90w" show={this.state.showProductDetail} onHide={this.closeProductDetailDialog}>
+          <Modal.Body style={{ overflowY: 'auto'}}>
+            <Row>
+              <ProductDetail product={this.state.curProduct} addProductToCart={this.addProductToCart}/>
+            </Row>
+          </Modal.Body>
+        </Modal> */}
         <Route exact path="/" render={() => (
-            <Home targetProductId={this.state.targetProductId} addProductToCart={this.addProductToCart}/>
+            <Home targetProductId={this.state.targetProductId} addProductToCart={this.addProductToCart} showProduct={this.showProduct}/>
         )}/>
         <Route exact path="/Men's Fashion" render={(location) => (
-            <Category name="Men's Fashion" data={data["Men's Fashion"]} addProductToCart={this.addProductToCart} location={location.location}/>
+            <Category name="Men's Fashion" data={data["Men's Fashion"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location}/>
         )}/>
         <Route exact path="/Women's Fashion" render={(location) => (
-            <Category name="Women's Fashion" data={data["Women's Fashion"]} addProductToCart={this.addProductToCart}  location={location.location}/>
+            <Category name="Women's Fashion" data={data["Women's Fashion"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location}/>
         )}/>
         <Route exact path="/Home and Kitchen" render={(location) => (
-            <Category name="Home and Kitchen" data={data["Home and Kitchen"]} addProductToCart={this.addProductToCart}  location={location.location}/>
+            <Category name="Home and Kitchen" data={data["Home and Kitchen"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location}/>
         )}/>
         <Route exact path="/Electronics" render={(location) => (
-            <Category name="Electronics" data={data["Electronics"]} addProductToCart={this.addProductToCart}  location={location.location}/>
+            <Category name="Electronics" data={data["Electronics"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location}/>
         )}/>
         <Route exact path="/Beauty and Personal Care" render={(location) => (
-            <Category name="Beauty and Personal Care" data={data["Beauty and Personal Care"]} addProductToCart={this.addProductToCart}  location={location.location}/>
+            <Category name="Beauty and Personal Care" data={data["Beauty and Personal Care"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location}/>
         )}/>
         <Route exact path="/Luggage" render={(location) => (
-            <Category name="Luggage" data={data["Luggage"]} addProductToCart={this.addProductToCart}  location={location.location}/>
+            <Category name="Luggage" data={data["Luggage"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location}/>
         )}/>
         <Route exact path="/Health and Household" render={(location) => (
-            <Category name="Health and Household" data={data["Health and Household"]} addProductToCart={this.addProductToCart}  location={location.location}/>
+            <Category name="Health and Household" data={data["Health and Household"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location}/>
+        )}/>
+        <Route exact path="/Checkout" render={(location) => (
+            <Checkout captchaId={this.state.captchaId} toggleCategoryNav={this.toggleCategoryNav}  location={location.location}/>
+        )}/>
+        <Route exact path="/Product" render={(location) => (
+            this.state.curProduct?
+            <Row>
+              <ProductDetail product={this.state.curProduct} addProductToCart={this.addProductToCart}/>
+            </Row>
+            :<Home targetProductId={this.state.targetProductId} addProductToCart={this.addProductToCart} showProduct={this.showProduct}/>
         )}/>
       </div>
       </Router>
@@ -294,6 +323,20 @@ class App extends React.Component {
   closeDialog() {
     this.setState({
       showLogin: false
+    })
+  }
+
+  showProduct(product) {
+    this.setState({
+      curProduct: product,
+      showProductDetail: true
+    })
+
+  }
+
+  closeProductDetailDialog() {
+    this.setState({
+      showProductDetail: false
     })
   }
 
@@ -340,6 +383,12 @@ class App extends React.Component {
       console.log("success")
       this.setState({captchaVerified: true})
     }
+  }
+
+  toggleCategoryNav() {
+    this.setState({
+      showCategoryNav: !this.state.showCategoryNav
+    })
   }
 }
 
