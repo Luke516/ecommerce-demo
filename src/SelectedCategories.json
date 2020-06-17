@@ -1,0 +1,26 @@
+{
+    "Man’s Fashion": [
+        "Clothing", 
+        "Shoes", 
+        "Watches"
+    ],
+    "Women’s Fashion":[
+        "Clothing", 
+        "Shoes", 
+        "Watches", 
+        "Jewelry", 
+        "Handbags & Wallets"
+    ],
+    "Home and Kitchen":[
+        "Bedding", 
+        "Furniture"
+    ],
+    "Luggage":[
+        "Backpack", 
+        "Laptop bags"
+    ],
+    "Electronic": [
+        "Cellphone", 
+        "Headphone"
+    ]
+}

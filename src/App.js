@@ -8,8 +8,8 @@ import RCG from 'react-captcha-generator';
 import YouCaptchaApp from './YouCaptchaApp'
 import Category from './Category'
 import Checkout from './Checkout'
+import Admin from './Admin'
 import ProductDetail from './ProductDetail'
-
 import {
   BrowserRouter as Router,
   withRouter,
@@ -287,10 +287,11 @@ class App extends React.Component {
         )}/>
         <Route exact path="/Product" render={(location) => (
             this.state.curProduct?
-            <Row>
               <ProductDetail product={this.state.curProduct} addProductToCart={this.addProductToCart}/>
-            </Row>
             :<Home targetProductId={this.state.targetProductId} addProductToCart={this.addProductToCart} showProduct={this.showProduct}/>
+        )}/>
+        <Route exact path="/Admin" render={(location) => (
+            <Admin location={location.location} />
         )}/>
       </div>
       </Router>
