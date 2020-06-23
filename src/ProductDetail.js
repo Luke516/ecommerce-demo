@@ -15,8 +15,21 @@ export default class ProductDetail extends React.Component {
       for(let i=0; i<4; i++){
         list1.push(this.getRandomProduct(data))
       }
+      let product = this.props.product
+      let price = 8787
+      if(product == null){
+        product = {
+            id: "QQ",
+            category: ["QWQ"],
+            name: "QAQ"
+        }
+      }
+      else {
+          price = priceData[product.id][0]
+      }
       this.state = {
-        price: priceData[this.props.product.id][0],
+        product,
+        price,
         detailHtml: "",
         list1
       };
@@ -60,7 +73,7 @@ export default class ProductDetail extends React.Component {
     }
 
     componentWillMount() {
-        fetch('./out2/' + this.props.product.id + '.html')
+        fetch('./out2/' + this.state.product.id + '.html')
         .then((r) => r.text())
         .then(text  => {
             this.setState({
@@ -77,23 +90,22 @@ export default class ProductDetail extends React.Component {
     render (){
         // let imageSourceUrl = "https://youcaptcha.s3-us-west-2.amazonaws.com/seed/Men's+Fashion/Clothing/Jackets+%26+Coats/B07HF4ZQRT.jpg"
         let imageSourceUrl = "https://youcaptcha.s3-us-west-2.amazonaws.com/seed/"
-        for (let category of this.props.product.category){
+        for (let category of this.state.product.category){
             category = category.replace('é', 'e')
             imageSourceUrl += encodeURIComponent(category) 
             imageSourceUrl += '/'
         }
-        imageSourceUrl += this.props.product.id
+        imageSourceUrl += this.state.product.id
         imageSourceUrl += '.jpg'
-        let title = this.props.product.name
-        
+        let title = this.state.product.name   
         return (
             <>
             <Row>
                 <Col xs={12} sm={12} md={12} lg={12} style={{paddingLeft: "4rem", paddingRight: "4rem"}}>
                     <a href="/">home</a>
                     {
-                        this.props.product.category.map((category) => {
-                            return <span> > <a key={category}>{category}</a></span>
+                        this.state.product.category.map((category) => {
+                            return <span> {">"} <a key={category}>{category}</a></span>
                         })
                     }
                 </Col>

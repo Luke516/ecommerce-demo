@@ -44,9 +44,7 @@ function CaptchaView(props) {
         }
         props.verifyCaptcha(data.targetCaptcha.id, selectedIds);
     }
-  
-    let width = "120px";
-    let height = "120px";
+
     if(loading){
         return(
             <div>
@@ -83,7 +81,7 @@ function CaptchaView(props) {
                 <i className="fas fa-sync-alt"></i>
             </div>
             <div className="cell">
-                <Button variant="secondary" onClick={() => {verifyCaptcha()}}>Verify</Button>
+                <Button variant="primary" onClick={() => {verifyCaptcha()}}>送出</Button>
             </div>
         </Row>
         </div>

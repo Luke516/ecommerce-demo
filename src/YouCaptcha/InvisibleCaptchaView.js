@@ -27,9 +27,6 @@ function InvisibleCaptchaView(props) {
           errorPolicy: 'all'
         }
     );
-
-    let width = "120px";
-    let height = "120px";
     
     if(loading){
         return(

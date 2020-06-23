@@ -1,15 +1,15 @@
 {
     "Man’s Fashion": [
         "Clothing", 
+        "Pants",
         "Shoes", 
-        "Watches"
+        "Accessories"
     ],
     "Women’s Fashion":[
         "Clothing", 
+        "Pants",
         "Shoes", 
-        "Watches", 
-        "Jewelry", 
-        "Handbags & Wallets"
+        "Accessories"
     ],
     "Home and Kitchen":[
         "Bedding", 

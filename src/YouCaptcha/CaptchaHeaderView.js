@@ -37,8 +37,6 @@ function CaptchaHeaderView(props) {
         }
       }, [props.success]);
 
-    let width = "120px";
-    let height = "120px";
     if(error){
         return (
             <div>error</div>
@@ -47,7 +45,7 @@ function CaptchaHeaderView(props) {
     return (
         <> 
         <Row className="title captcha-row">
-            <div className="youcaptcha-image-container" style={{width: showAd? "260px": "130px"}}>
+            <div className="youcaptcha-image-container" style={{width: showAd? "240px": "120px"}}>
                 <img className={props.success? "slide youcaptcha-img" : "youcaptcha-hide"} src={props.result.origin} />
                 <img className={props.success? "slideFade youcaptcha-img" : "youcaptcha-img"} src={loading? "": data.targetCaptcha.question} />
                 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" style={{display: props.success? "inline-block": "none"}}>
@@ -63,7 +61,7 @@ function CaptchaHeaderView(props) {
             <Fade in={showAd}>
                 <div className="youcaptcha-ad" >
                     <span style={{fontSize: "14px"}}>{props.result.title}</span><br/>
-                    <Button size="sm" target="_blank" rel="noopener noreferrer" href={"https://www.amazon.com/dp/"/* + this.props.captcha.captchaUrls[10].split("/").pop().substr(0,10)*/}>Check it out</Button>
+                    <Button size="sm" target="_blank" rel="noopener noreferrer" href={"http://localhost:3000/Product?p=" + decodeURIComponent(props.result.origin).split("/").pop().substr(0,10)}>Check it out</Button>
                 </div>
             </Fade>}
         </Row>

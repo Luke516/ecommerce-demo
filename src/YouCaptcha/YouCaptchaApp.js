@@ -5,7 +5,6 @@ import HeaderView from './HeaderView.js'
 import ApolloClient, { InMemoryCache } from 'apollo-boost';
 import { ApolloProvider, Query, Mutation, useQuery } from 'react-apollo';
 import { gql } from "apollo-boost";
-import logo from './logo.svg';
 import './YouCaptchaApp.css';
 
 const GET_CAPTCHAS = gql`

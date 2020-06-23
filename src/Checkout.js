@@ -1,7 +1,7 @@
 import React from 'react';
 import { withCookies, Cookies } from 'react-cookie';
 import './App.css';
-import YouCaptchaApp from './YouCaptchaApp'
+import YouCaptchaApp from './YouCaptcha/YouCaptchaApp'
 
 import queryString from 'query-string';
 import { ListGroup, Container, Row, Col, Carousel, Button, Card, CardDeck, InputGroup, Form, FormControl } from 'react-bootstrap';

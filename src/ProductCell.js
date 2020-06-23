@@ -33,22 +33,28 @@ class ProductCell extends React.Component {
         return (
             <Col xs={12} sm={6} md={4} lg={3} style={{paddingLeft: "5px", paddingRight: "5px"}}>
                 <Card style={{padding: "1rem", height: "480px", justifyContent: "space-between", alignItems: "center"}}>
-                    {/* <Card.Img variant="top" height="300px" src="https://youcaptcha.s3-us-west-2.amazonaws.com/seed/Men's+Fashion/Clothing/Jackets+%26+Coats/B07HF4ZQRT.jpg" /> */}
-                    {/* <Card.Img variant="top" height="300px" src={imageSourceUrl} /> */}
                     <div></div>
                     <div className="d-flex justify-content-center" style={{maxHeight:"200px", maxWidth:"200px", overflow: "hidden"}}>
-                        {/* <Card.Img variant="top" height="300px" src={imageSourceUrl} /> */}
                         <img src={this.state.imageSourceUrl} style={{maxWidth: "200px", maxHeight:"200px", width: "auto", height: "auto"}}></img>
                     </div>
                     <Card.Body className={"d-block"} style={{justifyContent: "flex-end", flex: "none"}}>
                         <Card.Title style={{height: "5rem"}}>{title}</Card.Title>
-                        <Card.Title style={{color: "red"}}><strong>{"$" + this.state.price}</strong></Card.Title>
-                        <Button variant="warning" className="my-1 w-100" onClick={this.detailButtonClick}>
-                            <FontAwesomeIcon className="mx-2" icon={faInfo} />Product Detail
-                        </Button>
-                        <Button variant="info" className="w-100" onClick={()=>{this.props.addProductToCart({...this.props.product, ...this.state})}}>
-                            <FontAwesomeIcon className="mx-2" icon={faShoppingCart} />Add To Cart
-                        </Button>
+                        {
+                            !this.props.hideOption &&
+                            <Card.Title style={{color: "red"}}><strong>{"$" + this.state.price}</strong></Card.Title>
+                        }
+                        {
+                            !this.props.hideOption &&
+                            <Button variant="warning" className="my-1 w-100" onClick={this.detailButtonClick}>
+                                <FontAwesomeIcon className="mx-2" icon={faInfo} />Product Detail
+                            </Button>
+                        }
+                        {
+                            !this.props.hideOption &&
+                            <Button variant="info" className="w-100" onClick={()=>{this.props.addProductToCart({...this.props.product, ...this.state})}}>
+                                <FontAwesomeIcon className="mx-2" icon={faShoppingCart} />Add To Cart
+                            </Button>
+                        }
                     </Card.Body>
                 </Card>
             </Col>

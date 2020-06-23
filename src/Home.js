@@ -1,10 +1,13 @@
 import React from 'react';
 import './App.css';
 import data from './metadata_all_with_detail_img_2_empty.json';
+// import data from './selectedProductsFromFile.json';
 import productIdToPath from './productIdToPath.json'
 
 import { Container, Row, Col, Carousel, Button, Card, CardDeck, InputGroup, Form, FormControl } from 'react-bootstrap';
 import ProductCell from './ProductCell'
+import ProductRow from './ProductRow'
+import { translate } from './utils/translate';
 
 export default class Home extends React.Component {
 
@@ -100,10 +103,10 @@ export default class Home extends React.Component {
             </Col>
         </Row>
         <Row>
-            <h3 className="ml-4 mt-4">Best Sellers</h3>
+            <h3 className="ml-4 mt-4">{translate("All Products")}</h3>
             <hr/>
         </Row>
-        <Row className="ml-4 mt-2">
+        {/* <Row className="ml-4 mt-2">
             {
                 this.state.list1.map(element => {
                     return <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
@@ -116,7 +119,8 @@ export default class Home extends React.Component {
                     return <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
                 })
             }
-        </Row>
+        </Row> */}
+        <ProductRow name={""} data={data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
         </Container>
       );
     }

@@ -3,8 +3,14 @@ import './App.css';
 
 import { Container, Row, Col, Carousel, Button, Card, CardDeck, InputGroup, Form, FormControl } from 'react-bootstrap';
 import ProductCell from './ProductCell'
+import {shuffle} from './utils/utlis'
 
 export default class ProductRow extends React.Component {
+
+    orderProducts(data) {
+        let obj_keys = Object.keys(data);
+        return shuffle(obj_keys);
+    }
 
     getRandomProduct(data) {
         let obj_keys = Object.keys(data);
@@ -43,19 +49,27 @@ export default class ProductRow extends React.Component {
     }
 
     getInitState() {
+        let productIdsInOrder = this.orderProducts(this.props.data)
         let list1 = []
+        let reachEnd = false
         for(let i=0; i<12; i++){
             for(let j=0; j<100; j++){
                 let product = this.getRandomProduct(this.props.data)
-                product['category'].unshift(this.props.name)
+                if(this.props.name.length > 0){
+                    product['category'].unshift(this.props.name)
+                }
                 if(!list1.includes(product)){
                     list1.push(product)
                     break
                 }
+                else if (j == 99){
+                    reachEnd = true
+                }
             }
         }
         return {
-            list1
+            list1,
+            reachEnd
         }
     }
   
@@ -63,6 +77,7 @@ export default class ProductRow extends React.Component {
       super(props);
       this.getInitState = this.getInitState.bind(this);
       this.getRandomProduct = this.getRandomProduct.bind(this)
+      this.loadMore = this.loadMore.bind(this)
       this.state = this.getInitState()
     }
   
@@ -80,7 +95,39 @@ export default class ProductRow extends React.Component {
                 })
             }
         </Row>
+        {
+            !this.state.reachEnd &&
+            <Row className="mt-1 d-flex justify-content-center">
+                <Button onClick={this.loadMore} className="w-75 text-center" variant="light">
+                    Load More
+                </Button>
+            </Row>
+        }
         </>
       );
     }
-  }
+
+    loadMore(e) {
+        let list1 = this.state.list1
+        let reachEnd = false
+        for(let i=0; i<12; i++){
+            for(let j=0; j<100; j++){
+                let product = this.getRandomProduct(this.props.data)
+                if(this.props.name.length > 0){
+                    product['category'].unshift(this.props.name)
+                }
+                if(!list1.includes(product)){
+                    list1.push(product)
+                    break
+                }
+                else if (j == 99){
+                    reachEnd = true
+                }
+            }
+        }
+        this.setState({
+            list1,
+            reachEnd
+        })
+    }
+}
