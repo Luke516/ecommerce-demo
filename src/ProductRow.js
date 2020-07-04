@@ -4,6 +4,7 @@ import './App.css';
 import { Container, Row, Col, Carousel, Button, Card, CardDeck, InputGroup, Form, FormControl } from 'react-bootstrap';
 import ProductCell from './ProductCell'
 import {shuffle} from './utils/utlis'
+import {translate} from './utils/translate'
 
 export default class ProductRow extends React.Component {
 
@@ -49,10 +50,25 @@ export default class ProductRow extends React.Component {
     }
 
     getInitState() {
-        let productIdsInOrder = this.orderProducts(this.props.data)
+        // let productIdsInOrder = this.orderProducts(this.props.data)
         let list1 = []
         let reachEnd = false
-        for(let i=0; i<12; i++){
+        let count = 12
+        if (this.props.target){
+            while(true){
+                let product = this.getRandomProduct(this.props.data)
+                if(product.id != this.props.targetProductId){
+                    continue
+                }
+                if(this.props.name.length > 0){
+                    product['category'].unshift(this.props.name)
+                }
+                list1.push(product)
+                break
+            }
+            count = 11
+        }
+        for(let i=0; i<count; i++){
             for(let j=0; j<100; j++){
                 let product = this.getRandomProduct(this.props.data)
                 if(this.props.name.length > 0){
@@ -67,6 +83,7 @@ export default class ProductRow extends React.Component {
                 }
             }
         }
+        list1 = shuffle(list1)
         return {
             list1,
             reachEnd
@@ -84,11 +101,11 @@ export default class ProductRow extends React.Component {
     render (){
       return (
         <>
-        <Row>
-            <h4 className="ml-4 mt-4">{this.props.name.split('/')[1]}</h4>
-            <hr/>
-        </Row>
-        <Row className="ml-4 mt-2">
+        <div>
+            {/* <h4 className="ml--4 mt-4">{translate(this.props.name.split('/')[1])}</h4>
+            <hr/> */}
+        </div>
+        <Row className="ml--4 mt-2">
             {
                 this.state.list1.map(element => {
                     return <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
@@ -97,9 +114,9 @@ export default class ProductRow extends React.Component {
         </Row>
         {
             !this.state.reachEnd &&
-            <Row className="mt-1 d-flex justify-content-center">
-                <Button onClick={this.loadMore} className="w-75 text-center" variant="light">
-                    Load More
+            <Row className="my-4 d-flex justify-content-center">
+                <Button onClick={this.loadMore} className="w-25 text-center" variant="light">
+                    {translate("Load More")}
                 </Button>
             </Row>
         }

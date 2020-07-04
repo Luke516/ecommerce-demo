@@ -1,9 +1,7 @@
 .youcaptcha-img {
     margin: 5px;
-    min-width: 90px;
-    max-width: 110px;
-    min-height: 90px;
-    max-height: 110px;
+    width: 100px;
+    height: 100px;
 }  
 
 .youcaptcha-p {
@@ -15,8 +13,8 @@
 }
 
 #demo {
-    margin-top: 20px;
-    width: 420px;
+    margin-top: 0px;
+    width: 380px;
 }
 
 .Container {
@@ -29,21 +27,28 @@
 }
 
 .device {
-    border: 1px solid #f6f9fc;
+    border: 1px solid rgba(182, 185, 188, 0.6);
     border-radius: 1rem;
-    box-shadow: inset 0 4px 7px 1px #fff, inset 0 -5px 20px rgba(173,186,204,.25), 0 2px 6px rgba(0,21,64,.14), 0 10px 20px rgba(0,21,64,.05);
     background-color: white;
+}
+
+.completed {
+    background-color: white;
+}
+
+.shadow {
+    box-shadow: inset 0 4px 7px 1px #fff, inset 0 -5px 20px rgba(173,186,204,.25), 0 2px 6px rgba(0,21,64,.14), 0 10px 20px rgba(0,21,64,.05);
 }
 
 .title {
     margin-top: 1.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0rem;
 }
 
 .selected {
     border-style: solid;
-    border-color: black;
-    border-width: 2px;
+    border-color: #007bff;
+    border-width: 5px;
 }
 
 .cell {
@@ -54,4 +59,12 @@
     justify-content: space-between !important;
     margin-top: 1rem;
     margin-bottom: 1.5rem;
+}
+
+.captcha-error{
+    padding-left: 1.2rem;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+    background-position: left 0 center;
+    background-repeat: no-repeat;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23dc3545' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
 }

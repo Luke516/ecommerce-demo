@@ -6,6 +6,8 @@ import { gql } from "apollo-boost";
 import './CaptchaView.css';
 import './CaptchaHeaderView.css'
 
+import flatData from '../data/flat_products_list_zh.json';
+
 const GET_CAPTCHAS = gql`
   query Captchas($id: Int!) {
     targetCaptcha(id: $id) {
@@ -42,28 +44,33 @@ function CaptchaHeaderView(props) {
             <div>error</div>
         )
     }
+
     return (
         <> 
-        <Row className="title captcha-row">
-            <div className="youcaptcha-image-container" style={{width: showAd? "240px": "120px"}}>
-                <img className={props.success? "slide youcaptcha-img" : "youcaptcha-hide"} src={props.result.origin} />
-                <img className={props.success? "slideFade youcaptcha-img" : "youcaptcha-img"} src={loading? "": data.targetCaptcha.question} />
+        <Row className={showAd?"captcha-row":"title captcha-row"}>
+            <div className={"youcaptcha-image-container"} style={{width: showAd? "500px": "110px"}}>
+                <img className={props.success? "slide" : "youcaptcha-hide"} src={props.result.origin} />
+                <img className={props.success? "slideFade" : "youcaptcha-img"} src={loading? "": data.targetCaptcha.question} />
                 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" style={{display: props.success? "inline-block": "none"}}>
-                    <polyline className={props.success? "path check" : ""} fill="none" stroke="#73AF55" strokeWidth="10" strokeLinecap="round" strokeMiterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
+                    <polyline className={props.success? "path check" : ""} fill="none" stroke="#73AF55" strokeWidth="10" strokeLinecap="square" strokeMiterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
                 </svg> 
             </div>
             {!showAd?
             <Fade in={!props.success}>
                 <div className="youcaptcha-description">
-                    <h5>請從以下的九宮格中，選出與左圖相同的物品</h5>
+                    <h5>請從以下的九宮格中，選出一個以上與左圖相同的物品</h5>
                 </div>
             </Fade>:
-            <Fade in={showAd}>
-                <div className="youcaptcha-ad" >
-                    <span style={{fontSize: "14px"}}>{props.result.title}</span><br/>
-                    <Button size="sm" target="_blank" rel="noopener noreferrer" href={"http://localhost:3000/Product?p=" + decodeURIComponent(props.result.origin).split("/").pop().substr(0,10)}>Check it out</Button>
+            <div className="youcaptcha-ad fadeIn" >
+                <div className="youcaptcha-ad-text my-2" style={{fontSize: "18px"}}>{flatData[decodeURIComponent(props.result.origin).split("/").pop().substr(0,10)].name}</div>
+                {/* <div className="youcaptcha-ad-text my-2" style={{fontSize: "14px"}}>{props.result.title}</div> */}
+                
+                {/* <Button size="sm" target="_blank" rel="noopener noreferrer" href={"http://localhost:3000/Product?p=" + decodeURIComponent(props.result.origin).split("/").pop().substr(0,10)}>Check it out</Button> */}
+                <div>
+                    <Button className="mx-1" size="md" target="_blank" rel="noopener noreferrer" href={"http://localhost:3000/Product?p=" + decodeURIComponent(props.result.origin).split("/").pop().substr(0,10)}>去看看</Button>
+                    <Button variant={"secondary"} className="mx-1" size="md" target="_blank" rel="noopener noreferrer" href={""} onClick={props.closeAd}>略過</Button>
                 </div>
-            </Fade>}
+            </div>}
         </Row>
         {/* <Row style={{display: this.props.captcha.finish? "block": "none", maxWidth: "360px"}}>
             <Alert variant={this.props.captcha.success? "success": "danger"}>

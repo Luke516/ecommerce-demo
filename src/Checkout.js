@@ -7,6 +7,7 @@ import queryString from 'query-string';
 import { ListGroup, Container, Row, Col, Carousel, Button, Card, CardDeck, InputGroup, Form, FormControl } from 'react-bootstrap';
 import ProductCell from './ProductCell'
 import ProductRow from './ProductRow'
+import { translate } from './utils/translate';
 
 class Checkout extends React.Component {
   
@@ -21,7 +22,7 @@ class Checkout extends React.Component {
       this.state = {
         productsInCart: productsInCart,
         totalPrice: totalPrice,
-        captchaVerified: false
+        captchaVerified: true
       }
     }
 
@@ -33,39 +34,52 @@ class Checkout extends React.Component {
         console.log(this.state.productsInCart)
         return (
             <Container>
-                <h2 className="my-4">Checkout</h2>
+                <Row>
+                <h2 className="my-4">
+                    {translate("Checkout")}
+                </h2>
+                </Row>
             {
                 this.state.productsInCart.map(product => {
-                    return (<Row key={product.id} className="my-2" style={{height: "120px"}}>
-                        <Col md={3} className={"d-flex justify-content-center"} style={{maxHeight: "90%"}}>
+                    return (<Row key={product.id} className="my-3 checkoutItem shadow">
+                        <Col md={3} className={"d-flex"} style={{maxHeight: "90%"}}>
                             <img style={{maxWidth:"90%", maxHeight: "90%"}} src={product.imageSourceUrl}></img>
                         </Col>
                         <Col md={6} style={{maxHeight: "90%"}}>
                             <strong key={product.id}>{product.name}</strong>
                         </Col>
                         <Col md={3} style={{maxHeight: "90%"}}>
-                            <strong style={{color:"red"}} key={product.id}>{"$" + product.price}</strong>
+                            <strong className="text-success" key={product.id}>{"$" + product.price}</strong>
                         </Col>
                     </Row>)
                     }
                 )
                 }
-                <hr style={{width: "90%", height: "1px", border: "none", backgroundColor: "gray"}}/>
-                <Row>
-                    <Col className={"d-flex justify-content-center"} md={3}>
-                        <strong>Total</strong>
+                <hr className="my-4" style={{width: "100%", height: "1px", border: "none", backgroundColor: "gray"}}/>
+                <Row className="my-2">
+                    <Col className={"d-flex"} md={3}>
+                        <strong>
+                            {translate("Total")}
+                        </strong>
                     </Col>
                     <Col md={6}></Col>
                     <Col md={3}>
-                        <strong style={{color: "red"}}>{"$" + this.state.totalPrice}</strong>
+                        <strong className="text-success">{"$" + this.state.totalPrice}</strong>
                     </Col>
                 </Row>
-                <Row className="d-flex justify-content-center">
+                {/* <Row className="d-flex justify-content-center">
                     <YouCaptchaApp captchaId={this.props.captchaId} onSuccess={() => {this.setState({captchaVerified: true})}}/>
-                </Row>
-                <Row className={"my-2 d-flex justify-content-center"}>
-                    <Button variant="secondary" size="lg" href="/" className={"mx-1"}>Cancel</Button>
-                    {this.state.captchaVerified && <Button variant="info" size="lg" className={"mx-1"}>Proceed</Button>}
+                </Row> */}
+                <Row className={"mt-4 mb-2 d-flex justify-content-center"}>
+                    <Button variant="secondary" size="lg" href="/" className={"mx-1"}>
+                        {translate("Cancel")}
+                    </Button>
+                    {
+                        this.state.captchaVerified && 
+                        <Button onClick={this.props.showSurvey} variant="primary" size="lg" className={"mx-1"}>
+                            {translate("Proceed")}
+                        </Button>
+                    }
                 </Row>
                 
             </Container>

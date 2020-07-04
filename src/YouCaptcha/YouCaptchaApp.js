@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Collapse } from 'react-bootstrap';
+import { Container, Collapse, Row, Button } from 'react-bootstrap';
 import CaptchaView from './CaptchaView.js'
 import HeaderView from './HeaderView.js'
 import ApolloClient, { InMemoryCache } from 'apollo-boost';
@@ -18,8 +18,14 @@ const GET_CAPTCHAS = gql`
 `;
 
 function YouCaptchaApp(props) {
+  const [firstLoad, setFirstLoad] = useState(true);
   const [showCaptcha, setShowCaptcha] = useState(false);
+  const [showAd, setShowAd] = useState(false);
+  const [verified, setVerified] = useState(false);
+  const [showWrongMessage, setShowWrongMessage] = useState(false);
+  const [showEmptyMessage, setShowEmptyMessage] = useState(false);
   const [startCaptcha, setStartCaptcha] = useState(false);
+  const [fetchData, setFetchData] = useState({result: {status: "incorrect"}});
   const [captchaId, setCaptchaId] = useState(props.captchaId);
   const [captchaAnswer, setCaptchaAnswer] = useState([]);
   const defaultResult = {
@@ -47,8 +53,34 @@ function YouCaptchaApp(props) {
   }
 
   const verifyCaptcha = (id, answer) => {
+    setFirstLoad(false);
     setCaptchaId(id);
     setCaptchaAnswer(answer.slice());
+    if(data.result.status == "incorrect"){
+      setTimeout(()=>{
+        setShowEmptyMessage(false)
+        setShowWrongMessage(true)
+      }, 500)
+    }
+    else{
+      if(props.onSuccess()){
+        setShowWrongMessage(false)
+        setShowEmptyMessage(false)
+        setShowCaptcha(false)
+        setFirstLoad(true)
+        setFetchData(data)
+      }
+      else {
+        setShowWrongMessage(false)
+        setShowEmptyMessage(true)
+      }
+    }
+  }
+
+  const toggleShowCaptcha = () => {
+    setTimeout(()=>{
+      setShowCaptcha(!showCaptcha)
+    }, 180)
   }
 
   useEffect(() => {
@@ -57,8 +89,26 @@ function YouCaptchaApp(props) {
         data.result.title = data.result.title.substring(0,50) + "...";
       }
       if(data.result.status != "incorrect"){
-        setShowCaptcha(false);
-        props.onSuccess();
+        if(props.onSuccess()){
+          setShowWrongMessage(false)
+          setShowEmptyMessage(false)
+          // setShowCaptcha(false)
+          toggleShowCaptcha()
+          setFirstLoad(true)
+          setFetchData(data)
+          setVerified(true)
+          setShowAd(true)
+        }
+        else {
+          setShowWrongMessage(false)
+          setShowEmptyMessage(true)
+        }
+      }
+      else{ // incorrect
+        if(!firstLoad){
+          setShowEmptyMessage(false)
+          setShowWrongMessage(true)
+        }
       }
     }
   }, [data]);
@@ -90,12 +140,14 @@ function YouCaptchaApp(props) {
           Learn React
         </a>
       </header> */}
-      <Container id="demo" className="device px-4" style={{display: "block"}}>
-        <HeaderView captchaId={props.captchaId} toggleCaptcha={toggleCaptcha} showCaptcha={startCaptcha} result={loading? defaultResult: data.result}/>
+      <div id="demo" className={showAd? "completed px-4": "device px-4"} style={{display: "block"}}>
+        <HeaderView captchaId={props.captchaId} toggleCaptcha={toggleCaptcha} showCaptcha={startCaptcha} result={loading? defaultResult: fetchData.result} showAd={showAd} verified={verified} closeAd={props.closeAd}/>
         <Collapse in={showCaptcha}>
-          <div><CaptchaView captchaId={props.captchaId} verifyCaptcha={verifyCaptcha}/></div>
+          <div id="youcaptcha-collpase">
+            <CaptchaView captchaId={props.captchaId} showWrongMessage={showWrongMessage} showEmptyMessage={showEmptyMessage} verifyCaptcha={verifyCaptcha} verified={verified} showCaptcha={showCaptcha} toggleShowCaptcha={toggleShowCaptcha}/>
+          </div>
         </Collapse>
-      </Container>
+      </div>
     </div>
   );
 }

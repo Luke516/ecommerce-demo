@@ -7,11 +7,11 @@ function HeaderView(props) {
 
     if (!props.showCaptcha)
         return (
-            <InvisibleCaptchaView captchaId={props.captchaId} toggleCaptcha={props.toggleCaptcha}/>
+            <InvisibleCaptchaView captchaId={props.captchaId} toggleCaptcha={props.toggleCaptcha} showAd={props.showAd}/>
         );
     else 
         return (
-            <CaptchaHeaderView captchaId={props.captchaId} finish={false} success={props.result.status != "incorrect"} result={props.result}/>
+            <CaptchaHeaderView captchaId={props.captchaId} finish={false} success={props.result.status != "incorrect"} result={props.result} showAd={props.showAd} closeAd={props.closeAd}/>
         );
 }
 

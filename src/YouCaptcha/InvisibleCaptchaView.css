@@ -50,11 +50,6 @@
     z-index: 100;
 }
 
-.youcaptcha-hide {
-    /* display: none !important; */
-    visibility: hidden;
-}
-
 .sponser {
     display: flex;
     margin-right: 1rem;
@@ -108,3 +103,17 @@
 }
 
 
+.youcaptchaScale {
+    animation: scaleCaptchaAnimation 1s forwards;
+    animation-delay: 1s;
+  }
+  
+@keyframes scaleCaptchaAnimation {
+    0% {
+        width: 380px;
+      }
+      100% {
+        width: 500px;
+        height: 240px;
+      }
+}

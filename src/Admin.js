@@ -2,7 +2,7 @@ import React from 'react';
 import { withCookies, Cookies } from 'react-cookie';
 import './App.css';
 import YouCaptchaApp from './YouCaptcha/YouCaptchaApp'
-import data from './metadata_all_with_detail_img_2_empty.json';
+import data from './data/metadata_all_with_detail_img_3_empty.json';
 
 import queryString from 'query-string';
 import { Dropdown, Container, Row, Button, Col} from 'react-bootstrap';

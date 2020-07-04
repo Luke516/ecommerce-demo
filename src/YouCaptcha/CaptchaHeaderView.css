@@ -4,7 +4,7 @@
 
 .youcaptcha-description {
     display: flex;
-    width: 230px;
+    width: 210px;
     margin: 0 5px 0 5px;
     flex-direction: column;
     justify-content: center;
@@ -12,12 +12,23 @@
 }
 
 .youcaptcha-ad {
-    width: 120px;
+    justify-content: space-evenly;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    margin-left: 360px;
+    width: 240px;
+    height: 160px;
     font-size: 14px;
 }
 
+.youcaptcha-ad-text {
+    height: 60px;
+    overflow-y: hidden;
+}
+
 .youcaptcha-hide {
-    visibility: hidden;
+    opacity: 0;
 }
 
 .youcaptcha-image-container {
@@ -31,8 +42,8 @@
 }
 
 .youcaptcha-image-container > svg {
-    width: 110px;
-    height: 110px;
+    width: 100px;
+    height: 100px;
     margin: 5px;
     display: none;
     position: absolute;
@@ -96,35 +107,63 @@
 }
 
 .slide {
-    animation: slideAnimation 1s forwards;
-    animation-delay: 1s;
+    animation: slideAnimation 1s forwards linear;
+    animation-delay: 0;
 }
 
 @keyframes slideAnimation {
     0% {
+        top: 0;
         margin-left: 5px;
-      }
-      100% {
-        margin-left: 110px;
-      }
+        width: 100px;
+        height: 100px;
+        z-index: 100;
+    }
+    25% {
+        top: 0;
+        margin-left: 5px;
+        width: 100px;
+        height: 100px;
+        z-index: 100;
+    }
+    100% {
+        top: -10px;
+        margin-left: 180px;
+        width: 160px;
+        height: 160px;
+        z-index: 100;
+    }
 }
 
 .slideFade {
-    animation: slideFadeAnimation 1s forwards;
-    animation-delay: 1s;
+    animation: slideFadeAnimation 1s forwards linear;
+    animation-delay: 0;
 }
 
 @keyframes slideFadeAnimation {
     0% {
+        top: 0;
         margin-left: 5px;
+        width: 100px;
+        height: 100px;
         opacity: 1;
+        z-index: 150;
     }
-    50% {
+    25% {
+        top: 0;
+        margin-left: 5px;
+        width: 100px;
+        height: 100px;
         opacity: 1;
+        z-index: 150;
     }
     100% {
-        margin-left: 110px;
+        top: -10px;
+        margin-left: 180px;
+        width: 160px;
+        height: 160px;
         opacity: 0;
+        z-index: 150;
     }
 }
 

@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Button, Alert } from 'react-bootstrap';
 import { useQuery } from 'react-apollo';
 import { gql } from "apollo-boost";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSyncAlt } from '@fortawesome/free-solid-svg-icons'
+
 import './CaptchaView.css';
 
 const GET_CAPTCHAS = gql`
@@ -26,6 +29,7 @@ function CaptchaView(props) {
     );
     const [selected, setSelected] = useState([false, false, false, false, false, false, false, false, false]);
     const [captchaUrls, setCaptchaUrls] = useState(["","","","","","","","","",""]);
+    const [refreshing, setRefreshing] = useState(false);
 
     const toggleSelection = (candidate_id) => {
         let new_selected = selected;
@@ -43,6 +47,16 @@ function CaptchaView(props) {
             }
         }
         props.verifyCaptcha(data.targetCaptcha.id, selectedIds);
+    }
+
+    const refreshCaptcha = () => {
+        setRefreshing(true)
+        // refetch(0).then(()=>{
+        //     setRefreshing(false)
+        // })
+        setTimeout(()=>{
+            setRefreshing(false)
+        }, 500)
     }
 
     if(loading){
@@ -76,12 +90,29 @@ function CaptchaView(props) {
             <img id="captcha8" className={selected[7]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[7]} onClick={() => {toggleSelection(7)}/*this.props.selectCaptcha(8)*/}/>
             <img id="captcha9" className={selected[8]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[8]} onClick={() => {toggleSelection(8)}/*this.props.selectCaptcha(9)*/}/>
         </Row>
-        <Row className="captcha-row ending align-items-center">
-            <div className="ml-2 text-muted cell" onClick={() => {refetch(0)}/*this.props.getCaptcha*/}>
-                <i className="fas fa-sync-alt"></i>
+        <Row className="captcha-row ending align-items-center px-2">
+            <Button variant="white" className="text-muted cell" onClick={refreshCaptcha/*this.props.getCaptcha*/} 
+                style={{textAlign:"left", paddingLeft:"0"}}>
+                {/* <i className="fas fa-sync-alt"></i> */}
+                <FontAwesomeIcon icon={faSyncAlt} className={refreshing?"rotating":""} style={{cursor: "pointer", marginLeft:"8px", marginRight:"8px"}} />
+            </Button>
+            <div className="captcha-error">
+                {
+                    props.showEmptyMessage && 
+                    <span className="text-danger">請完成必要欄位</span>
+                }
+                {
+                    props.showWrongMessage && 
+                    <span className="text-danger">請再試一次</span>
+                }
             </div>
-            <div className="cell">
-                <Button variant="primary" onClick={() => {verifyCaptcha()}}>送出</Button>
+            <div className="cell" style={{textAlign:"right"}}>
+                <Button variant="primary" onClick={() => {verifyCaptcha()}}
+                // <Button variant="primary" onClick={() => {props.toggleShowCaptcha()}}
+                    aria-controls="youcaptcha-collpase"
+                    aria-expanded={props.showCaptcha}>
+                    繼續
+                </Button>
             </div>
         </Row>
         </div>

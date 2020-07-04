@@ -1,40 +1,162 @@
 import React from 'react';
 import './App.css';
-import priceData from './prices2All.json';
-import data from './metadata_all_with_detail_img_2_empty.json';
+import priceData from './data/prices2All.json';
+import data from './data/metadata_all_with_detail_img_3_empty.json';
+import flatData from './data/flat_products_list_zh.json';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faInfo, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
+import { translate } from './utils/translate';
+import { shuffle } from './utils/utlis';
 import ProductCell from './ProductCell'
 import { Container, Row, Col, Carousel, Button, Card, CardDeck, InputGroup, Form, FormControl } from 'react-bootstrap';
 
 export default class ProductDetail extends React.Component {
   
     constructor(props) {
-      super(props);
+        super(props);
+        console.log(this.props.location)
 
-      let list1 = []
-      for(let i=0; i<4; i++){
-        list1.push(this.getRandomProduct(data))
-      }
-      let product = this.props.product
-      let price = 8787
-      if(product == null){
-        product = {
-            id: "QQ",
-            category: ["QWQ"],
-            name: "QAQ"
+        let queryString = this.props.location.search
+        let productId = "QQ"
+        let category = ["QWQ"]
+        let productName = "QAQ"
+        let subCategoryData = data
+        if(queryString.split("p=").length > 1){
+            productId = queryString.split("p=")[1].substring(0,10)
+            let productData = flatData[productId]
+            console.log(productData)
+            productName = productData.name
+            category = decodeURIComponent(productData.url).split('/').slice(4,7)
+            subCategoryData = data[category[0]]
+            console.log(category)
         }
-      }
-      else {
-          price = priceData[product.id][0]
-      }
-      this.state = {
-        product,
-        price,
-        detailHtml: "",
-        list1
-      };
-  
+
+        let list1 = []
+        let count = 4
+        if (this.props.targetProductId != productId){
+            while(true){
+                if(category[0] != this.props.targetCategory){
+                    break
+                }
+                let selected_product = this.getRandomProduct(subCategoryData)
+                if(selected_product.id != this.props.targetProductId){
+                    continue
+                }
+                selected_product.category.unshift(category[0])
+                list1.push(selected_product)
+                count = 3
+                break
+            }
+        }
+        for(let i=0; i<count; i++){
+            let recommandedProduct = this.getRandomProduct(subCategoryData)
+            recommandedProduct.category.unshift(category[0])
+            list1.push(recommandedProduct)
+        }
+        list1 = shuffle(list1)
+        let product = this.props.product
+        let price = 8787
+        if(!product){
+            product = {
+                id: productId,
+                category,
+                name: productName
+            }
+            price = priceData[productId][0]
+        }
+        else {
+            price = priceData[product.id][0]
+        }
+        this.state = {
+            product,
+            price,
+            detailHtml: "",
+            list1
+        };
+        this.updateContent = this.updateContent.bind(this)
     }
+
+    updateContent() {
+        let queryString = this.props.location.search
+        let productId = "QQ"
+        let category = ["QWQ"]
+        let productName = "QAQ"
+        let subCategoryData = data
+        if(queryString.split("p=").length > 1){
+            productId = queryString.split("p=")[1].substring(0,10)
+            let productData = flatData[productId]
+            console.log(productData)
+            productName = productData.name
+            category = decodeURIComponent(productData.url).split('/').slice(4,7)
+            subCategoryData = data[category[0]]
+            console.log(category)
+        }
+
+        let list1 = []
+        let count = 4
+        if (this.props.targetProductId != productId){
+            while(true){
+                if(category[0] != this.props.targetCategory){
+                    break
+                }
+                let selected_product = this.getRandomProduct(subCategoryData)
+                if(selected_product.id != this.props.targetProductId){
+                    continue
+                }
+                selected_product.category.unshift(category[0])
+                list1.push(selected_product)
+                count = 3
+                break
+            }
+        }
+        for(let i=0; i<count; i++){
+            let recommandedProduct = this.getRandomProduct(subCategoryData)
+            recommandedProduct.category.unshift(category[0])
+            list1.push(recommandedProduct)
+        }
+        list1 = shuffle(list1)
+        let product = this.props.product
+        let price = 8787
+        if(!product){
+            product = {
+                id: productId,
+                category,
+                name: productName
+            }
+            price = priceData[productId][0]
+        }
+        else {
+            price = priceData[product.id][0]
+        }
+        this.setState({
+            product,
+            price,
+            detailHtml: "",
+            list1
+        }, ()=>{
+            fetch('./out6/' + this.state.product.id + '.html')
+            .then((r) => r.text())
+            .then(text  => {
+                this.setState({
+                    detailHtml: text
+                })
+                console.log(text);
+            })  
+        });
+    }
+
+    componentDidUpdate(prevProps) {
+        console.log("update!!!")
+        if(!prevProps.product){
+            return;
+        }
+        if(this.props.product.id != prevProps.product.id)
+        {
+            this.updateContent()
+            return;
+        }
+    } 
 
     getRandomProduct(data) {
         let obj_keys = Object.keys(data);
@@ -73,7 +195,7 @@ export default class ProductDetail extends React.Component {
     }
 
     componentWillMount() {
-        fetch('./out2/' + this.state.product.id + '.html')
+        fetch('./out6/' + this.state.product.id + '.html')
         .then((r) => r.text())
         .then(text  => {
             this.setState({
@@ -92,55 +214,61 @@ export default class ProductDetail extends React.Component {
         let imageSourceUrl = "https://youcaptcha.s3-us-west-2.amazonaws.com/seed/"
         for (let category of this.state.product.category){
             category = category.replace('é', 'e')
+            category = category.trim()
             imageSourceUrl += encodeURIComponent(category) 
             imageSourceUrl += '/'
         }
         imageSourceUrl += this.state.product.id
         imageSourceUrl += '.jpg'
+        let productCategories = this.state.product.category.slice(0, 2)
         let title = this.state.product.name   
         return (
-            <>
+            <Container style={{maxWidth: "1300px"}}>
+            <Row style={{height:"1.5rem"}}></Row>
             <Row>
                 <Col xs={12} sm={12} md={12} lg={12} style={{paddingLeft: "4rem", paddingRight: "4rem"}}>
-                    <a href="/">home</a>
+                    <a href="/">{translate("home")}</a>
                     {
-                        this.state.product.category.map((category) => {
-                            return <span> {">"} <a key={category}>{category}</a></span>
+                        productCategories.map((_category) => {
+                            return <span> {">"} <a key={_category}>{translate(_category)}</a></span>
                         })
                     }
                 </Col>
             </Row>
-            <Row>
-                <Col xs={12} sm={12} md={4} lg={4} style={{paddingLeft: "4rem", paddingRight: "2rem"}}>
-                    <Card style={{padding: "1rem", height: "480px", justifyContent: "center", alignItems: "center", border: "none"}}>
-                        <div className="d-flex justify-content-center" style={{maxHeight:"400px", maxWidth:"400px"}}>
+            <Row className="my-4">
+                <Col xs={12} sm={12} md={5} lg={5} style={{paddingLeft: "4rem", paddingRight: "2rem"}}>
+                    <Card style={{padding: "1rem", width:"410px", maxHeight: "700px", overflowY: "scroll", justifyContent: "center", alignItems: "center", border: "none"}}>
+                        <div className="d-flex justify-content-center" style={{maxHeight:"320px", maxWidth:"320px"}}>
                             {/* <Card.Img variant="top" height="300px" src={imageSourceUrl} /> */}
-                            <img src={imageSourceUrl} style={{maxWidth: "400px", maxHeight:"400px", width: "auto", height: "auto"}}></img>
+                            <img src={imageSourceUrl} style={{maxWidth: "320px", maxHeight:"320px", width: "auto", height: "auto"}}></img>
                         </div>
                     </Card>
                 </Col>
-                <Col xs={12} sm={12} md={8} lg={8} style={{paddingLeft: "5px", paddingRight: "5px"}}>
-                    <Card style={{padding: "1rem", height: "480px", justifyContent: "space-between", alignItems: "center", border: "none"}}>
+                <Col xs={12} sm={12} md={7} lg={7}>
+                    <Card style={{padding: "1rem", maxHeight: "700px", overflowY: "scroll", justifyContent: "space-between", alignItems: "center", border: "none"}}>
                         <Card.Body className={"d-block"} style={{justifyContent: "flex-end", flex: "none"}}>
                             {/* <Card.Title style={{height: "5rem"}}>{title}</Card.Title> */}
                             <div dangerouslySetInnerHTML={{ __html: this.state.detailHtml }} ></div>
-                            <Card.Title style={{color: "red"}}><strong>{"$" + this.state.price}</strong></Card.Title>
-                            <Button variant="info" className="w-100" onClick={()=>{this.props.addProductToCart(this.props.product)}}>Add To Cart</Button>
+                            <div style={{height: "2rem"}}></div>
+                            <Card.Title className="text-success"><strong>{"$" + this.state.price}</strong><span className="mx-2 text-secondary" style={{fontSize: "10px"}}>不含運費</span></Card.Title>
+                            <Button variant="primary" className="w-100" onClick={()=>{this.props.addProductToCart({...this.state.product, price: this.state.price})}}>
+                                <FontAwesomeIcon className="mx-2" icon={faShoppingCart} />{translate("Add To Cart")}
+                            </Button>
                         </Card.Body>
                     </Card>
                 </Col>
             </Row>
-            <Row className="ml-4 mt-2">
+            <div className="ml-4 mt-2">
                 <h4>你可能也會喜歡</h4>
-            </Row>
-            <Row className="ml-4 mt-2" style={{padding: "20px"}}>
+            </div>
+            <Row className="ml-2" style={{padding: "20px"}}>
                 {
                     this.state.list1.map(element => {
                         return <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
                     })
                 }
             </Row>
-            </>
+            </Container>
         );
     }
   }

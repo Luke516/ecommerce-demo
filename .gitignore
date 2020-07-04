@@ -25,3 +25,5 @@ yarn-error.log*
 # local files
 src/out2
 public/out2
+src/out6
+public/out6

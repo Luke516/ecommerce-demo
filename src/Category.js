@@ -2,9 +2,10 @@ import React from 'react';
 import './App.css';
 
 import queryString from 'query-string';
-import { Container, Row, Col, Carousel, Button, Card, CardDeck, InputGroup, Form, FormControl } from 'react-bootstrap';
+import { Container, Row, Tabs, Tab, Nav } from 'react-bootstrap';
 import ProductCell from './ProductCell'
 import ProductRow from './ProductRow'
+import {translate} from './utils/translate'
 
 class Category extends React.Component {
 
@@ -44,7 +45,7 @@ class Category extends React.Component {
         }
     }
 
-    getAllSubCategoryData(data) {
+    getAllSubCategoryData(data, targetSubCategory) {
         let obj_keys = Object.keys(data);
         let allSubCategoryData = []
         for(let key of obj_keys){
@@ -52,6 +53,12 @@ class Category extends React.Component {
             if (typeof selected_data == "undefined"){
             }
             else if(!selected_data.hasOwnProperty('name')){
+                console.log(key)
+                console.log(targetSubCategory)
+                if (key == targetSubCategory){
+
+                    continue
+                }
                 allSubCategoryData.push({
                     displayName: key,
                     name: this.props.name + '/' +key,
@@ -63,8 +70,27 @@ class Category extends React.Component {
     }
 
     getInitState() {
-        let subCategoryList = this.getAllSubCategoryData(this.props.data);
+        let targetCategory = decodeURIComponent(this.props.targetProductData.url).split('/')[4];
+        let targetSubCategory = decodeURIComponent(this.props.targetProductData.url).split('/')[5];
+        let subCategoryList = this.getAllSubCategoryData(this.props.data, targetSubCategory);
+        console.log(targetSubCategory)
+        let targetSubCategoryData = this.props.data[targetSubCategory]
+        targetSubCategoryData = {
+            displayName: targetSubCategory,
+            name: this.props.name + '/' + targetSubCategory,
+            data: targetSubCategoryData
+        }
+        if(targetCategory != this.props.name){
+            targetSubCategoryData = null
+        }else{
+            subCategoryList.unshift(targetSubCategoryData)
+        }
+        console.log("QWQ=====")
+        for(let c of subCategoryList){
+            console.log(c.name)
+        }
         return {
+            targetSubCategoryData,
             subCategoryList
         }
     }
@@ -86,28 +112,57 @@ class Category extends React.Component {
         if(!this.state.subCategory){
             return (
                 <Container>
-                <Row>
-                    <h2 className="ml-4 mt-4">{this.props.name}</h2>
+                <div>
+                    <h2 className="ml--4 mt-4">{translate(this.props.name)}</h2>
                     <hr/>
-                </Row>
+                </div>
+                <Tab.Container defaultActiveKey={this.state.subCategoryList[0].name} id="uncontrolled-tab-example">
+                <Nav variant="pills" className="flex--column">
                 {
                     this.state.subCategoryList.map(subCategoryData => {
-                        return <ProductRow key={subCategoryData.name} name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
+                        return (
+                        <Nav.Item key={subCategoryData.name} title={translate(subCategoryData.name.split('/')[1])} >
+                            <Nav.Link className={"mx-1 my-1 btn btn-outline-primary"} eventKey={subCategoryData.name}>{translate(subCategoryData.name.split('/')[1])}</Nav.Link>
+                        </Nav.Item>
+                        )
                     })
                 }
+                </Nav>
+                {/* <Tabs defaultActiveKey={this.state.subCategoryList[0].name} id="uncontrolled-tab-example"> */}
+                <Tab.Content>
+                {/* {
+                    this.state.targetSubCategoryData.data &&
+                    <Tab.Pane key={this.state.targetSubCategoryData.name} eventKey={this.state.targetSubCategoryData.name} title={translate(this.state.targetSubCategoryData.name.split('/')[1])} >
+                        <ProductRow key={this.state.targetSubCategoryData.name} name={this.state.targetSubCategoryData.name} data={this.state.targetSubCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target targetProductId={this.props.targetProductId}/>
+                    </Tab.Pane>
+                } */}
+                {
+                    this.state.subCategoryList.map((subCategoryData) => {
+                        return (
+                            this.state.targetSubCategoryData && subCategoryData.name == this.state.targetSubCategoryData.name?
+                            <Tab.Pane key={this.state.targetSubCategoryData.name} eventKey={this.state.targetSubCategoryData.name} title={translate(this.state.targetSubCategoryData.name.split('/')[1])} >
+                                <ProductRow key={this.state.targetSubCategoryData.name} name={this.state.targetSubCategoryData.name} data={this.state.targetSubCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target targetProductId={this.props.targetProductId}/>
+                            </Tab.Pane>:
+                            <Tab.Pane key={subCategoryData.name} eventKey={subCategoryData.name} title={translate(subCategoryData.name.split('/')[1])} >
+                                <ProductRow name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
+                            </Tab.Pane>
+                        )
+                    })
+                }
+                </Tab.Content>
+                </Tab.Container>
+                {/* </Tabs> */}
                 </Container>
             );
         }else{
             for(let subCategoryData of this.state.subCategoryList){
-                // console.log(subCategoryData.name)
-                // console.log(this.props.name + '/' + this.state.subCategory)
                 if(subCategoryData.name.includes(this.props.name + '/' + this.state.subCategory)){
                     return(
                         <Container>
-                            <Row>
-                                <h2 className="ml-4 mt-4">{this.props.name}</h2>
+                            <div>
+                                <h2 className="ml--4 mt-4">{translate(subCategoryData.name.split('/')[0])} / {translate(subCategoryData.name.split('/')[1])}</h2>
                                 <hr/>
-                            </Row>
+                            </div>
                             <ProductRow key={subCategoryData.name} name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
                         </Container>
                     )
