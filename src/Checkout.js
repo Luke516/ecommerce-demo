@@ -41,8 +41,8 @@ class Checkout extends React.Component {
                 </Row>
             {
                 this.state.productsInCart.map(product => {
-                    return (<Row key={product.id} className="my-3 checkoutItem shadow">
-                        <Col md={3} className={"d-flex"} style={{maxHeight: "90%"}}>
+                    return (<Row key={product.id} className="my-3 checkoutItem shadow-sm">
+                        <Col md={3} className={"d-flex justify-content-center"} style={{maxHeight: "90%"}}>
                             <img style={{maxWidth:"90%", maxHeight: "90%"}} src={product.imageSourceUrl}></img>
                         </Col>
                         <Col md={6} style={{maxHeight: "90%"}}>
@@ -58,13 +58,13 @@ class Checkout extends React.Component {
                 <hr className="my-4" style={{width: "100%", height: "1px", border: "none", backgroundColor: "gray"}}/>
                 <Row className="my-2">
                     <Col className={"d-flex"} md={3}>
-                        <strong>
+                        <h5><strong>
                             {translate("Total")}
-                        </strong>
+                        </strong></h5>
                     </Col>
                     <Col md={6}></Col>
                     <Col md={3}>
-                        <strong className="text-success">{"$" + this.state.totalPrice}</strong>
+                        <h5><strong className="text-success">{"$" + this.state.totalPrice}</strong></h5>
                     </Col>
                 </Row>
                 {/* <Row className="d-flex justify-content-center">
@@ -81,7 +81,7 @@ class Checkout extends React.Component {
                         </Button>
                     }
                 </Row>
-                
+                <div className="footer1 my-4"></div>
             </Container>
         )
     }

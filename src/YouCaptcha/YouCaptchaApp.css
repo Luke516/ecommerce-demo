@@ -1,5 +1,5 @@
 .collapsing {
-    transition: height 0.5s ease !important;
+    transition: height 0.3s ease !important;
 }
 
 @-webkit-keyframes rotating /* Safari and Chrome */ {

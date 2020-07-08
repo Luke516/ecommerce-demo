@@ -115,7 +115,7 @@ export default class ProductRow extends React.Component {
         {
             !this.state.reachEnd &&
             <Row className="my-4 d-flex justify-content-center">
-                <Button onClick={this.loadMore} className="w-25 text-center" variant="light">
+                <Button onClick={this.loadMore} className="w-25 text-center" variant="light2">
                     {translate("Load More")}
                 </Button>
             </Row>

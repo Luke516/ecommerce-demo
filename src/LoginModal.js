@@ -29,18 +29,21 @@ class LoginModal extends React.Component {
   
     render (){
         return (
-            <Modal show={this.props.showLogin} onHide={this.props.closeDialog} dialogClassName="login-dialog">
-                <Modal.Header closeButton className="align-items-baseline">
+            <Modal show={this.props.showLogin} onHide={this.props.closeDialog} dialogClassName="login-dialog" centered>
+                <Modal.Header closeButton className="align-items-baseline" style={{borderBottom: 0}}>
                     <Modal.Title>
                     {this.props.captchaVerified? translate("Welcome") + ", " + this.props.username : translate("Login Your Account")}
                     </Modal.Title>
-                    <span className="mx-2 text-secondary text-muted">
-                        沒有帳號？請先<a href="#">註冊</a>
-                    </span>
+                    {
+                        !this.props.captchaVerified &&
+                        <span className="mx-2 text-secondary text-muted">
+                            沒有帳號？請先<a href="#">註冊</a>
+                        </span>
+                }      
                 </Modal.Header>
                 <Modal.Body className="mt-2">
                     <Form className="d-flex flex-row justify-content-center">
-                    <div className={this.props.captchaVerified?"ml-2 d-flex flex-column shrink vertLine ml-2 mr-4 pr-4":"ml-2 d-flex flex-column w-50 vertLine mr-4 pr-4"}>
+                    <div className={this.props.captchaVerified?"justify-content-center ml-2 d-flex flex-column ww-50 shrink vertLine ml-2 mr-4 pr-4":"justify-content-center ml-2 d-flex flex-column ww-50 vertLine mr-4 pr-4"}>
                         <InputGroup className="d-flex align-items-center mb-3" style={{borderRadius:"0.25rem"}}>
                             <InputGroup.Prepend>
                                 {/* <label htmlFor="basic-url">{translate("Username")}</label>    */}
@@ -79,20 +82,23 @@ class LoginModal extends React.Component {
                             </InputGroup.Append>
                         </InputGroup>
                         <div>
-                            <a href="#">忘記密碼？</a>
+                            <a href="#" className="text-secondary">忘記密碼？</a>
                         </div>
-                        <div className="my-3 d-flex justify-content-center align-items-center">
+                        {/* <div className="my-3 d-flex justify-content-center align-items-center">
                             <div class="left-seperator"></div>
-                            <span class="">或</span>
+                            <span class="">其他登入方式</span>
                             <div class="right-seperator"></div>
                         </div>
                         <div className="d-flex flex-row">
-                            <Button variant="google text-light" className="d-flex align-items-center google-login mx-2"><FontAwesomeIcon icon={faGoogle}/>Google<span></span></Button>
-                            <Button variant="facebook text-light" className="d-flex align-items-center facebook-login mx-2"><FontAwesomeIcon icon={faFacebookF}/>Facebook<span></span></Button>
-                        </div>
+                            <Button variant="google text-light" className="d-flex align-items-center google-login mr-2"><FontAwesomeIcon icon={faGoogle}/>Google<span></span></Button>
+                            <Button variant="facebook text-light" className="d-flex align-items-center facebook-login ml-2"><FontAwesomeIcon icon={faFacebookF}/>Facebook<span></span></Button>
+                        </div> */}
                     </div>
-                    <div className={this.props.captchaVerified?"scale":"w-50"} style={{minHeight: this.props.captchaType == "YouCaptcha"?"180px":"80px"}}>
-                        <p>{this.props.captchaVerified?"":"完成驗證碼"}</p>
+                    <div className={this.props.captchaVerified?"ww-50 scale":"ww-50"} style={{minHeight: this.props.captchaType == "YouCaptcha"? this.props.captchaVerified? "170px" :"120px":"80px"}}>
+                        {/* {
+                            !this.props.captchaVerified &&
+                            <p>完成驗證碼</p>
+                        } */}
                         {this.props.captchaType == "textCaptcha" && 
                             <div className="text-captcha">
                                 <RCG result={this.props.result} />

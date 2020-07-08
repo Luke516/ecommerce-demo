@@ -41,7 +41,19 @@ function YouCaptchaApp(props) {
         type: "",
         answer: captchaAnswer
       },
-      errorPolicy: 'all'
+      errorPolicy: 'all',
+      onCompleted: ()=>{
+        console.log('hahaha')
+        if(firstLoad){
+          setFirstLoad(false);
+        }
+        else{
+          if(data.result.status === "incorrect"){
+            setShowEmptyMessage(false)
+            setShowWrongMessage(true)
+          }
+        }
+      }
     }
   );
 
@@ -53,27 +65,17 @@ function YouCaptchaApp(props) {
   }
 
   const verifyCaptcha = (id, answer) => {
-    setFirstLoad(false);
-    setCaptchaId(id);
-    setCaptchaAnswer(answer.slice());
-    if(data.result.status == "incorrect"){
-      setTimeout(()=>{
+    if(props.onSuccess()){
+      setCaptchaId(id);
+      setCaptchaAnswer(answer.slice());
+      if(answer.length == 0){
         setShowEmptyMessage(false)
         setShowWrongMessage(true)
-      }, 500)
+      }
     }
     else{
-      if(props.onSuccess()){
-        setShowWrongMessage(false)
-        setShowEmptyMessage(false)
-        setShowCaptcha(false)
-        setFirstLoad(true)
-        setFetchData(data)
-      }
-      else {
-        setShowWrongMessage(false)
-        setShowEmptyMessage(true)
-      }
+      setShowWrongMessage(false)
+      setShowEmptyMessage(true)
     }
   }
 
@@ -89,7 +91,7 @@ function YouCaptchaApp(props) {
         data.result.title = data.result.title.substring(0,50) + "...";
       }
       if(data.result.status != "incorrect"){
-        if(props.onSuccess()){
+        if(props.onSuccess(true)){
           setShowWrongMessage(false)
           setShowEmptyMessage(false)
           // setShowCaptcha(false)

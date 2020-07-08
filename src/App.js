@@ -125,7 +125,7 @@ class App extends React.Component {
     return (
       <Router>
       <div className=''>
-        <Navbar bg="light" expand="lg" className="my-2 nav-shadow" style={{display: this.state.navbarToggle? "none": "flex"}}>
+        <Navbar bg="light" expand="lg" className="shadow-sm px-4" style={{display: this.state.navbarToggle? "none": "flex"}}>
           <Navbar.Brand href="/">
             <img
               alt=""
@@ -137,13 +137,9 @@ class App extends React.Component {
             <span className="brand">KocoShop</span>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            {/* <Form inline className="d-flex justify-content-center col-sm-8 mr-sm-2">
-              <FormControl type="text" placeholder="搜尋" className="col-sm-10 mr-sm-2" />
-              <Button variant="outline-info">搜尋</Button>
-            </Form> */}
+          <Navbar.Collapse id="basic-navbar-nav" className="justify-content-between">
 
-            <Nav className="mr-auto">
+            <Nav>
               <SplitButton className={ this.state.targetCategory=="Men's Fashion"? "mr-3 target-category": "mr-3" } tag={Link} href="Men's Fashion"
                 variant={this.state.targetCategory=="Men's Fashion"?'':''}
                 title={translate(`Men's Fashion`)}>
@@ -210,70 +206,69 @@ class App extends React.Component {
                 }
               </SplitButton>
             </Nav>
-            <OverlayTrigger
-              trigger="focus"
-              key={'bottom'}
-              placement={'bottom'}
-              overlay={
-                <Popover id={`popover-positioned-${'bottom'}`}>
-                  <ListGroup>
-                  {
-                    this.state.productsInCart.map((product, index) => {
-                        return (
-                        <ListGroup.Item>
-                          <Row>
-                            <Col style={{cursor: "pointer"}} onClick={() => this.clearCart(index)} lg={2}><FontAwesomeIcon icon={faTimes} /></Col>
-                            <Col lg={10}><strong key={product.id}>{product.name}</strong></Col>
-                          </Row>
-                        </ListGroup.Item>)
-                      }
-                    )
-                  }
-                  {
-                    this.state.productsInCart.length > 0?
-                    <>
-                      <ListGroup.Item action onClick={() => this.clearCart()}>
-                        清空購物車
-                      </ListGroup.Item>
+            <div className="d-flex flex-row align-items-center">
+              <OverlayTrigger
+                trigger="focus"
+                key={'bottom'}
+                placement={'bottom'}
+                overlay={
+                  <Popover id={`popover-positioned-${'bottom'}`}>
+                    <ListGroup>
+                    {
+                      this.state.productsInCart.map((product, index) => {
+                          return (
+                          <ListGroup.Item>
+                            <Row>
+                              <Col style={{cursor: "pointer"}} onClick={() => this.clearCart(index)} lg={2}><FontAwesomeIcon icon={faTimes} /></Col>
+                              <Col lg={10}><strong key={product.id}>{product.name}</strong></Col>
+                            </Row>
+                          </ListGroup.Item>)
+                        }
+                      )
+                    }
+                    {
+                      this.state.productsInCart.length > 0?
+                      <>
+                        <ListGroup.Item action style={{padding: 0}} onClick={() => this.clearCart()}>
+                          {/* 清空購物車 */}
+                          <Button size="" variant="light" className="w-100">清空購物車</Button>
+                        </ListGroup.Item>
+                        <ListGroup.Item style={{padding: 0}}>
+                          {/* <a href="Checkout"><strong>去結帳</strong></a> */}
+                          <Button href="Checkout" size="" className="w-100">去結帳</Button>
+                        </ListGroup.Item>
+                      </>:
                       <ListGroup.Item>
-                        <a href="Checkout"><strong>去結帳</strong></a>
+                        您的購物車目前沒有商品
                       </ListGroup.Item>
-                    </>:
-                    <ListGroup.Item>
-                      您的購物車目前沒有商品
-                    </ListGroup.Item>
-                  }
-                  <ListGroup.Item>
-                    <Button onClick={this.nextTest}>下一個</Button>
-                  </ListGroup.Item>
-                  </ListGroup>
-                </Popover>
+                    }
+                    {/* <ListGroup.Item>
+                      <Button onClick={this.nextTest}>下一個</Button>
+                    </ListGroup.Item> */}
+                    </ListGroup>
+                  </Popover>
+                }
+              >
+                <Button className="mx" variant="">
+                <FontAwesomeIcon className="mx-2" icon={faShoppingCart}/>
+                  購物車
+                  <Badge className="mx-1" variant={this.state.productsInCart.length > 0? "primary" :"secondary"}>{this.state.productsInCart.length}</Badge>
+                </Button>
+              </OverlayTrigger>
+              {
+                this.state.userLogin ? 
+                <>
+                  <span className="ml-2 mr-4" href="#home">歡迎, {this.state.username}</span>
+                  <Button variant="outline-primary" href="/" onClick={this.userLogout}>登出</Button>
+                </>:
+                <Button className="ml-2" variant="outline-primary" onClick={() => {this.setState({showLogin: true})}}>
+                  登入
+                </Button>
               }
-            >
-              <Button className="mx-2" variant="">
-               <FontAwesomeIcon className="mx-2" icon={faShoppingCart}/>
-                購物車
-                <Badge className="mx-1" variant="secondary">{this.state.productsInCart.length}</Badge>
-              </Button>
-            </OverlayTrigger>
-            {
-              this.state.userLogin ? 
-              <>
-                <Nav.Link className="mr-2" href="#home">歡迎, {this.state.username}</Nav.Link>
-                <Button variant="outline-primary" size="sm" href="/" onClick={this.userLogout}>登出</Button>
-              </>:
-              <Button className="mr-2" variant="outline-primary" onClick={() => {this.setState({showLogin: true})}}>
-                登入
-              </Button>
-              //   <Nav.Link href="#home" onClick={() => {this.setState({showLogin: true})}}>
-              //     登入
-              // </Nav.Link>
-            }
-            {/* <Nav.Link href="#link">Cart <Badge variant="secondary">{this.state.productsInCart.length}</Badge>
-            </Nav.Link> */}
+            </div>
           </Navbar.Collapse>
         </Navbar>
-        <Alert variant="success" style={{position: "fixed", bottom: "2rem", width: "40%", left: "30%", zIndex: "1200", textAlign: "center", display: this.state.showSuccessDialog? "block" : "none"}}>
+        <Alert variant="success" className="shadow-sm" style={{position: "fixed", bottom: "2rem", width: "40%", left: "30%", zIndex: "1200", textAlign: "center", display: this.state.showSuccessDialog? "block" : "none"}}>
           加入購物車成功
         </Alert>
         <LoginModal showLogin={this.state.showLogin} closeDialog={this.closeDialog} 
@@ -523,7 +518,7 @@ class App extends React.Component {
     })
   }
 
-  captchaSuccess() {
+  captchaSuccess(captchaPass = false) {
     if(this.state.username == "" || this.state.password == ""){
       this.setState({
         usernameValid: this.state.username == ""? false: true,
@@ -531,13 +526,17 @@ class App extends React.Component {
       })
       return false
     }
-    this.setState({
-      usernameValid: true,
-      passwordValid: true,
-      captchaVerified: true
-    }, ()=>{
-      this.userLogin()
-    })
+    if(captchaPass){
+      setTimeout(
+        this.setState({
+          usernameValid: true,
+          passwordValid: true,
+          captchaVerified: true
+        }, ()=>{
+          this.userLogin()
+        }), 500
+      )
+    }
     return true
   }
 

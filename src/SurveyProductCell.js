@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfo, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 import { translate } from './utils/translate';
 
-class ProductCell extends React.Component {
+class SurveyProductCell extends React.Component {
   
     constructor(props) {
         super(props);
@@ -29,7 +29,8 @@ class ProductCell extends React.Component {
         this.state = {
             price: priceData[this.props.product.id][0],
             imageSourceUrl: imageSourceUrl,
-            title
+            title,
+            check: false
         };
         this.detailButtonClick = this.detailButtonClick.bind(this);
     }
@@ -45,18 +46,18 @@ class ProductCell extends React.Component {
         //     title = this.props.product.name.slice(0,42) + "..."
         return (
             <Col className="my-3 mx-" xs={12} sm={6} md={4} lg={3} style={{cursor: "pointer"}}>
-                <Card className="shadow" style={{border: "0", padding: "0rem", height: this.props.hideOption?"400px":"480px", justifyContent: "space-between", alignItems: "center"}}>
+                <div className="d-flex flex-column align-items-center" style={{backgroundColor:"white", border: "1px solid black", padding: "1rem", height: this.props.hideOption?"400px":"480px"}}>
                     <div className="w-100">
                     {this.props.checkbox &&
-                        <input id="1-2" onChange={this.changeAnswer} type="checkbox" className=""></input>
+                        <input id="1-2" onChange={this.changeAnswer} checked={this.state.check} type="checkbox" className=""></input>
                     }
                     </div>
                     <div onClick={this.detailButtonClick} className="d-flex justify-content-center" style={{maxHeight:"200px", maxWidth:"200px", overflow: "hidden"}}>
                         <img src={this.state.imageSourceUrl} style={{maxWidth: "200px", maxHeight:"200px", width: "auto", height: "auto"}}></img>
                     </div>
-                    <Card.Body className={"d-block w-100"} style={{justifyContent: "flex-end", flex: "none", padding: 0}}>
+                    <div className={"d-block w-100"} style={{justifyContent: "flex-end", flex: "none", padding: 0}}>
                         <div onClick={this.detailButtonClick} style={{padding: "1rem"}}>
-                            <Card.Title style={{lineHeight: "1.5rem", height: "4.5rem", overflowY: "scroll"}}>{title}</Card.Title>
+                            <div style={{lineHeight: "1.5rem", height: "4.5rem", overflowY: "scroll"}}>{title}</div>
                             {
                                 !this.props.hideOption &&
                                 <h4 className="text-success text-right"><strong>{"$" + this.state.price}</strong></h4>
@@ -75,18 +76,21 @@ class ProductCell extends React.Component {
                                 <FontAwesomeIcon className="mx-2" icon={faShoppingCart} />{translate("Add To Cart")}
                             </Button>
                         }
-                    </Card.Body>
-                </Card>
+                    </div>
+                </div>
             </Col>
         );
     }
 
     detailButtonClick() {
         let { history } = this.props
-        this.props.history.push('/Product?p=' + this.props.product.id) 
-        console.log("Detail Click !!!")
-        this.props.showProduct({...this.props.product, ...this.state});
+        this.setState({
+            check: !this.state.check
+        })
+        // this.props.history.push('/Product?p=' + this.props.product.id) 
+        // console.log("Detail Click !!!")
+        // this.props.showProduct({...this.props.product, ...this.state});
     }
 }
 
-export default withRouter(ProductCell)
+export default withRouter(SurveyProductCell)

@@ -9,7 +9,7 @@ export function translate(text) {
         "Health and Household": "健康",
         "Home and Kitchen": "居家生活",
         "Beauty and Personal Care":"美妝護理",
-        "Television & Video":"電視",
+        "Television & Video":"電視影音",
         "Clothing":"衣著",
         "Shoes":"鞋子",
         "Watches":"手錶",

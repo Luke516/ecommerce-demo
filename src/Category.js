@@ -113,16 +113,16 @@ class Category extends React.Component {
             return (
                 <Container>
                 <div>
-                    <h2 className="ml--4 mt-4">{translate(this.props.name)}</h2>
-                    <hr/>
+                    <h2 className="mb-4 mt-4">{translate(this.props.name)}</h2>
+                    {/* <hr/> */}
                 </div>
                 <Tab.Container defaultActiveKey={this.state.subCategoryList[0].name} id="uncontrolled-tab-example">
-                <Nav variant="pills" className="flex--column">
+                <Nav variant="tabs" className="flex--column">
                 {
                     this.state.subCategoryList.map(subCategoryData => {
                         return (
                         <Nav.Item key={subCategoryData.name} title={translate(subCategoryData.name.split('/')[1])} >
-                            <Nav.Link className={"mx-1 my-1 btn btn-outline-primary"} eventKey={subCategoryData.name}>{translate(subCategoryData.name.split('/')[1])}</Nav.Link>
+                            <Nav.Link className={" btnq btnq-outline-primary"} eventKey={subCategoryData.name}>{translate(subCategoryData.name.split('/')[1])}</Nav.Link>
                         </Nav.Item>
                         )
                     })
@@ -152,6 +152,7 @@ class Category extends React.Component {
                 </Tab.Content>
                 </Tab.Container>
                 {/* </Tabs> */}
+                <div className="footer1 my-4"></div>
                 </Container>
             );
         }else{
@@ -160,10 +161,11 @@ class Category extends React.Component {
                     return(
                         <Container>
                             <div>
-                                <h2 className="ml--4 mt-4">{translate(subCategoryData.name.split('/')[0])} / {translate(subCategoryData.name.split('/')[1])}</h2>
+                                <h2 className="mb-4 mt-4">{translate(subCategoryData.name.split('/')[0])} / {translate(subCategoryData.name.split('/')[1])}</h2>
                                 <hr/>
                             </div>
                             <ProductRow key={subCategoryData.name} name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
+                            <div className="footer1 my-4"></div>
                         </Container>
                     )
                 }

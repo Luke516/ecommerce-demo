@@ -6,7 +6,7 @@ import YouCaptchaApp from './YouCaptcha/YouCaptchaApp'
 
 import queryString from 'query-string';
 import { Form, Container, Row, Button, Col, Modal, Card} from 'react-bootstrap';
-import ProductCell from './ProductCell'
+import SurveyProductCell from './SurveyProductCell'
 import ProductRow from './ProductRow'
 import data from './data/metadata_all_with_detail_img_3_empty.json';
 import flatData from './data/flat_products_list_zh.json';
@@ -14,6 +14,20 @@ import { shuffle } from './utils/utlis';
 import { translate } from './utils/translate';
 
 class Survey extends React.Component {
+
+    changeFavicon(src) {
+        // var link = document.createElement('link'),
+        //     oldLink = document.getElementById('dynamic-favicon');
+        // link.id = 'dynamic-favicon';
+        // link.rel = 'shortcut icon';
+        // link.href = src;
+        // if (oldLink) {
+        //  document.head.removeChild(oldLink);
+        // }
+        // document.head.appendChild(link);
+        const favicon = document.getElementById('favicon');
+        favicon.setAttribute("href", src);
+    }
 
     getRandomProduct(data) {
         let obj_keys = Object.keys(data);
@@ -75,20 +89,26 @@ class Survey extends React.Component {
         }
 
         this.state = {
-            questionId: 1,
+            questionId: 0,
             list1,
             list2,
             list3: targetProduct,
             list4: this.getRandomProduct(data),
             showDialog: false,
-            answers: [[], [], -1, -1, -1]
+            answers: [[], [], -1, -1, -1],
+            other: "其他"
         }
 
+        this.changeFavicon = this.changeFavicon.bind(this);
         this.nextQuestion = this.nextQuestion.bind(this);
         this.prevQuestion = this.prevQuestion.bind(this);
         this.changeAnswer = this.changeAnswer.bind(this);
         this.checkValid = this.checkValid.bind(this);
         this.finish = this.finish.bind(this);
+        this.otherFactor = this.otherFactor.bind(this);
+
+        document.title = '問卷！';
+        this.changeFavicon("/logo192.png");
     }
 
     componentWillMount() {
@@ -101,19 +121,38 @@ class Survey extends React.Component {
   
     render (){
         return (
-            <Container>
-                <Row className={this.state.questionId == 1?"":"mb-4"}>
-                    <Col xs={12} className="d-flex flex-row justify-content-center align-items-center my-2">
-                        <h2 className="mt-4">{translate("Survey") + " (" + (parseInt(this.state.questionId)-1)+ "/5)"}</h2>
-                    </Col>
-                    {this.state.questionId == 1 &&
-                        // <Col xs={12}>
-                            <p>感謝您協助參與我們的研究！請幫助我們回答以下幾個問題。這些問題沒有正確答案，只需要憑印象回答即可。</p>
-                        // </Col>
+            <div className="vh-100" style={{padding: "2rem", backgroundImage: "url('back03.jpg')"}}>
+                <Row className={"mb--4"}>
+                    {
+                        this.state.questionId > 0 &&
+                        <Col xs={12} className="d-flex flex-row justify-content-center align-items-center my-2">
+                            {/* <h2 className="mt-4">{translate("Survey") + " (" + (parseInt(this.state.questionId)-1)+ "/5)"}</h2> */}
+                            <h2 className="mt--4">{"第" + (parseInt(this.state.questionId))+ "題，共5題"}</h2>
+                        </Col>
                     }
                 </Row>
-                <hr style={{width: "100%", height: "1px", border: "none", backgroundColor: "rgba(0, 0, 0, 0.125)"}}/>
-                <Row style={{display: this.state.questionId == 0? "block": "none"}}>
+                {this.state.questionId == 0 &&
+                    // <Col xs={12}>
+                    <div className="w-100 d-flex justify-content-center align-items-center flex-column" style={{height: "80%"}}>
+                        <h2>恭喜！你已經完成了本階段的任務。</h2>
+                        <p className="mt-4">
+                            接下來，我們會請您回答五題簡單的問題。請憑您剛剛瀏覽網頁的印象來作答。
+                        </p>
+                        <button type="button" onClick={this.nextQuestion}>開始</button>
+                    </div>
+                    // </Col>
+                }
+                {this.state.questionId > 0 &&
+                    <div className="my-4 d-flex justify-content-center">
+                        <span className={this.state.questionId == 1? "mx-2 black-dot": "mx-2 dot"}></span>
+                        <span className={this.state.questionId == 2? "mx-2 black-dot": "mx-2 dot"}></span>
+                        <span className={this.state.questionId == 3? "mx-2 black-dot": "mx-2 dot"}></span>
+                        <span className={this.state.questionId == 4? "mx-2 black-dot": "mx-2 dot"}></span>
+                        <span className={this.state.questionId == 5? "mx-2 black-dot": "mx-2 dot"}></span>
+                    </div>
+                }
+                {/* <hr style={{width: "100%", height: "1px", border: "none", backgroundColor: "rgba(0, 0, 0, 0.125)"}}/> */}
+                <Row className="mt-2" style={{display: this.state.questionId == 0? "block": "none"}}>
                     <Modal show={this.state.showDialog} onHide={()=>{this.setState({showDialog: false})}}>
                         <Modal.Header closeButton>
                             <Modal.Title>
@@ -137,7 +176,11 @@ class Survey extends React.Component {
                     </Modal>
                 </Row>
                 <Row style={{display: this.state.questionId == 1? "block": "none"}}>
-                    <h4>請問您印象中有看過下列哪些商品？請將看過的打勾 (答案可能有任意數目，或是沒有答案)</h4>
+                    {/* <h4>請問您印象中有看過下列哪些商品？請將看過的打勾 (答案可能有任意數目，或是沒有答案)</h4> */}
+                    <div className="d-flex flex-column align-items-center">
+                        <h5>下面有四件商品的名稱與圖片，請問在剛剛瀏覽的過程中，有哪些商品是您印象中有看過的？請將看過的商品打勾。</h5>
+                        <h5>(答案可能有任意數目，如果全部都沒看過，直接按下一題即可)</h5>
+                    </div>
                     {/* <Row className="mt-4">
                         <Col xs={12} sm={6} md={4} lg={3} style={{paddingLeft: "5px", paddingRight: "5px"}}>
                             <input id="1-1" onChange={this.changeAnswer} type="checkbox" className=""></input>
@@ -156,7 +199,7 @@ class Survey extends React.Component {
                     {
                         this.state.list1.map(element => {
                             return (
-                                <ProductCell hideOption key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} checkbox/>
+                                <SurveyProductCell hideOption key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} checkbox/>
                             )
                         })
                     }
@@ -180,7 +223,11 @@ class Survey extends React.Component {
                     </Row> */}
                 </Row>
                 <Row style={{display: this.state.questionId == 2? "block": "none"}}>
-                <h4>請問您印象中有看過下列哪些商品？請將看過的打勾 (答案可能有任意數目，或是沒有答案)</h4>
+                {/* <h4>請問您印象中有看過下列哪些商品？請將看過的打勾 (答案可能有任意數目，或是沒有答案)</h4> */}
+                    <div className="d-flex flex-column align-items-center">
+                        <h5>下面有四件商品的名稱與圖片，請問在剛剛瀏覽的過程中，有哪些商品是您印象中有看過的？請將看過的商品打勾。</h5>
+                        <h5>(答案可能有任意數目，如果全部都沒看過，直接按下一題即可)</h5>
+                    </div>
                     {/* <Row>
                         <Col xs={12} sm={6} md={4} lg={3} style={{paddingLeft: "5px", paddingRight: "5px"}}>
                             <input type="checkbox" className=""></input>
@@ -198,7 +245,7 @@ class Survey extends React.Component {
                     <Row>
                     {
                         this.state.list2.map(element => {
-                            return <ProductCell hideOption key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} checkbox/>
+                            return <SurveyProductCell hideOption key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} checkbox/>
                         })
                     }
                         {/* <Col className="my-1" xs={12} sm={6} md={4} lg={3} style={{paddingLeft: "5px", paddingRight: "5px"}}>
@@ -221,15 +268,20 @@ class Survey extends React.Component {
                     </Row> */}
                 </Row>
                 <Row style={{display: this.state.questionId == 3? "block": "none"}}>
-                    <h4>請看以下商品的圖片和名稱，如果以第一印象而言，您對它感興趣的程度？</h4>
-                    <Row className="my-4">
+                    {/* <h4>請看以下商品的圖片和名稱，如果以第一印象而言，您對它感興趣的程度？</h4> */}
+                    <div className="d-flex flex-column align-items-center">
+                        <h5>請看以下商品的圖片和名稱，如果只看第一印象，不論價錢的話，您對它感興趣的程度？</h5>
+                        {/* <h5>(如果您在其他地方看到這款商品)</h5> */}
+                    </div>
+                    <Row className="my--2">
                         <Col xs={12} sm={6} md={4} lg={3} style={{paddingLeft: "5px", paddingRight: "5px"}}></Col>
-                        <ProductCell hideOption key={this.state.list3.id} product={this.state.list3} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
+                        <SurveyProductCell hideOption key={this.state.list3.id} product={this.state.list3} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
                         <Col xs={12} sm={6} md={4} lg={3}>
                             <div key={`inline-radio`} className="mb-3">
                                 <Form className="d-flex flex-column justify-content-center">
-                                    <div className="my-2"></div>
-                                    <Form.Check inline label="非常感興趣" name="survey3" type={'radio'} id={`inline-radio-1`} /><br/>
+                                    {/* <div className="my-2"></div> */}
+                                    <br/>
+                                    <Form.Check className="my-2" inline label="非常感興趣" name="survey3" type={'radio'} id={`inline-radio-1`} /><br/>
                                     <Form.Check inline label="有點感興趣" name="survey3" type={'radio'} id={`inline-radio-2`} /><br/>
                                     <Form.Check inline label="普通" name="survey3" type={'radio'} id={`inline-radio-3`} /><br/>
                                     <Form.Check inline label="不太感興趣" name="survey3" type={'radio'} id={`inline-radio-4`} /><br/>
@@ -241,14 +293,20 @@ class Survey extends React.Component {
                     </Row>
                 </Row>
                 <Row style={{display: this.state.questionId == 4? "block": "none"}}>
-                    <h4>請看以下商品的圖片和名稱，如果以第一印象而言，您對它感興趣的程度？</h4>
-                    <Row className="my-4">
+                    {/* <h4>請看以下商品的圖片和名稱，如果以第一印象而言，您對它感興趣的程度？</h4> */}
+                    <div className="d-flex flex-column align-items-center">
+                        <h5>請看以下商品的圖片和名稱，如果只看第一印象，不論價錢的話，您對它感興趣的程度？</h5>
+                        {/* <h5>(如果您在其他地方看到這款商品)</h5> */}
+                    </div>
+                    <Row className="my--2">
                     <Col xs={12} sm={6} md={4} lg={3} style={{paddingLeft: "5px", paddingRight: "5px"}}></Col>
-                        <ProductCell hideOption key={this.state.list4.id} product={this.state.list4} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
+                        <SurveyProductCell hideOption key={this.state.list4.id} product={this.state.list4} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
                         <Col xs={12} sm={6} md={4} lg={3} >
                             <div key={`inline-radio`} className="mb-3">
                                 <Form>
-                                    <Form.Check inline label="非常感興趣" name="survey4" type={'radio'} id={`inline-radio-1`} /><br/><br/>
+                                    {/* <div className="my-2"></div> */}
+                                    <br/>
+                                    <Form.Check className="my-2" inline label="非常感興趣" name="survey4" type={'radio'} id={`inline-radio-1`} /><br/><br/>
                                     <Form.Check inline label="有點感興趣" name="survey4" type={'radio'} id={`inline-radio-2`} /><br/><br/>
                                     <Form.Check inline label="普通" name="survey4" type={'radio'} id={`inline-radio-3`} /><br/><br/>
                                     <Form.Check inline label="不太感興趣" name="survey4" type={'radio'} id={`inline-radio-4`} /><br/><br/>
@@ -260,25 +318,39 @@ class Survey extends React.Component {
                     </Row>
                 </Row>
                 <Row style={{display: this.state.questionId == 5? "block": "none"}}>
-                    <h4>在本次購買的過程中，您覺得影響您最後決定的主要因素是？</h4>
-                    <Col className="my-4" sm={10}>
+                    {/* <h4>在本次購買的過程中，您覺得影響您最後決定的主要因素是？</h4> */}
+                    <div className="d-flex flex-column align-items-center">
+                        <h5>在本階段實驗的過程中，您覺得在所有影響您最後選擇商品的因素中，最主要因素為何？</h5>
+                        {/* <h5>(如果您在其他地方看到這款商品)</h5> */}
+                    </div>
+                    <Col className="my-4 d-flex justify-content-center" sm={12}>
                         <div key={`inline-radio`} className="mb-3">
-                            <Form.Check inline label="外觀" type={'radio'} id={`inline-radio-1`} /><br/><br/>
-                            <Form.Check inline label="敘述" type={'radio'} id={`inline-radio-2`} /><br/><br/>
-                            <Form.Check inline label="價格" type={'radio'} id={`inline-radio-3`} /><br/>
+                            <Form.Check inline label="外觀" type={'radio'} name="question4" id={`inline-radio-1`} />
+                            <Form.Check inline label="敘述" type={'radio'} name="question4" id={`inline-radio-2`} />
+                            <Form.Check inline label="價格" type={'radio'} name="question4" id={`inline-radio-3`} />
+                            <Form.Check onClick={this.otherFactor} inline label={this.state.other} type={'radio'} name="question4" id={`inline-radio-3`} />
                         </div>
                     </Col>
                 </Row>
                 {
                     this.state.questionId > 0 &&
                     <Row className="my-2 d-flex justify-content-center">
-                        <Button size="lg" className="mx-1" style={{display: this.state.questionId == 1? "none": "block"}} onClick={() => this.prevQuestion()}>上一題</Button>
-                        <Button size="lg" className="mx-1" style={{display: this.state.questionId == 5? "none": "block"}} onClick={() => this.nextQuestion()}>下一題</Button>
-                        <Button size="lg" className="mx-1" style={{display: this.state.questionId == 5? "block": "none"}} onClick={() => {this.setState({showDialog: true})}}>完成</Button>
+                        <button type="button" size="lg" className="mx-1" style={{display: this.state.questionId == 1? "none": "block"}} onClick={() => this.prevQuestion()}>上一題</button>
+                        <button type="button"  size="lg" className="mx-1" style={{display: this.state.questionId == 5? "none": "block"}} onClick={() => this.nextQuestion()}>下一題</button>
+                        <button type="button"  size="lg" className="mx-1" style={{display: this.state.questionId == 5? "block": "none"}} onClick={() => {this.finish()}}>完成</button> 
+                        {/* <button type="button"  size="lg" className="mx-1" style={{display: this.state.questionId == 5? "block": "none"}} onClick={() => {this.setState({showDialog: true})}}>完成</button> */}
                     </Row>
                 }
-            </Container>
+            </div>
         )
+    }
+
+    otherFactor() {
+        let factor = prompt("請填寫原因：")
+        this.setState({
+            other: factor
+        })
+        console.log(factor)
     }
 
     changeAnswer(e) {
@@ -309,6 +381,7 @@ class Survey extends React.Component {
         this.setState({
             showDialog: false
         })
+        alert("感謝您的回答！接下來將進行下一階段的實驗")
         this.props.nextTest()
         this.props.clearCart()
         setTimeout(()=>{

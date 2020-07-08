@@ -111,7 +111,7 @@ function CaptchaView(props) {
                 // <Button variant="primary" onClick={() => {props.toggleShowCaptcha()}}
                     aria-controls="youcaptcha-collpase"
                     aria-expanded={props.showCaptcha}>
-                    繼續
+                    登入
                 </Button>
             </div>
         </Row>

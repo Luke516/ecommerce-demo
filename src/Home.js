@@ -123,6 +123,10 @@ class Home extends React.Component {
             }
         </Row> */}
         <ProductRow name={""} data={data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
+        <div className="footer1 my-4"></div>
+        <Row className="context-dark">
+            
+        </Row>
         </Container>
       );
     }

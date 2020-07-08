@@ -5723,8 +5723,8 @@
         }
     },
     "Men's Fashion": {
-        "Up": {
-            "1":{
+        "Clothing": {
+            "Shirts": {
                 "B07F1CQ89K": {
                     "name": "Amazon Essentials Men's Slim-Fit Quick-Dry Golf Polo Shirt"
                 },
@@ -5775,16 +5775,7 @@
                 },
                 "B07C5Y611J": {
                     "name": "Isle Bay Linens Men's Standard-Fit Long Sleeve Casual Shirt"
-                }
-            }
-        },
-        "Down:": {
-            "1":{
-
-            }
-        },
-        "Clothing": {
-            "Shirts": {
+                },
                 "B01GJ1QQT2": {
                     "name": "NEARKIN Mens Tuxedo Shirts Non Iron Wrinkle Free Spandex Comfy Dress Shirt"
                 }

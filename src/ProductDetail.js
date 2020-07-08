@@ -9,7 +9,7 @@ import { faInfo, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 import { translate } from './utils/translate';
 import { shuffle } from './utils/utlis';
 import ProductCell from './ProductCell'
-import { Container, Row, Col, Carousel, Button, Card, CardDeck, InputGroup, Form, FormControl } from 'react-bootstrap';
+import { Container, Row, Col, Carousel, Button, Card, Breadcrumb } from 'react-bootstrap';
 
 export default class ProductDetail extends React.Component {
   
@@ -55,7 +55,8 @@ export default class ProductDetail extends React.Component {
             list1.push(recommandedProduct)
         }
         list1 = shuffle(list1)
-        let product = this.props.product
+        // let product = this.props.product
+        let product = null
         let price = 8787
         if(!product){
             product = {
@@ -226,18 +227,28 @@ export default class ProductDetail extends React.Component {
             <Container style={{maxWidth: "1300px"}}>
             <Row style={{height:"1.5rem"}}></Row>
             <Row>
-                <Col xs={12} sm={12} md={12} lg={12} style={{paddingLeft: "4rem", paddingRight: "4rem"}}>
+                {/* <Col xs={12} sm={12} md={12} lg={12} style={{paddingLeft: "4rem", paddingRight: "4rem"}}>
                     <a href="/">{translate("home")}</a>
                     {
                         productCategories.map((_category) => {
                             return <span> {">"} <a key={_category}>{translate(_category)}</a></span>
                         })
                     }
-                </Col>
+                </Col> */}
+                <Breadcrumb>
+                    <Breadcrumb.Item href="/">{translate("home")}</Breadcrumb.Item>
+                    <Breadcrumb.Item href={"/" + encodeURIComponent(productCategories[0])}>{translate(productCategories[0])}</Breadcrumb.Item>
+                    <Breadcrumb.Item href="/">{translate(productCategories[1])}</Breadcrumb.Item>
+                    {/* {
+                        productCategories.map((_category) => {
+                            return <Breadcrumb.Item><a key={_category}>{translate(_category)}</a></Breadcrumb.Item>
+                        })
+                    } */}
+                </Breadcrumb>
             </Row>
             <Row className="my-4">
-                <Col xs={12} sm={12} md={5} lg={5} style={{paddingLeft: "4rem", paddingRight: "2rem"}}>
-                    <Card style={{padding: "1rem", width:"410px", maxHeight: "700px", overflowY: "scroll", justifyContent: "center", alignItems: "center", border: "none"}}>
+                <Col className="d-flex justify-content-center" xs={12} sm={12} md={5} lg={5} style={{paddingLeft: "4rem", paddingRight: "2rem"}}>
+                    <Card className="d-flex justify-content-center" style={{padding: "1rem", width:"410px", maxHeight: "500px", overflowY: "scroll", alignItems: "center", border: "none"}}>
                         <div className="d-flex justify-content-center" style={{maxHeight:"320px", maxWidth:"320px"}}>
                             {/* <Card.Img variant="top" height="300px" src={imageSourceUrl} /> */}
                             <img src={imageSourceUrl} style={{maxWidth: "320px", maxHeight:"320px", width: "auto", height: "auto"}}></img>
@@ -250,7 +261,7 @@ export default class ProductDetail extends React.Component {
                             {/* <Card.Title style={{height: "5rem"}}>{title}</Card.Title> */}
                             <div dangerouslySetInnerHTML={{ __html: this.state.detailHtml }} ></div>
                             <div style={{height: "2rem"}}></div>
-                            <Card.Title className="text-success"><strong>{"$" + this.state.price}</strong><span className="mx-2 text-secondary" style={{fontSize: "10px"}}>不含運費</span></Card.Title>
+                            <h4 className="text-success"><strong>{"$" + this.state.price}</strong> <span className="mx-2 text-secondary" style={{fontSize: "10px"}}>不含運費</span></h4>
                             <Button variant="primary" className="w-100" onClick={()=>{this.props.addProductToCart({...this.state.product, price: this.state.price})}}>
                                 <FontAwesomeIcon className="mx-2" icon={faShoppingCart} />{translate("Add To Cart")}
                             </Button>
