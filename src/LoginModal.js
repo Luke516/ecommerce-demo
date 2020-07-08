@@ -43,7 +43,7 @@ class LoginModal extends React.Component {
                 </Modal.Header>
                 <Modal.Body className="mt-2">
                     <Form className="d-flex flex-row justify-content-center">
-                    <div className={this.props.captchaVerified?"justify-content-center ml-2 d-flex flex-column ww-50 shrink vertLine ml-2 mr-4 pr-4":"justify-content-center ml-2 d-flex flex-column ww-50 vertLine mr-4 pr-4"}>
+                    <div className={this.props.captchaVerified?"justify-content-center ml-2 d-flex flex-column ww-50 shrink vertLine mr-4 pr-4":"justify-content-center ml-2 d-flex flex-column ww-50 vertLine mr-4 pr-4"}>
                         <InputGroup className="d-flex align-items-center mb-3" style={{borderRadius:"0.25rem"}}>
                             <InputGroup.Prepend>
                                 {/* <label htmlFor="basic-url">{translate("Username")}</label>    */}

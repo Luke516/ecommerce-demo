@@ -3,6 +3,7 @@ import './App.css';
 import priceData from './data/prices2All.json';
 import flatData from './data/flat_products_list_zh.json';
 
+import handleViewport from 'react-in-viewport';
 import {withRouter} from 'react-router-dom'
 import { Container, Row, Col, Carousel, Button, Card, CardDeck, InputGroup, Form, FormControl } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -13,6 +14,11 @@ class ProductCell extends React.Component {
   
     constructor(props) {
         super(props);
+
+        this.detailButtonClick = this.detailButtonClick.bind(this);
+        this.logPosition = this.logPosition.bind(this);
+        this.isInViewport = this.isInViewport.bind(this);
+
         let imageSourceUrl = "https://youcaptcha.s3-us-west-2.amazonaws.com/seed/"
         for (let category of this.props.product.category){
             category = category.replace('é', 'e')
@@ -26,12 +32,17 @@ class ProductCell extends React.Component {
         if(flatData[this.props.product.id]){
             title = flatData[this.props.product.id].name
         }
+
+        let logPositionTimer = null
+        if(this.props.target){
+            logPositionTimer = setInterval(this.logPosition, 100)
+        }
         this.state = {
             price: priceData[this.props.product.id][0],
             imageSourceUrl: imageSourceUrl,
-            title
+            title,
+            logPositionTimer
         };
-        this.detailButtonClick = this.detailButtonClick.bind(this);
     }
   
     render (){
@@ -44,7 +55,7 @@ class ProductCell extends React.Component {
         // if(title.length > 42)
         //     title = this.props.product.name.slice(0,42) + "..."
         return (
-            <Col className="my-3 mx-" xs={12} sm={6} md={4} lg={3} style={{cursor: "pointer"}}>
+            <Col className="my-3 mx-" xs={12} sm={6} md={4} lg={3} style={{cursor: "pointer"}} ref={(el) => this.domElement = el}>
                 <Card className="shadow" style={{border: "0", padding: "0rem", height: this.props.hideOption?"400px":"480px", justifyContent: "space-between", alignItems: "center"}}>
                     <div className="w-100">
                     {this.props.checkbox &&
@@ -87,6 +98,21 @@ class ProductCell extends React.Component {
         console.log("Detail Click !!!")
         this.props.showProduct({...this.props.product, ...this.state});
     }
+
+    isInViewport(element, offset = 0) {
+        if (!element) return false;
+        const top = element.getBoundingClientRect().top;
+        return (top + offset) >= 0 && (top - offset) <= window.innerHeight;
+    }
+    
+
+    logPosition() {
+        const { isVisible, inViewport  } = this.props;
+        console.log( this.isInViewport(this.domElement) )
+        if(isVisible){
+            console.log("position QWQ!")
+        }
+    }
 }
 
-export default withRouter(ProductCell)
+export default handleViewport(withRouter(ProductCell), { rootMargin: '-1.0px' })

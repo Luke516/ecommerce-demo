@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 
+import TrackVisibility from 'react-on-screen';
 import queryString from 'query-string';
 import { Container, Row, Tabs, Tab, Nav } from 'react-bootstrap';
 import ProductCell from './ProductCell'
@@ -141,7 +142,9 @@ class Category extends React.Component {
                         return (
                             this.state.targetSubCategoryData && subCategoryData.name == this.state.targetSubCategoryData.name?
                             <Tab.Pane key={this.state.targetSubCategoryData.name} eventKey={this.state.targetSubCategoryData.name} title={translate(this.state.targetSubCategoryData.name.split('/')[1])} >
-                                <ProductRow key={this.state.targetSubCategoryData.name} name={this.state.targetSubCategoryData.name} data={this.state.targetSubCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target targetProductId={this.props.targetProductId}/>
+                                <TrackVisibility partialVisibility>
+                                    <ProductRow key={this.state.targetSubCategoryData.name} name={this.state.targetSubCategoryData.name} data={this.state.targetSubCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target targetProductId={this.props.targetProductId}/>
+                                </TrackVisibility>
                             </Tab.Pane>:
                             <Tab.Pane key={subCategoryData.name} eventKey={subCategoryData.name} title={translate(subCategoryData.name.split('/')[1])} >
                                 <ProductRow name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>

@@ -20,6 +20,8 @@
     "react-captcha-generator": "^1.6.3",
     "react-cookie": "^4.0.3",
     "react-dom": "^16.13.1",
+    "react-in-viewport": "^1.0.0-alpha.14",
+    "react-on-screen": "^2.1.1",
     "react-recaptcha": "^2.3.10",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.1.2",

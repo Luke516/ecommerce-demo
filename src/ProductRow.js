@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import TrackVisibility from 'react-on-screen';
 
 import { Container, Row, Col, Carousel, Button, Card, CardDeck, InputGroup, Form, FormControl } from 'react-bootstrap';
 import ProductCell from './ProductCell'
@@ -108,7 +109,11 @@ export default class ProductRow extends React.Component {
         <Row className="ml--4 mt-2">
             {
                 this.state.list1.map(element => {
-                    return <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
+                    return <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target={this.props.target} isVisible={this.props.isVisible } />
+                    // return (
+                    // <TrackVisibility >
+                    //     <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target={this.props.target}/>
+                    // </TrackVisibility>)
                 })
             }
         </Row>

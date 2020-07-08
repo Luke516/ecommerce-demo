@@ -245,3 +245,11 @@ input[type=radio]
 .footer1 {
   height: 120px;
 }
+
+div {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+div::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
+}
