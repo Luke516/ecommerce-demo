@@ -17,14 +17,14 @@
     display: flex;
     position: absolute;
     flex-direction: column;
-    margin-left: 300px;
+    margin-left: 240px;
     width: 280px;
-    height: 160px;
+    height: 280px;
     font-size: 14px;
 }
 
 .youcaptcha-ad-text {
-    height: 60px;
+    height: 120px;
     overflow-y: hidden;
 }
 
@@ -57,7 +57,7 @@
 
 .circle {
     -webkit-animation: dash .9s ease-in-out;
-    animation: dash .9s ease-in-out;
+    animation: dash .9s 1.6s ease-in-out forwards;
 }
 .line {
     stroke-dashoffset: 1000;
@@ -66,10 +66,9 @@
 }
 .check {
     stroke-dashoffset: -100;
-    -webkit-animation: dash-check .9s .35s ease-in-out forwards;
-    animation: dash-check .9s .35s ease-in-out forwards;
+    -webkit-animation: dash-check .9s 0s ease-in-out forwards;
+    animation: dash-check 1s 0s ease-in-out forwards;
 }
-  
   
 @-webkit-keyframes dash {
     0% {
@@ -107,9 +106,30 @@
     }
 }
 
+
+.check-shift{
+    animation: checkShiftAnimation 0.6s 0.6s linear forwards;
+}
+
+@keyframes checkShiftAnimation {
+    0% {
+      margin-left: 0;
+    }
+    100% {
+      margin-left: -100px;
+    }
+}
+
 .slide {
-    animation: slideAnimation 1s forwards linear;
-    animation-delay: 0;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 100px;
+    height: 100px;
+    z-index: 10;
+    animation: slideAnimation 0.6s forwards linear;
+    animation-delay: 0.5s;
 }
 
 @keyframes slideAnimation {
@@ -120,7 +140,7 @@
         margin-bottom: 5px;
         width: 100px;
         height: 100px;
-        z-index: 100;
+        z-index: 10;
     }
     25% {
         margin-left: 5px;
@@ -129,22 +149,30 @@
         margin-bottom: 5px;
         width: 100px;
         height: 100px;
-        z-index: 100;
+        z-index: 10;
     }
     100% {
-        margin-left: 160px;
+        margin-left: 5px;
         margin-right: 5px;
         margin-top: 5px;
         margin-bottom: 5px;
-        width: 120px;
-        height: 120px;
-        z-index: 100;
+        width: 240px;
+        height: 240px;
+        z-index: 10;
     }
 }
 
 .slideFade {
-    animation: slideFadeAnimation 1s forwards linear;
-    animation-delay: 0;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 100px;
+    height: 100px;
+    opacity: 1;
+    z-index: 15;
+    animation: slideFadeAnimation 0.6s forwards linear;
+    animation-delay: 0.5s;
 }
 
 @keyframes slideFadeAnimation {
@@ -156,7 +184,7 @@
         width: 100px;
         height: 100px;
         opacity: 1;
-        z-index: 150;
+        z-index: 15;
     }
     25% {
         margin-left: 5px;
@@ -166,17 +194,17 @@
         width: 100px;
         height: 100px;
         opacity: 1;
-        z-index: 150;
+        z-index: 15;
     }
     100% {
-        margin-left: 160px;
+        margin-left: 5px;
         margin-right: 5px;
         margin-top: 5px;
         margin-bottom: 5px;
-        width: 120px;
-        height: 120px;
+        width: 240px;
+        height: 240px;
         opacity: 0;
-        z-index: 150;
+        z-index: 15;
     }
 }
 

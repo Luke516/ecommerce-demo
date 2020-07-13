@@ -142,7 +142,7 @@ function YouCaptchaApp(props) {
           Learn React
         </a>
       </header> */}
-      <div id="demo" className={showAd? "completed px-4": "device px-4"} style={{display: "block"}}>
+      <div id="demo" className={showAd? "completed": "device px-4"} style={{display: "block"}}>
         <HeaderView captchaId={props.captchaId} toggleCaptcha={toggleCaptcha} showCaptcha={startCaptcha} result={loading? defaultResult: fetchData.result} showAd={showAd} verified={verified} closeAd={props.closeAd}/>
         <Collapse in={showCaptcha}>
           <div id="youcaptcha-collpase">

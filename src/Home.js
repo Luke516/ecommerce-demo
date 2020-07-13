@@ -81,8 +81,8 @@ class Home extends React.Component {
         <Row className="my-4">
             {/* <Carousel> */}
                 {/* <Carousel.Item> */}
-                    <Row className="mt-2 justify-content-center" style={{minHeight: "320px"}}>
-                        <Col sm={4} className={"d-flex justify-content-center flex-column"} 
+                    <Row className="mt-4 justify-content-center" style={{minHeight: "320px", minWidth: "320px"}}>
+                        <Col sm={5} className={"d-flex justify-content-center flex-column"} 
                         style={{maxHeight: "320px", maxWidth: "320px", padding: "1rem"}}>
                             <div className="d-flex"></div>
                             <img
@@ -92,8 +92,8 @@ class Home extends React.Component {
                             />
                             <div className="d-flex" ></div>
                         </Col>
-                        <Col sm={5} className="d-flex flex-column text-center justify-content-center">
-                            <h3>{this.props.targetProductData.name}</h3>
+                        <Col sm={6} className="d-flex flex-column text-center" style={{justifyContent: "space-evenly"}}>
+                            <h2>{this.props.targetProductData.name}</h2>
                             <div className="d-flex flex-row justify-content-center">
                                 <Button variant="primary" size="lg" className="w-50" onClick={this.detailButtonClick}>
                                     {translate("Check It Out")}

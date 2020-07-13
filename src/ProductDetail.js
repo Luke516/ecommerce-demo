@@ -5,7 +5,7 @@ import data from './data/metadata_all_with_detail_img_3_empty.json';
 import flatData from './data/flat_products_list_zh.json';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faInfo, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faMinus, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 import { translate } from './utils/translate';
 import { shuffle } from './utils/utlis';
 import ProductCell from './ProductCell'
@@ -69,13 +69,28 @@ export default class ProductDetail extends React.Component {
         else {
             price = priceData[product.id][0]
         }
+
+        let imageSourceUrl = "https://youcaptcha.s3-us-west-2.amazonaws.com/seed/"
+        for (let category of product.category){
+            category = category.replace('é', 'e')
+            category = category.trim()
+            imageSourceUrl += encodeURIComponent(category) 
+            imageSourceUrl += '/'
+        }
+        imageSourceUrl += product.id
+        imageSourceUrl += '.jpg'
+
         this.state = {
             product,
             price,
             detailHtml: "",
-            list1
+            list1,
+            count: 1,
+            imageSourceUrl
         };
         this.updateContent = this.updateContent.bind(this)
+        this.addCount = this.addCount.bind(this)
+        this.minusCount = this.minusCount.bind(this)
     }
 
     updateContent() {
@@ -209,6 +224,20 @@ export default class ProductDetail extends React.Component {
     componentDidMount() {
         window.scrollTo(0, 0)
     }
+
+    addCount() {
+        this.setState({
+            count: this.state.count + 1
+        })
+    }
+
+    minusCount() {
+        if(this.state.count < 2)
+            return
+        this.setState({
+            count: this.state.count - 1
+        }) 
+    }
   
     render (){
         // let imageSourceUrl = "https://youcaptcha.s3-us-west-2.amazonaws.com/seed/Men's+Fashion/Clothing/Jackets+%26+Coats/B07HF4ZQRT.jpg"
@@ -223,6 +252,17 @@ export default class ProductDetail extends React.Component {
         imageSourceUrl += '.jpg'
         let productCategories = this.state.product.category.slice(0, 2)
         let title = this.state.product.name   
+
+        let price = parseInt(this.state.price * 31)
+        if(price % 100 < 20){
+            price = price - (price%100) - 1;
+        }
+        else if(price % 100 > 90){
+            price = price - (price%100) + 99;
+        }
+        else{
+            price = price - price % 10
+        }
         return (
             <Container style={{maxWidth: "1300px"}}>
             <Row style={{height:"1.5rem"}}></Row>
@@ -246,12 +286,12 @@ export default class ProductDetail extends React.Component {
                     } */}
                 </Breadcrumb>
             </Row>
-            <Row className="my-4">
+            <Row className="my--4">
                 <Col className="d-flex justify-content-center" xs={12} sm={12} md={5} lg={5} style={{paddingLeft: "4rem", paddingRight: "2rem"}}>
-                    <Card className="d-flex justify-content-center" style={{padding: "1rem", width:"410px", maxHeight: "500px", overflowY: "scroll", alignItems: "center", border: "none"}}>
-                        <div className="d-flex justify-content-center" style={{maxHeight:"320px", maxWidth:"320px"}}>
+                    <Card className="d-flex justify-content-center" style={{padding: "0.1rem", maxWidth:"500px", maxHeight: "500px", overflowY: "scroll", alignItems: "center", border: "none"}}>
+                        <div className="d-flex justify-content-center" style={{maxHeight:"400px", maxWidth:"400px"}}>
                             {/* <Card.Img variant="top" height="300px" src={imageSourceUrl} /> */}
-                            <img src={imageSourceUrl} style={{maxWidth: "320px", maxHeight:"320px", width: "auto", height: "auto"}}></img>
+                            <img src={imageSourceUrl} style={{maxWidth: "400px", maxHeight:"400px", width: "auto", height: "auto"}}></img>
                         </div>
                     </Card>
                 </Col>
@@ -261,8 +301,23 @@ export default class ProductDetail extends React.Component {
                             {/* <Card.Title style={{height: "5rem"}}>{title}</Card.Title> */}
                             <div dangerouslySetInnerHTML={{ __html: this.state.detailHtml }} ></div>
                             <div style={{height: "2rem"}}></div>
-                            <h4 className="text-success"><strong>{"$" + this.state.price}</strong> <span className="mx-2 text-secondary" style={{fontSize: "10px"}}>不含運費</span></h4>
-                            <Button variant="primary" className="w-100" onClick={()=>{this.props.addProductToCart({...this.state.product, price: this.state.price})}}>
+                            <div className="d-flex flex-row justify-content-between align-itemas-center">
+                                <div>
+                                    <h2 className="text-success d-inline"><strong>{"$" + price}</strong></h2>
+                                    <span className="mx-2 text-secondary" style={{fontSize: "10px"}}>不含運費</span>
+                                </div>
+                                <div className="">
+                                    <span className="mx-2 d-inline">數量</span>
+                                    <Button className="my-2" size="sm" variant="outline-secondary" onClick={this.minusCount}>
+                                        <FontAwesomeIcon icon={faMinus}/>
+                                    </Button>
+                                    <span className="my-2 mx-2">{this.state.count}</span>
+                                    <Button className="my-2" size="sm" variant="outline-secondary" onClick={this.addCount}>
+                                        <FontAwesomeIcon icon={faPlus}/>
+                                    </Button>
+                                </div>
+                            </div>
+                            <Button size="lg" variant="primary" className="w-100" onClick={()=>{this.props.addProductToCart({...this.state.product, imageSourceUrl, price: this.state.price}, this.state.count)}}>
                                 <FontAwesomeIcon className="mx-2" icon={faShoppingCart} />{translate("Add To Cart")}
                             </Button>
                         </Card.Body>

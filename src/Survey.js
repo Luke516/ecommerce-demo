@@ -121,10 +121,14 @@ class Survey extends React.Component {
   
     render (){
         return (
-            <div className="vh-100" style={{padding: "2rem", backgroundImage: "url('back03.jpg')"}}>
+            <div className="vh-100 survey">
+                <div className="survey-nav">
+                    <img width="60" height="60" src="https://www.nthu.edu.tw//public/images/about10/cis-1-1.jpg"/>
+                    <span className="mx-2">國立清華大學datalab實驗室</span>
+                </div>
                 <Row className={"mb--4"}>
                     {
-                        this.state.questionId > 0 &&
+                        (this.state.questionId > 0 && this.state.questionId < 6) &&
                         <Col xs={12} className="d-flex flex-row justify-content-center align-items-center my-2">
                             {/* <h2 className="mt-4">{translate("Survey") + " (" + (parseInt(this.state.questionId)-1)+ "/5)"}</h2> */}
                             <h2 className="mt--4">{"第" + (parseInt(this.state.questionId))+ "題，共5題"}</h2>
@@ -142,7 +146,7 @@ class Survey extends React.Component {
                     </div>
                     // </Col>
                 }
-                {this.state.questionId > 0 &&
+                {(this.state.questionId > 0 && this.state.questionId < 6) &&
                     <div className="my-4 d-flex justify-content-center">
                         <span className={this.state.questionId == 1? "mx-2 black-dot": "mx-2 dot"}></span>
                         <span className={this.state.questionId == 2? "mx-2 black-dot": "mx-2 dot"}></span>
@@ -332,12 +336,16 @@ class Survey extends React.Component {
                         </div>
                     </Col>
                 </Row>
+                <div className="w-100 justify-content-center align-items-center flex-column" style={{height: "80%", display: this.state.questionId == 6? "flex": "none"}}>
+                    <h2>感謝您的回答！接下來將進行下一階段的實驗</h2>
+                    <button type="button"  size="lg" className="mx-1 my-2" style={{display: "block"}} onClick={() => {this.finish()}}>繼續</button> 
+                </div>
                 {
-                    this.state.questionId > 0 &&
+                    (this.state.questionId > 0 && this.state.questionId < 6) &&
                     <Row className="my-2 d-flex justify-content-center">
                         <button type="button" size="lg" className="mx-1" style={{display: this.state.questionId == 1? "none": "block"}} onClick={() => this.prevQuestion()}>上一題</button>
                         <button type="button"  size="lg" className="mx-1" style={{display: this.state.questionId == 5? "none": "block"}} onClick={() => this.nextQuestion()}>下一題</button>
-                        <button type="button"  size="lg" className="mx-1" style={{display: this.state.questionId == 5? "block": "none"}} onClick={() => {this.finish()}}>完成</button> 
+                        <button type="button"  size="lg" className="mx-1" style={{display: this.state.questionId == 5? "block": "none"}} onClick={() => {this.nextQuestion()}}>完成</button> 
                         {/* <button type="button"  size="lg" className="mx-1" style={{display: this.state.questionId == 5? "block": "none"}} onClick={() => {this.setState({showDialog: true})}}>完成</button> */}
                     </Row>
                 }
@@ -364,7 +372,7 @@ class Survey extends React.Component {
 
     nextQuestion() {
         console.log("nextQuestion")
-        let nextQuestionId = Math.min(this.state.questionId + 1, 5)
+        let nextQuestionId = Math.min(this.state.questionId + 1, 6)
         this.setState({
             questionId: nextQuestionId
         })
@@ -381,7 +389,7 @@ class Survey extends React.Component {
         this.setState({
             showDialog: false
         })
-        alert("感謝您的回答！接下來將進行下一階段的實驗")
+        // alert("感謝您的回答！接下來將進行下一階段的實驗")
         this.props.nextTest()
         this.props.clearCart()
         setTimeout(()=>{

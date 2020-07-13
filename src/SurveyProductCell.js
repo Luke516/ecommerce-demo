@@ -47,9 +47,9 @@ class SurveyProductCell extends React.Component {
         return (
             <Col className="my-3 mx-" xs={12} sm={6} md={4} lg={3} style={{cursor: "pointer"}}>
                 <div className="d-flex flex-column align-items-center" style={{backgroundColor:"white", border: "1px solid black", padding: "1rem", height: this.props.hideOption?"400px":"480px"}}>
-                    <div className="w-100">
+                    <div className="w-100" onClick={this.detailButtonClick}>
                     {this.props.checkbox &&
-                        <input id="1-2" onChange={this.changeAnswer} checked={this.state.check} type="checkbox" className=""></input>
+                        <input id="1-2" checked={this.state.check} type="checkbox" className=""></input>
                     }
                     </div>
                     <div onClick={this.detailButtonClick} className="d-flex justify-content-center" style={{maxHeight:"200px", maxWidth:"200px", overflow: "hidden"}}>

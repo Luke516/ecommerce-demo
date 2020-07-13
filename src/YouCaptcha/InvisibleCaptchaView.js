@@ -81,7 +81,7 @@ function InvisibleCaptchaView(props) {
                     <img className={/*this.props.captcha.success? "slideFade2" :*/ ""} src={data.targetCaptcha.question} width="40px" height="40px" style={{borderRadius: "2px"}}/>
                 </div>
                 {/* <span className="small-text" style={{visibility: "hidden"}}>YouCaptcha</span> */}
-                <span className="small-text text-secondary"><a className="text-secondary" href="#">Privacy</a> - <a className="text-secondary" href="#">Terms</a></span>
+                <span className="small-text text-secondary"><a className="text-" href="#">Privacy</a> - <a className="text-" href="#">Terms</a></span>
             </div>
         </Row>
         <Row className="mb-2 captcha-row">

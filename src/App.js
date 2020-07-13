@@ -27,7 +27,7 @@ import { withCookies, Cookies } from 'react-cookie';
 import { Col, Alert, Row, Nav, Navbar, NavDropdown, Form, FormControl, Button, SplitButton, Dropdown, Badge,
   OverlayTrigger, Popover, ListGroup, InputGroup, Modal} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimes, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
+import { faTimes, faShoppingCart, faCheck } from '@fortawesome/free-solid-svg-icons'
 
 class App extends React.Component {
 
@@ -90,8 +90,10 @@ class App extends React.Component {
       productsInCart: cookies.get('products')? cookies.get('products') : [],
       showProductDetail: false,
       curProduct: null,
-      showSuccessDialog: false,
-      captchaType
+      showSuccessDialog: -1,
+      captchaType,
+      redirect: cookies.get('username')? cookies.get('username') != "" ? false: true: true,
+      showAd: false
     };
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleUserNameChange = this.handleUserNameChange.bind(this);
@@ -110,6 +112,7 @@ class App extends React.Component {
     this.showSurvey = this.showSurvey.bind(this);
     this.nextTest = this.nextTest.bind(this);
     this.captchaSuccess = this.captchaSuccess.bind(this);
+    this.updateCart = this.updateCart.bind(this);
     // console.log(data)
   }
 
@@ -208,7 +211,7 @@ class App extends React.Component {
             </Nav>
           </Navbar.Collapse>
           <div className="d-flex flex-row align-items-center">
-            <OverlayTrigger
+            {/* <OverlayTrigger
               trigger="focus"
               key={'bottom'}
               placement={'bottom'}
@@ -231,11 +234,9 @@ class App extends React.Component {
                     this.state.productsInCart.length > 0?
                     <>
                       <ListGroup.Item action style={{padding: 0}} onClick={() => this.clearCart()}>
-                        {/* 清空購物車 */}
                         <Button size="" variant="light" className="w-100">清空購物車</Button>
                       </ListGroup.Item>
                       <ListGroup.Item style={{padding: 0}}>
-                        {/* <a href="Checkout"><strong>去結帳</strong></a> */}
                         <Button href="Checkout" size="" className="w-100">去結帳</Button>
                       </ListGroup.Item>
                     </>:
@@ -249,34 +250,39 @@ class App extends React.Component {
                   </ListGroup>
                 </Popover>
               }
-            >
-              <Button className="mx" variant="">
+            > */}
+              <Button href={this.state.productsInCart.length > 0? "Checkout": ""} className="mx" variant="">
               <FontAwesomeIcon className="mx-2" icon={faShoppingCart}/>
                 購物車
                 <Badge className="mx-1" variant={this.state.productsInCart.length > 0? "primary" :"secondary"}>{this.state.productsInCart.length}</Badge>
               </Button>
-            </OverlayTrigger>
+            {/* </OverlayTrigger> */}
             {
               this.state.userLogin ? 
               <>
                 <span className="ml-2 mr-4" href="#home">歡迎, {this.state.username}</span>
                 <Button variant="outline-primary" href="/" onClick={this.userLogout}>登出</Button>
               </>:
+              <>
               <Button className="ml-2" variant="outline-primary" onClick={() => {this.setState({showLogin: true})}}>
                 登入
               </Button>
+              <Button onClick={this.nextTest} style={{opacity: 0}}>下一個</Button>
+              </>
             }
           </div>
         </Navbar>
-        <Alert variant="success" className="shadow-sm" style={{position: "fixed", bottom: "2rem", width: "40%", left: "30%", zIndex: "1200", textAlign: "center", display: this.state.showSuccessDialog? "block" : "none"}}>
-          加入購物車成功
+        <Alert variant="success" className="shadow-sm" style={{position: "fixed", bottom: "2rem", width: "40%", left: "30%", zIndex: "1200", textAlign: "center", display: this.state.showSuccessDialog > 0? "block" : "none"}}>
+          <FontAwesomeIcon className="mx-2" icon={faCheck}/>
+          已將<span className="mx-1">{this.state.showSuccessDialog}</span>件商品加入購物車
         </Alert>
         <LoginModal showLogin={this.state.showLogin} closeDialog={this.closeDialog} 
-          captchaVerified={this.state.captchaVerified} username={this.state.username}
+          captchaVerified={this.state.captchaVerified} username={this.state.username} password={this.state.password}
           handleUserNameChange={this.handleUserNameChange} handlePasswordChange={this.handlePasswordChange}
           usernameValid={this.state.usernameValid} passwordValid={this.state.passwordValid}
           captchaType={this.state.captchaType} result={this.result} handleClick={this.handleClick}
           captcha={this.state.captcha} captchaId={this.state.captchaId} captchaSuccess={this.captchaSuccess}
+          userLogin={this.userLogin}
           />
         {/* <Modal show={this.state.showLogin} onHide={this.closeDialog}>
           <Modal.Header closeButton>
@@ -337,8 +343,10 @@ class App extends React.Component {
             </Row>
           </Modal.Body>
         </Modal> */}
-        <Route exact path="/" render={() => (
-            <Home targetProductId={this.state.targetProductId} addProductToCart={this.addProductToCart} showProduct={this.showProduct} targetProductId={this.state.targetProductId} targetProductData={this.state.targetProductData}/>
+        <Route exact path="/" render={(location) => (
+            !this.state.redirect?
+            <Home targetProductId={this.state.targetProductId} addProductToCart={this.addProductToCart} showProduct={this.showProduct} targetProductId={this.state.targetProductId} targetProductData={this.state.targetProductData}/>:
+            <Category name={this.state.targetCategory} data={data[this.state.targetCategory]} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} targetProductData={this.state.targetProductData}/>
         )}/>
         <Route exact path="/Men's Fashion" render={(location) => (
             <Category name="Men's Fashion" data={data["Men's Fashion"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} targetProductData={this.state.targetProductData}/>
@@ -362,7 +370,7 @@ class App extends React.Component {
             <Category name="Health and Household" data={data["Health and Household"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} targetProductData={this.state.targetProductData}/>
         )}/>
         <Route exact path="/Checkout" render={(location) => (
-            <Checkout captchaId={this.state.captchaId} toggleCategoryNav={this.toggleCategoryNav}  location={location.location} targetProductId={this.state.targetProductId} targetProductData={this.state.targetProductData} showSurvey={this.showSurvey}/>
+            <Checkout captchaId={this.state.captchaId} toggleCategoryNav={this.toggleCategoryNav}  location={location.location} targetProductId={this.state.targetProductId} targetProductData={this.state.targetProductData} showSurvey={this.showSurvey} updateCart={this.updateCart}/>
         )}/>
         <Route exact path="/Product" render={(location) => (
             this.state.curProduct?
@@ -386,19 +394,28 @@ class App extends React.Component {
     }));
   }
 
-  addProductToCart(product) {
+  addProductToCart(product, count = 1) {
     console.log("add to cart:")
     console.log(product)
     const { cookies } = this.props;
     product.name = flatData[product.id].name
+    product.count = count
     this.state.productsInCart.push(product)
+    for(let i=0; i<this.state.productsInCart.length - 1; i++){
+      let p = this.state.productsInCart[i]
+      if(p.id === product.id){
+        this.state.productsInCart[i].count += product.count
+        this.state.productsInCart.pop()
+        break
+      }
+    }
     cookies.set('products', JSON.stringify(this.state.productsInCart))
     this.setState({
-      showSuccessDialog: true
+      showSuccessDialog: count
     })
     setTimeout(() => {
       this.setState({
-        showSuccessDialog: false
+        showSuccessDialog: -1
       })
     }, 800)
   }
@@ -424,6 +441,14 @@ class App extends React.Component {
     }
   }
 
+  updateCart() {
+    const { cookies } = this.props;
+    let productsInCart = cookies.get('products')? cookies.get('products') : [];
+    this.setState({
+      productsInCart
+    });
+  }
+
   closeDialog() {
     this.setState({
       showLogin: false,
@@ -431,9 +456,9 @@ class App extends React.Component {
       usernameValid: true,
       passwordValid: true
     },()=>{
-      if(this.state.userLogin){
-        window.location.href = this.state.targetCategory;
-      }
+      // if(this.state.userLogin){
+      //   window.location.href = this.state.targetCategory;
+      // }
     })
   }
 
@@ -526,15 +551,21 @@ class App extends React.Component {
       })
       return false
     }
+    else{
+      this.setState({
+        usernameValid: true,
+        passwordValid: true,
+      })
+    }
     if(captchaPass){
       setTimeout(
         this.setState({
-          usernameValid: true,
-          passwordValid: true,
           captchaVerified: true
         }, ()=>{
-          this.userLogin()
-        }), 500
+          if(this.state.captchaType == "YouCaptcha"){
+            this.userLogin()
+          }
+        }), 100
       )
     }
     return true
@@ -545,7 +576,7 @@ class App extends React.Component {
     if (this.state.username != ""){
       cookies.set('username', this.state.username)
       this.setState({
-        // showLogin: false,
+        showLogin: this.state.captchaType == "YouCaptcha"? true: false,
         userLogin: true
       })
     }
@@ -592,7 +623,7 @@ class App extends React.Component {
     // console.log("success")
     // this.setState({captchaVerified: true})
     // }
-    this.captchaSuccess()
+    this.captchaSuccess(true)
   }
 
   toggleCategoryNav() {

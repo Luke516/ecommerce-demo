@@ -19,12 +19,17 @@ class LoginModal extends React.Component {
         super(props);
 
         this.state = {
-            showPassword: false
+            showPassword: false,
+            empty: false,
+            wrong: false,
+            captchaVerified: false
         }
 
         this.handleClick = this.handleClick.bind(this)
         this.otherCaptchaSuccess = this.otherCaptchaSuccess.bind(this)
         this.toggleShowPassword = this.toggleShowPassword.bind(this)
+        this.recaptchaCheck = this.recaptchaCheck.bind(this)
+        this.showLoginButton = this.showLoginButton.bind(this)
     }
   
     render (){
@@ -43,7 +48,8 @@ class LoginModal extends React.Component {
                 </Modal.Header>
                 <Modal.Body className="mt-2">
                     <Form className="d-flex flex-row justify-content-center">
-                    <div className={this.props.captchaVerified?"justify-content-center ml-2 d-flex flex-column ww-50 shrink vertLine mr-4 pr-4":"justify-content-center ml-2 d-flex flex-column ww-50 vertLine mr-4 pr-4"}>
+                    <div className={(this.props.captchaVerified && this.props.captchaType == "YouCaptcha")
+                        ?"justify-content-center ml-2 d-flex flex-column ww-50 shrink vertLine mr-4 pr-4":"justify-content-center ml-2 d-flex flex-column ww-50 vertLine mr-4 pr-4"}>
                         <InputGroup className="d-flex align-items-center mb-3" style={{borderRadius:"0.25rem"}}>
                             <InputGroup.Prepend>
                                 {/* <label htmlFor="basic-url">{translate("Username")}</label>    */}
@@ -82,7 +88,7 @@ class LoginModal extends React.Component {
                             </InputGroup.Append>
                         </InputGroup>
                         <div>
-                            <a href="#" className="text-secondary">忘記密碼？</a>
+                            <a href="#" className="text-">忘記密碼？</a>
                         </div>
                         {/* <div className="my-3 d-flex justify-content-center align-items-center">
                             <div class="left-seperator"></div>
@@ -94,7 +100,7 @@ class LoginModal extends React.Component {
                             <Button variant="facebook text-light" className="d-flex align-items-center facebook-login ml-2"><FontAwesomeIcon icon={faFacebookF}/>Facebook<span></span></Button>
                         </div> */}
                     </div>
-                    <div className={this.props.captchaVerified?"ww-50 scale":"ww-50"} style={{minHeight: this.props.captchaType == "YouCaptcha"? this.props.captchaVerified? "170px" :"120px":"80px"}}>
+                    <div className={(this.props.captchaVerified && this.props.captchaType == "YouCaptcha")?"ww-50 scale":"ww-50"} style={{minHeight: this.props.captchaType == "YouCaptcha"? this.props.captchaVerified? "160px" :"120px":"80px"}}>
                         {/* {
                             !this.props.captchaVerified &&
                             <p>完成驗證碼</p>
@@ -105,17 +111,42 @@ class LoginModal extends React.Component {
                             </div>
                         }
                         {this.props.captchaType == "textCaptcha" && 
+                            <>
                             <form className="d-flex flex-row" onSubmit={this.handleClick}>
                                 <input type='text' className={'d-flex w-75 form-control'} placeholder={translate("Enter captcha...")} ref={ref => this.captchaEnter = ref} />
                                 {/* <input type='submit' /> */}
                                 <Button className="mx-2" onClick={this.handleClick}>{translate("Proceed")}</Button>
                             </form>
+                            <div className="my-3 justify-content-center" style={{display: (this.state.empty || this.state.wrong)? "flex": "none"}}>
+                                <div className="captcha-error">
+                                {this.state.empty && <span className="text-danger">請完成必要欄位</span>}
+                                {this.state.wrong && <span className="text-danger">驗證碼錯誤</span>}
+                                </div>
+                            </div>
+                            </>
                         }
-                        {this.props.captchaType == "YouCaptcha" && <YouCaptchaApp captchaId={this.props.captchaId} onVerify={() => {}} onSuccess={this.props.captchaSuccess} closeAd={this.props.closeDialog}/>}
-                        {this.props.captchaType == "ReCaptcha" && <Recaptcha sitekey="6LfG6rkUAAAAAOxhm3p9iOJZ-92gHJb_UGtsTxpE" 
-                            render="explicit" 
-                            onloadCallback={()=>{console.log("onload")}} 
-                            verifyCallback={this.otherCaptchaSuccess}  />}
+                        {this.props.captchaType == "YouCaptcha" && 
+                            <YouCaptchaApp captchaId={this.props.captchaId} onVerify={() => {}} onSuccess={this.props.captchaSuccess} closeAd={this.props.closeDialog}/>}
+                        {this.props.captchaType == "ReCaptcha" && 
+                            <div onClick={this.recaptchaCheck}>
+                                <div className={(this.props.usernameValid && this.props.passwordValid)? (this.props.username == "" || this.props.password == "")? "disabled-element": "enabled-element": "disabled-element"}>
+                                    <Recaptcha sitekey="6LfG6rkUAAAAAOxhm3p9iOJZ-92gHJb_UGtsTxpE" 
+                                        render="explicit" 
+                                        onloadCallback={()=>{console.log("onload")}} 
+                                        verifyCallback={this.otherCaptchaSuccess}  />
+                                </div>
+                                <div className="justify-content-center" style={{display: this.state.empty? "flex": "none"}}>
+                                    <div className="captcha-error">
+                                    <span className="text-danger">請完成必要欄位</span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <div className="justify-content-center my-3" style={{display: (this.props.captchaVerified && this.props.captchaType !== "YouCaptcha")? "flex": "none"}}>
+                           {
+                               <Button className="px-2" onClick={this.props.userLogin}>{translate('Login Your Account')}</Button>
+                           }
+                        </div>
                     </div>
                     </Form>
                     <div className="mb-1"></div>
@@ -125,16 +156,43 @@ class LoginModal extends React.Component {
     }
     
     otherCaptchaSuccess(){
-        this.props.captchaSuccess()
-        setTimeout(()=>{
-            this.props.closeDialog()
-        }, 1000)
+        if(this.props.captchaSuccess(true)){
+            if(this.props.captchaType !== "YouCaptcha"){
+                this.setState({
+                    captchaVerified: true
+                })
+            }
+        }
+        // setTimeout(()=>{
+        //     this.props.closeDialog()
+        // }, 1000)
     }
 
     handleClick(e) {
         e.preventDefault();
+        if(!this.props.captchaSuccess()){
+            this.setState({
+                empty: true
+            })
+            return
+        }
+        else{
+            this.setState({
+                empty: false
+            })
+        }
         if(this.props.captcha === this.captchaEnter.value){
-          this.props.handleClick(e)
+            this.setState({
+                empty: false,
+                wrong: false
+            })
+            this.props.handleClick(e)
+        }
+        else{
+            this.setState({
+                empty: false,
+                wrong: true
+            })
         }
     }
 
@@ -142,6 +200,19 @@ class LoginModal extends React.Component {
         this.setState({
             showPassword: !this.state.showPassword
         })
+    }
+
+    recaptchaCheck(click = true) {
+        // console.log()
+        if(click){
+            this.setState({
+                empty: !this.props.captchaSuccess()
+            })
+        }
+    }
+
+    showLoginButton() {
+
     }
 }
 
