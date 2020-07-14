@@ -2,6 +2,7 @@ export function translate(text) {
     let dict = {
         "home": "首頁",
         "All Products": "所有商品",
+        "all": "全部",
         "Electronics": "電子產品",
         "Luggage": "行李",
         "Men's Fashion": "男性時尚",

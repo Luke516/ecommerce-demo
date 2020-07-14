@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import {withCookies} from 'react-cookie';
 import TrackVisibility from 'react-on-screen';
 
 import { Container, Row, Col, Carousel, Button, Card, CardDeck, InputGroup, Form, FormControl } from 'react-bootstrap';
@@ -7,7 +8,7 @@ import ProductCell from './ProductCell'
 import {shuffle} from './utils/utlis'
 import {translate} from './utils/translate'
 
-export default class ProductRow extends React.Component {
+class ProductRow extends React.Component {
 
     orderProducts(data) {
         let obj_keys = Object.keys(data);
@@ -50,15 +51,52 @@ export default class ProductRow extends React.Component {
         }
     }
 
-    getInitState() {
-        // let productIdsInOrder = this.orderProducts(this.props.data)
+    getTargetInitState() {
         let list1 = []
         let reachEnd = false
-        let count = 12
-        if (this.props.target){
-            while(true){
+        let count = 11
+        const {cookies} = this.props
+        console.log('getTargetInitState')
+        let browsed = cookies.get('browsed')? cookies.get('browsed'): []
+        console.log(browsed)
+        if(this.props.controlProductId){
+            count --
+        }
+        for(let i=0; i<count; i++){
+            for(let j=0; j<100; j++){
                 let product = this.getRandomProduct(this.props.data)
-                if(product.id != this.props.targetProductId){
+                if(this.props.name.length > 0){
+                    product['category'].unshift(this.props.name)
+                }
+                if(!list1.includes(product)){
+                    list1.push(product)
+                    break
+                }
+                else if (j == 99){
+                    reachEnd = true
+                }
+            }
+        }
+        if(browsed.length < 1){
+            cookies.set('browsed', list1)
+            console.log('browsed')
+            console.log(list1)
+        }
+        while(true){ // add atrget product
+            let product = this.getRandomProduct(this.props.data)
+            if(product.id != this.props.targetProductId){
+                continue
+            }
+            if(this.props.name.length > 0){
+                product['category'].unshift(this.props.name)
+            }
+            list1.push(product)
+            break
+        }
+        if(this.props.controlProductId){
+            while(true){ // add atrget product
+                let product = this.getRandomProduct(this.props.data)
+                if(product.id != this.props.controlProductId){
                     continue
                 }
                 if(this.props.name.length > 0){
@@ -67,8 +105,19 @@ export default class ProductRow extends React.Component {
                 list1.push(product)
                 break
             }
-            count = 11
         }
+        list1 = shuffle(list1)
+        return {
+            list1,
+            reachEnd
+        }
+    }
+
+    getInitState() {
+        // let productIdsInOrder = this.orderProducts(this.props.data)
+        let list1 = []
+        let reachEnd = false
+        let count = 12
         for(let i=0; i<count; i++){
             for(let j=0; j<100; j++){
                 let product = this.getRandomProduct(this.props.data)
@@ -94,9 +143,16 @@ export default class ProductRow extends React.Component {
     constructor(props) {
       super(props);
       this.getInitState = this.getInitState.bind(this);
+      this.getTargetInitState = this.getTargetInitState.bind(this);
       this.getRandomProduct = this.getRandomProduct.bind(this)
       this.loadMore = this.loadMore.bind(this)
-      this.state = this.getInitState()
+
+      if(this.props.target){
+        this.state = this.getTargetInitState()
+      }
+      else{
+        this.state = this.getInitState()
+      }
     }
   
     render (){
@@ -153,3 +209,5 @@ export default class ProductRow extends React.Component {
         })
     }
 }
+
+export default withCookies(ProductRow)

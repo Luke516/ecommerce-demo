@@ -47,28 +47,30 @@ class App extends React.Component {
     // console.log(ran_key)
     let testId = cookies.get('testId')? cookies.get('testId') : "3";
     let curSetting = cookies.get('username')? cookies.get('username') : "";
+    
     let targetCategory = "Men's Fashion";
-    let targetProducts = metadata_captcha[targetCategory]
-    let targetProductId = "B07S11FR7F" //targetProducts[Math.floor(Math.random() *targetProducts.length)];
+    let targetProductId = "B07M9QXCP7"
+    let controlProductId = "B07HXZH7WD"
     let captchaType = "YouCaptcha"
-
     if(testId == "1"){
       targetCategory = "Men's Fashion";
-      targetProductId = "B07S11FR7F"
+      targetProductId = "B07M9QXCP7"
+      controlProductId = "B07HXZH7WD"
       captchaType = "YouCaptcha"
     }
     if(testId == "2"){
       targetCategory = "Electronics";
-      targetProductId = "B019U00D7K"
+      targetProductId = "B015CH1PJU"
+      controlProductId = "B079GXWSWG"
       captchaType = "ReCaptcha"
     }
     if(testId == "3"){
       targetCategory = "Luggage";
-      targetProductId = "B00BMJSJG0"
+      targetProductId = "B06ZYHM4JY"
+      controlProductId = "B00BMJSJG0"
       captchaType = "textCaptcha"
     }
 
-    let targetProductData = flatData[targetProductId];
     let captchaIdList = productIdToCaptchaId[targetProductId]
     let captchaId = captchaIdList[Math.floor(Math.random() *captchaIdList.length)];
 
@@ -79,7 +81,7 @@ class App extends React.Component {
       captchaVerified: false,
       targetCategory,
       targetProductId,
-      targetProductData,
+      controlProductId,
       captchaId: captchaId,
       captcha: "",
       username: cookies.get('username')? cookies.get('username') : "",
@@ -345,43 +347,43 @@ class App extends React.Component {
         </Modal> */}
         <Route exact path="/" render={(location) => (
             !this.state.redirect?
-            <Home targetProductId={this.state.targetProductId} addProductToCart={this.addProductToCart} showProduct={this.showProduct} targetProductId={this.state.targetProductId} targetProductData={this.state.targetProductData}/>:
-            <Category name={this.state.targetCategory} data={data[this.state.targetCategory]} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} targetProductData={this.state.targetProductData}/>
+            <Home targetProductId={this.state.targetProductId} addProductToCart={this.addProductToCart} showProduct={this.showProduct} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId}/>:
+            <Category name={this.state.targetCategory} data={data[this.state.targetCategory]} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId}/>
         )}/>
         <Route exact path="/Men's Fashion" render={(location) => (
-            <Category name="Men's Fashion" data={data["Men's Fashion"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} targetProductData={this.state.targetProductData}/>
+            <Category name="Men's Fashion" data={data["Men's Fashion"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId}/>
         )}/>
         <Route exact path="/Women's Fashion" render={(location) => (
-            <Category name="Women's Fashion" data={data["Women's Fashion"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} targetProductData={this.state.targetProductData}/>
+            <Category name="Women's Fashion" data={data["Women's Fashion"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId}/>
         )}/>
         <Route exact path="/Home and Kitchen" render={(location) => (
-            <Category name="Home and Kitchen" data={data["Home and Kitchen"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} targetProductData={this.state.targetProductData}/>
+            <Category name="Home and Kitchen" data={data["Home and Kitchen"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId}/>
         )}/>
         <Route exact path="/Electronics" render={(location) => (
-            <Category name="Electronics" data={data["Electronics"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} targetProductData={this.state.targetProductData}/>
+            <Category name="Electronics" data={data["Electronics"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId}/>
         )}/>
         <Route exact path="/Beauty and Personal Care" render={(location) => (
-            <Category name="Beauty and Personal Care" data={data["Beauty and Personal Care"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} targetProductData={this.state.targetProductData}/>
+            <Category name="Beauty and Personal Care" data={data["Beauty and Personal Care"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId}/>
         )}/>
         <Route exact path="/Luggage" render={(location) => (
-            <Category name="Luggage" data={data["Luggage"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} targetProductData={this.state.targetProductData}/>
+            <Category name="Luggage" data={data["Luggage"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId}/>
         )}/>
         <Route exact path="/Health and Household" render={(location) => (
-            <Category name="Health and Household" data={data["Health and Household"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} targetProductData={this.state.targetProductData}/>
+            <Category name="Health and Household" data={data["Health and Household"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId}/>
         )}/>
         <Route exact path="/Checkout" render={(location) => (
-            <Checkout captchaId={this.state.captchaId} toggleCategoryNav={this.toggleCategoryNav}  location={location.location} targetProductId={this.state.targetProductId} targetProductData={this.state.targetProductData} showSurvey={this.showSurvey} updateCart={this.updateCart}/>
+            <Checkout captchaId={this.state.captchaId} toggleCategoryNav={this.toggleCategoryNav}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} showSurvey={this.showSurvey} updateCart={this.updateCart}/>
         )}/>
         <Route exact path="/Product" render={(location) => (
             this.state.curProduct?
-              <ProductDetail product={this.state.curProduct} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} targetProductData={this.state.targetProductData} targetCategory={this.state.targetCategory}/>
-            :<ProductDetail product={null} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} targetProductData={this.state.targetProductData} targetCategory={this.state.targetCategory}/>
+              <ProductDetail product={this.state.curProduct} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} targetCategory={this.state.targetCategory}/>
+            :<ProductDetail product={null} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} targetCategory={this.state.targetCategory}/>
         )}/>
         <Route exact path="/Admin" render={(location) => (
             <Admin location={location.location} />
         )}/>
         <Route exact path="/Survey" render={(location) => (
-            <Survey targetProductId={this.state.targetProductId} targetProductData={this.state.targetProductData} location={location.location} clearCart={this.clearCart} nextTest={this.nextTest} handleNavbarToggle={this.handleNavbarToggle}/>
+            <Survey targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} location={location.location} clearCart={this.clearCart} nextTest={this.nextTest} handleNavbarToggle={this.handleNavbarToggle}/>
         )}/>
       </div>
       </Router>
@@ -502,27 +504,31 @@ class App extends React.Component {
         testId = "1"
     }
     cookies.set('testId', testId)
+    cookies.set('browsed', [])
+    cookies.set('products', [])
 
     let targetCategory = "Men's Fashion";
-    let targetProductId = "B07S11FR7F"
+    let targetProductId = "B07M9QXCP7"
+    let controlProductId = "B07HXZH7WD"
     let captchaType = "YouCaptcha"
     if(testId == "1"){
       targetCategory = "Men's Fashion";
-      targetProductId = "B07S11FR7F"
+      targetProductId = "B07M9QXCP7"
+      controlProductId = "B07HXZH7WD"
       captchaType = "YouCaptcha"
     }
     if(testId == "2"){
       targetCategory = "Electronics";
-      targetProductId = "B019U00D7K"
+      targetProductId = "B015CH1PJU"
+      controlProductId = "B079GXWSWG"
       captchaType = "ReCaptcha"
     }
     if(testId == "3"){
       targetCategory = "Luggage";
-      targetProductId = "B00BMJSJG0"
+      targetProductId = "B06ZYHM4JY"
+      controlProductId = "B00BMJSJG0"
       captchaType = "textCaptcha"
     }
-
-    let targetProductData = flatData[targetProductId];
     let captchaIdList = productIdToCaptchaId[targetProductId]
     let captchaId = captchaIdList[Math.floor(Math.random() *captchaIdList.length)];
 
@@ -530,8 +536,8 @@ class App extends React.Component {
       testId,
       targetCategory,
       targetProductId,
+      controlProductId,
       captchaType,
-      targetProductData,
       captchaId: captchaId,
       navbarToggle: false
     })

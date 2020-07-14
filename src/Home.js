@@ -3,6 +3,7 @@ import './App.css';
 import data from './data/metadata_all_with_detail_img_3_empty.json';
 // import data from './selectedProductsFromFile.json';
 import productIdToPath from './data/productIdToPath.json'
+import flatData from './data/flat_products_list_zh.json';
 
 import {withRouter} from 'react-router-dom'
 import { Container, Row, Col, Carousel, Button, Card, CardDeck, InputGroup, Form, FormControl } from 'react-bootstrap';
@@ -76,6 +77,8 @@ class Home extends React.Component {
     }
   
     render (){
+      let targetProductData = flatData[this.props.targetProductId]
+      let controlProductDate = flatData[this.props.contorlProductId]
       return (
         <Container>
         <Row className="my-4">
@@ -93,7 +96,7 @@ class Home extends React.Component {
                             <div className="d-flex" ></div>
                         </Col>
                         <Col sm={6} className="d-flex flex-column text-center" style={{justifyContent: "space-evenly"}}>
-                            <h2>{this.props.targetProductData.name}</h2>
+                            <h2>{targetProductData.name}</h2>
                             <div className="d-flex flex-row justify-content-center">
                                 <Button variant="primary" size="lg" className="w-50" onClick={this.detailButtonClick}>
                                     {translate("Check It Out")}

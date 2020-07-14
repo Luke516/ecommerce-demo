@@ -32,6 +32,7 @@ class ProductCell extends React.Component {
         let title =this.props.product.name
         if(flatData[this.props.product.id]){
             title = flatData[this.props.product.id].name
+            imageSourceUrl = flatData[this.props.product.id].url
         }
 
         let logPositionTimer = null

@@ -58,6 +58,7 @@
 .circle {
     -webkit-animation: dash .9s ease-in-out;
     animation: dash .9s 1.6s ease-in-out forwards;
+    stroke-dashoffset: 1000;
 }
 .line {
     stroke-dashoffset: 1000;

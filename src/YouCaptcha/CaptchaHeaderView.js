@@ -60,7 +60,15 @@ function CaptchaHeaderView(props) {
                 <div className={props.success? "check-shift" : ""} style={{width: "100px", height: "100px", zIndex: "200"}}>
                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" style={{display: props.success? "inline-block": "none", zIndex:"200"}}>
                         <polyline className={props.success? "path check" : ""} fill="none" stroke="#73AF55" strokeWidth="10" strokeLinecap="square" strokeMiterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
+                        <circle className={props.success? "path circle" : ""} cx="60" cy="60" r="50" stroke="#73AF55" stroke-width="10" strokeLinecap="square" strokeMiterlimit="10" fill-opacity="0" />
                     </svg>  
+                    {/* <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" style={{display: props.success? "inline-block": "none", zIndex:"200"}}>
+                        <polyline className={props.success? "path check" : ""} fill="none" stroke="#73AF55" strokeWidth="10" strokeLinecap="square" strokeMiterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
+                        <circle className={props.success? "path circle" : ""} cx="50" cy="50" r="45" stroke="#73AF55" stroke-width="10" strokeLinecap="square" strokeMiterlimit="10" fill-opacity="0" />
+                    </svg>   */}
+                    {/* <svg style={{width: "100px", height: "100px", zIndex: "200"}}>
+                        <circle class="circle" cx="50" cy="50" r="45" stroke="#231f20" stroke-width="10" fill-opacity="0" />
+                    </svg> */}
                 </div>
             </div>
             {/* {!showAd } */}

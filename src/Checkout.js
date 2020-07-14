@@ -19,7 +19,6 @@ class Checkout extends React.Component {
       let productsInCart = cookies.get('products')? cookies.get('products') : [];
       let totalPrice = 0.0;
       let totalCount = 0;
-      let productChecked = {}
       for(let product of productsInCart){
         let price = parseInt(product.price * 31)
         if(price % 100 < 20){
@@ -31,17 +30,17 @@ class Checkout extends React.Component {
         else{
             price = price - price % 10
         }
-        product.price = price
-        totalPrice = totalPrice + parseFloat(product.price)
+        product.displayPrice = price
+        product.checked = true
+        totalPrice = totalPrice + parseFloat(product.displayPrice) * product.count
         totalCount = totalCount + product.count
-        productChecked[product.id] = true
       }
       this.state = {
         productsInCart: productsInCart,
         totalPrice: totalPrice,
         totalCount: totalCount,
         captchaVerified: true,
-        productChecked
+        allChecked: true
       }
       this.clearCart = this.clearCart.bind(this)
       this.toggleAllChecks = this.toggleAllChecks.bind(this)
@@ -56,7 +55,9 @@ class Checkout extends React.Component {
         console.log(index)
         if (index == null){
           this.setState({
-            productsInCart: []
+            productsInCart: [],
+            totalPrice: 0.0,
+            totalCount: 0
           }, ()=>{
             cookies.set('products', JSON.stringify(this.state.productsInCart))
           })
@@ -64,51 +65,94 @@ class Checkout extends React.Component {
         else {
           let productsInCart = cookies.get('products')? cookies.get('products') : [];
           productsInCart.splice(index, 1)
+
+          cookies.set('products', JSON.stringify(productsInCart))
+          this.props.updateCart()
+
           let totalPrice = 0.0;
           let totalCount = 0;
           for(let product of productsInCart){
-            let price = parseInt(product.price * 31)
-            if(price % 100 < 20){
-                price = price - (price%100) - 1;
-            }
-            else if(price % 100 > 90){
-                price = price - (price%100) + 99;
-            }
-            else{
-                price = price - price % 10
-            }
-            product.price = price
-            totalPrice = totalPrice + parseFloat(product.price)
+            totalPrice = totalPrice + parseFloat(product.displayPrice) * product.count
             totalCount = totalCount + product.count
           }
           this.setState({
-            productsInCart,
+            productsInCart: productsInCart.slice(),
             totalPrice,
             totalCount
-          }, ()=>{
-            cookies.set('products', JSON.stringify(this.state.productsInCart))
-            this.props.updateCart()
           })
         }
     }
 
     toggleAllChecks() {
         let allChecked = true
-        for(let productCheck in this.state.productChecked){
-            console.log(productCheck)
-            if(!productCheck){
+        for(let product of this.state.productsInCart){
+            if(!product.checked){
                 allChecked = false
                 break
             }
         }
-        let productChecked = this.state.productChecked
+        let productsInCart = this.state.productsInCart
+        let totalCount = 0
+        let totalPrice = 0.0
         if(allChecked){
-
+            for(let i=0; i<productsInCart.length; i++){
+                productsInCart[i].checked = false
+            }
         }else{
-
+            for(let i=0; i<productsInCart.length; i++){
+                productsInCart[i].checked = true
+                totalCount++
+                totalPrice += productsInCart[i].displayPrice * productsInCart[i].count
+            }
         }
+        this.setState({
+            productsInCart: productsInCart.slice(),
+            totalCount,
+            totalPrice,
+            allChecked: !allChecked
+        })
+    }
+
+    toggleCheck(id){
+        let productsInCart = this.state.productsInCart
+        productsInCart[id].checked = !productsInCart[id].checked
+        let totalCount = this.state.totalCount
+        let totalPrice = this.state.totalPrice
+        if(productsInCart[id].checked){
+            totalCount += productsInCart[id].count
+            totalPrice = totalPrice + (productsInCart[id].displayPrice * productsInCart[id].count)
+        }
+        else{
+            totalCount -= productsInCart[id].count
+            totalPrice = totalPrice - (productsInCart[id].displayPrice * productsInCart[id].count)
+        }
+
+        let allChecked = true
+        for(let product of this.state.productsInCart){
+            if(!product.checked){
+                allChecked = false
+                break
+            }
+        }
+
+        this.setState({
+            productsInCart: productsInCart.slice(),
+            totalCount,
+            totalPrice,
+            allChecked
+        })
     }
   
+    getCountAndPrice(){
+        let selectedCount = 0
+        let totalPrice = 0.0;
+        for(let productId in this.state.productChecked){
+            if(this.state.productChecked[productId]){
+                selectedCount++
+            }
+        }
+    }
+
     render (){
         console.log(this.state.productsInCart)
         return (
@@ -122,7 +166,7 @@ class Checkout extends React.Component {
             {
                 <Row className="my-3 checkoutTitle shadow-sm">
                     <Col md={1} className={"d-flex align-items-center justify-content-center"} style={{maxHeight: "90%"}}>
-                        <input type="checkbox" className="normal-checkbox" defaultChecked onChange={this.toggleAllChecks}></input>
+                        <input type="checkbox" className="normal-checkbox" checked={this.state.allChecked} onChange={this.toggleAllChecks}></input>
                     </Col>
                     <Col md={2} className={"d-flex justify-content-center"} style={{maxHeight: "90%"}}>
                         <span className="text-secondary">商品</span>
@@ -146,7 +190,7 @@ class Checkout extends React.Component {
                     
                     return (<Row key={product.id} className="my-3 checkoutItem shadow-sm">
                         <Col md={1} className={"d-flex align-items-center justify-content-center"} style={{maxHeight: "90%"}}>
-                            <input type="checkbox" className="normal-checkbox" defaultChecked></input>
+                            <input type="checkbox" className="normal-checkbox" checked={this.state.productsInCart[index].checked} onChange={()=>{this.toggleCheck(index)}}></input>
                         </Col>
                         <Col md={2} className={"d-flex justify-content-center"} style={{maxHeight: "90%"}}>
                             <img style={{maxWidth:"90%", maxHeight: "90%"}} src={product.imageSourceUrl}></img>
@@ -155,13 +199,13 @@ class Checkout extends React.Component {
                             <strong key={product.id}>{product.name}</strong>
                         </Col>
                         <Col md={2} className={"d-flex justify-content-center align-items-center"} style={{maxHeight: "90%"}}>
-                            <h5><strong className="text-success" key={product.id}>{"$" + product.price}</strong></h5>
+                            <h5><strong className="text-success" key={product.id}>{"$" + product.displayPrice}</strong></h5>
                         </Col>
                         <Col md={2} className={"d-flex justify-content-center align-items-center"} style={{maxHeight: "90%"}}>
                             <h6>x {product.count}</h6>
                         </Col>
                         <Col md={2} className="d-flex align-items-center" style={{maxHeight: "90%", justifyContent: "space-between"}}>
-                            <h5><strong className="text-success" key={product.id}>{"$" + product.price}</strong></h5>
+                            <h5><strong className="text-success" key={product.id}>{"$" + (product.displayPrice * product.count)}</strong></h5>
                             <Button variant="" className="mb-2" onClick={() => {this.clearCart(index)}}><FontAwesomeIcon icon={faTrash} /></Button>
                         </Col>
                     </Row>)

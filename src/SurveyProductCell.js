@@ -25,6 +25,7 @@ class SurveyProductCell extends React.Component {
         let title =this.props.product.name
         if(flatData[this.props.product.id]){
             title = flatData[this.props.product.id].name
+            imageSourceUrl = flatData[this.props.product.id].url
         }
         this.state = {
             price: priceData[this.props.product.id][0],
@@ -86,6 +87,8 @@ class SurveyProductCell extends React.Component {
         let { history } = this.props
         this.setState({
             check: !this.state.check
+        }, ()=>{
+            this.props.handleClick( this.props.product.id ,this.state.check )
         })
         // this.props.history.push('/Product?p=' + this.props.product.id) 
         // console.log("Detail Click !!!")
