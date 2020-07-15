@@ -109,12 +109,14 @@ class ProductRow extends React.Component {
         list1 = shuffle(list1)
         return {
             list1,
-            reachEnd
+            reachEnd,
+            username: cookies.get('username')? cookies.get('username') : ""
         }
     }
 
     getInitState() {
         // let productIdsInOrder = this.orderProducts(this.props.data)
+        const {cookies} = this.props
         let list1 = []
         let reachEnd = false
         let count = 12
@@ -136,7 +138,8 @@ class ProductRow extends React.Component {
         list1 = shuffle(list1)
         return {
             list1,
-            reachEnd
+            reachEnd,
+            username: cookies.get('username')? cookies.get('username') : ""
         }
     }
   
@@ -165,7 +168,7 @@ class ProductRow extends React.Component {
         <Row className="ml--4 mt-2">
             {
                 this.state.list1.map(element => {
-                    return <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target={this.props.target} isVisible={this.props.isVisible } />
+                    return <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target={this.props.target} isVisible={this.props.isVisible } username={this.state.username} />
                     // return (
                     // <TrackVisibility >
                     //     <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target={this.props.target}/>

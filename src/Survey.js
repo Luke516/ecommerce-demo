@@ -2,7 +2,7 @@ import React from 'react';
 import { withCookies, Cookies } from 'react-cookie';
 import {withRouter} from 'react-router-dom'
 import './App.css';
-import YouCaptchaApp from './YouCaptcha/YouCaptchaApp'
+import unseenData from './data/unseen.json';
 
 import queryString from 'query-string';
 import { Form, Container, Row, Button, Col, Modal, Card} from 'react-bootstrap';
@@ -78,11 +78,26 @@ class Survey extends React.Component {
         // for(let i=0; i<3; i++){
         //     list1.push(this.getRandomProduct(data))
         // }
+        let unseen = []
+        let targetUnseenData = unseenData[this.props.targetCategory]
+        let unseenKeys = Object.keys(targetUnseenData);
+        let randomId = Math.floor(Math.random() * Object.keys(targetUnseenData).length)
+        let unseenProductKey = unseenKeys[randomId]
+        // let unseenProduct = targetUnseenData[unseenProductKey]
+        let unseenProduct = flatData[unseenProductKey]
+        let category = decodeURIComponent(unseenProduct.url).split('/').slice(4,7)
+        unseenProduct = {
+            ...unseenProduct,
+            category,
+            id: unseenProductKey
+        }
+        unseen.push(unseenProductKey)
+        list1.push(unseenProduct) 
         list1.push(browsed[0]) 
         list1.push(browsed[1])
-        list1.push(browsed[2])
+        // list1.push(browsed[2])
         let targetProduct = flatData[this.props.targetProductId]
-        let category = decodeURIComponent(targetProduct.url).split('/').slice(4,7)
+        category = decodeURIComponent(targetProduct.url).split('/').slice(4,7)
         targetProduct = {
             ...targetProduct,
             category,
@@ -93,9 +108,21 @@ class Survey extends React.Component {
         // for(let i=0; i<4; i++){
         //     list2.push(this.getRandomProduct(data))
         // }
+        randomId = (randomId + 1) % (Object.keys(targetUnseenData).length)
+        unseenProductKey = unseenKeys[randomId]
+        // let unseenProduct = targetUnseenData[unseenProductKey]
+        unseenProduct = flatData[unseenProductKey]
+        category = decodeURIComponent(unseenProduct.url).split('/').slice(4,7)
+        unseenProduct = {
+            ...unseenProduct,
+            category,
+            id: unseenProductKey
+        }
+        unseen.push(unseenProductKey)
+        list2.push(unseenProduct) 
         list2.push(browsed[3]) 
         list2.push(browsed[4])
-        list2.push(browsed[5])
+        // list2.push(browsed[5])
         let controlProduct = flatData[this.props.controlProductId]
         category = decodeURIComponent(controlProduct.url).split('/').slice(4,7)
         controlProduct = {
@@ -120,7 +147,8 @@ class Survey extends React.Component {
             answer5: "",
             other: "其他",
             unseen: [],
-            username: cookies.get('username')? cookies.get('username') : ""
+            username: cookies.get('username')? cookies.get('username') : "",
+            targetCategory: this.props.targetCategory
         }
 
         this.changeFavicon = this.changeFavicon.bind(this);
@@ -315,7 +343,6 @@ class Survey extends React.Component {
         this.setState({
             questionId: nextQuestionId
         })
-        this.logResult()
     }
 
     prevQuestion() {
@@ -329,7 +356,7 @@ class Survey extends React.Component {
         this.setState({
             showDialog: false
         })
-        // alert("感謝您的回答！接下來將進行下一階段的實驗")
+        this.logResult()
         this.props.nextTest()
         this.props.clearCart()
         setTimeout(()=>{
@@ -338,7 +365,38 @@ class Survey extends React.Component {
     }
 
     logResult() {
-        console.log(this.state)
+        let data = this.state
+        const proxyurl = "https://cors-anywhere.herokuapp.com/";
+        const httpHeaders = { 'Content-Type' : 'application/json', 'X-Requested-With': 'XMLHttpRequest'}
+        const myHeaders = new Headers(httpHeaders)
+        const url = "http://localhost:5000/log/";
+        const req = new Request(url, {method: 'POST', headers: myHeaders})
+
+        fetch(url, {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then(res=>res.json())
+        .then((res) => {
+            console.log(res)
+        });
+
+        const url2 = "http://localhost:5000/finish/";
+        const req2 = new Request(url2, {method: 'POST', headers: myHeaders})
+        fetch(url, {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then(res=>res.json())
+        .then((res) => {
+            console.log(res)
+        });
     }
 
     handleClick(productId, selected) {

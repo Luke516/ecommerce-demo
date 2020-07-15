@@ -303,7 +303,7 @@ export default class ProductDetail extends React.Component {
                             <div style={{height: "2rem"}}></div>
                             <div className="d-flex flex-row justify-content-between align-itemas-center">
                                 <div>
-                                    <h2 className="text-success d-inline"><strong>{"$" + price}</strong></h2>
+                                    <h2 className="display-4 text-success d-inline"><strong>{"$" + price}</strong></h2>
                                     <span className="mx-2 text-secondary" style={{fontSize: "10px"}}>不含運費</span>
                                 </div>
                                 <div className="">

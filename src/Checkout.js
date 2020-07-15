@@ -185,14 +185,17 @@ class Checkout extends React.Component {
                     </Col>
                 </Row>
             }
+            <div className="checkoutDiv shadow-sm">
             {
                 this.state.productsInCart.map((product, index) => {
                     
-                    return (<Row key={product.id} className="my-3 checkoutItem shadow-sm">
+                    return (
+                    <>
+                    <Row key={product.id} className="my-3 checkoutItem">
                         <Col md={1} className={"d-flex align-items-center justify-content-center"} style={{maxHeight: "90%"}}>
                             <input type="checkbox" className="normal-checkbox" checked={this.state.productsInCart[index].checked} onChange={()=>{this.toggleCheck(index)}}></input>
                         </Col>
-                        <Col md={2} className={"d-flex justify-content-center"} style={{maxHeight: "90%"}}>
+                        <Col md={2} className={"d-flex align-items-center  justify-content-center"} style={{maxHeight: "90%"}}>
                             <img style={{maxWidth:"90%", maxHeight: "90%"}} src={product.imageSourceUrl}></img>
                         </Col>
                         <Col md={3} className="align-items-center" style={{maxHeight: "90%"}}>
@@ -208,28 +211,30 @@ class Checkout extends React.Component {
                             <h5><strong className="text-success" key={product.id}>{"$" + (product.displayPrice * product.count)}</strong></h5>
                             <Button variant="" className="mb-2" onClick={() => {this.clearCart(index)}}><FontAwesomeIcon icon={faTrash} /></Button>
                         </Col>
-                    </Row>)
-                    }
+                    </Row>
+                    {index < this.state.productsInCart.length-1 && <hr className="my--4" style={{width: "100%", height: "1px", border: "none", backgroundColor: "rgba(0, 0, 0, 0.125)"}}/>}
+                    </>
+                    )}
                 )
                 }
-                <hr className="my-4" style={{width: "100%", height: "1px", border: "none", backgroundColor: "gray"}}/>
-                <Row className="my-2 checkoutItem shadow-sm d-flex align-items-center" style={{height: "100px", paddingTop: "1rem"}}>
-                    <Col className={"d-flex justify-content-center mb-2"} md={3}>
-                        您已經選擇了{this.state.totalCount}件商品
-                    </Col>
-                    {/* <Col md={3}></Col> */}
-                    <Col md={7} className="text-right">
-                        <div className="d-inline"><strong>
-                            {translate("Total")}
-                        </strong></div>
-                    </Col>
-                    <Col className="" md={2}>
-                        <h5 className="d-inline"><strong className="text-success">{"$" + this.state.totalPrice}</strong></h5>
-                        {/* <Button onClick={this.props.showSurvey} variant="primary" size="lg" className={"mx-1 px-4"}>
-                            確認結帳
-                        </Button> */}
-                    </Col>
-                </Row>
+                </div>
+                {/* <hr className="my-4" style={{width: "100%", height: "1px", border: "none", backgroundColor: "gray"}}/> */}
+                <div className="mt-4 mb-2 checkoutDiv shadow-sm">
+                    <Row className="checkoutItem d-flex align-items-center" style={{height: "80px", paddingTop: "0rem"}}>
+                        <Col className={"d-flex justify-content-center mb--2"} md={3}>
+                            您已經選擇了{this.state.totalCount}件商品
+                        </Col>
+                        {/* <Col md={3}></Col> */}
+                        <Col md={7} className="text-right">
+                            <div className="d-inline"><strong>
+                                {translate("Total")}
+                            </strong></div>
+                        </Col>
+                        <Col className="" md={2}>
+                            <h5 className="d-inline"><strong className="text-success">{"$" + this.state.totalPrice}</strong></h5>
+                        </Col>
+                    </Row>
+                </div>
                 {/* <Row className="d-flex justify-content-center">
                     <YouCaptchaApp captchaId={this.props.captchaId} onSuccess={() => {this.setState({captchaVerified: true})}}/>
                 </Row> */}

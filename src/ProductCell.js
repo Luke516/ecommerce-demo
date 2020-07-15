@@ -19,6 +19,9 @@ class ProductCell extends React.Component {
         this.logPosition = this.logPosition.bind(this);
         this.isInViewport = this.isInViewport.bind(this);
         this.addProductToCart = this.addProductToCart.bind(this);
+        this.mouseEnter = this.mouseEnter.bind(this)
+        this.mouseLeave = this.mouseLeave.bind(this)
+        this.logEvent = this.logEvent.bind(this)
 
         let imageSourceUrl = "https://youcaptcha.s3-us-west-2.amazonaws.com/seed/"
         for (let category of this.props.product.category){
@@ -70,7 +73,8 @@ class ProductCell extends React.Component {
         }
         return (
             <Col className="my-3 mx-" xs={12} sm={6} md={4} lg={3} style={{cursor: "pointer"}} ref={(el) => this.domElement = el}>
-                <Card className="card-shadow" style={{border: "0", padding: "0rem", height: this.props.hideOption?"400px":"480px", justifyContent: "space-between", alignItems: "center"}}>
+                <Card className="card-shadow" onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}
+                    style={{border: "0", padding: "0rem", height: this.props.hideOption?"400px":"480px", justifyContent: "space-between", alignItems: "center"}}>
                     <div className="w-100">
                     {this.props.checkbox &&
                         <input id="1-2" onChange={this.changeAnswer} type="checkbox" className=""></input>
@@ -124,7 +128,15 @@ class ProductCell extends React.Component {
     detailButtonClick() {
         let { history } = this.props
         this.props.history.push('/Product?p=' + this.props.product.id) 
-        console.log("Detail Click !!!")
+        // console.log("Detail Click !!!")
+
+        const timestamp = Date.now();
+        this.logEvent({
+            timestamp,
+            product: this.props.product.id,
+            type: "detailClick"
+        })
+
         this.props.showProduct({...this.props.product, ...this.state});
     }
 
@@ -134,13 +146,55 @@ class ProductCell extends React.Component {
         return (top + offset) >= 0 && (top - offset) <= window.innerHeight;
     }
     
-
     logPosition() {
         const { isVisible, inViewport  } = this.props;
         console.log( this.isInViewport(this.domElement) )
         if(isVisible){
             console.log("position QWQ!")
         }
+    }
+
+    mouseEnter() {
+        const timestamp = Date.now();
+        // console.log(this.props.product.id)
+        // console.log("mouseEnter")
+        this.logEvent({
+            timestamp,
+            product: this.props.product.id,
+            type: "mouseEnter"
+        })
+    }
+
+    mouseLeave(){
+        const timestamp = Date.now();
+        // console.log(this.props.product.id)
+        // console.log("mouseLeave")
+        this.logEvent({
+            timestamp,
+            product: this.props.product.id,
+            type: "mouseLeave"
+        })
+    }
+
+    logEvent(event){
+        let data={
+            username: this.props.username,
+            event: event
+        }
+        const proxyurl = "https://cors-anywhere.herokuapp.com/";
+        const httpHeaders = { 'Content-Type' : 'application/json', 'X-Requested-With': 'XMLHttpRequest'}
+        const myHeaders = new Headers(httpHeaders)
+        const url = "http://localhost:5000/event/";
+        const req = new Request(url, {method: 'POST', headers: myHeaders})
+
+        fetch(url, {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then(res=>{})
     }
 }
 

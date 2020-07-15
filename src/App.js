@@ -115,6 +115,7 @@ class App extends React.Component {
     this.nextTest = this.nextTest.bind(this);
     this.captchaSuccess = this.captchaSuccess.bind(this);
     this.updateCart = this.updateCart.bind(this);
+    this.logEvent = this.logEvent.bind(this);
     // console.log(data)
   }
 
@@ -122,6 +123,12 @@ class App extends React.Component {
     if(!this.state.userLogin){
       this.setState({
         showLogin: true
+      })
+
+      const timestamp = Date.now();
+      this.logEvent({
+        timestamp,
+        type: "showLogin"
       })
     }
   }
@@ -383,7 +390,7 @@ class App extends React.Component {
             <Admin location={location.location} />
         )}/>
         <Route exact path="/Survey" render={(location) => (
-            <Survey targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} location={location.location} clearCart={this.clearCart} nextTest={this.nextTest} handleNavbarToggle={this.handleNavbarToggle}/>
+            <Survey targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} location={location.location} clearCart={this.clearCart} nextTest={this.nextTest} handleNavbarToggle={this.handleNavbarToggle} targetCategory={this.state.targetCategory}/>
         )}/>
       </div>
       </Router>
@@ -414,6 +421,12 @@ class App extends React.Component {
     cookies.set('products', JSON.stringify(this.state.productsInCart))
     this.setState({
       showSuccessDialog: count
+    })
+    const timestamp = Date.now();
+    this.logEvent({
+      timestamp,
+      product: product.id,
+      type: "addToCart"
     })
     setTimeout(() => {
       this.setState({
@@ -564,6 +577,11 @@ class App extends React.Component {
       })
     }
     if(captchaPass){
+      const timestamp = Date.now();
+      this.logEvent({
+        timestamp,
+        type: "captchaVerified"
+      })
       setTimeout(
         this.setState({
           captchaVerified: true
@@ -637,6 +655,27 @@ class App extends React.Component {
       showCategoryNav: !this.state.showCategoryNav
     })
   }
+
+  logEvent(event){
+    let data={
+        username: this.state.username,
+        event: event
+    }
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const httpHeaders = { 'Content-Type' : 'application/json', 'X-Requested-With': 'XMLHttpRequest'}
+    const myHeaders = new Headers(httpHeaders)
+    const url = "http://localhost:5000/event/";
+    const req = new Request(url, {method: 'POST', headers: myHeaders})
+
+    fetch(url, {
+        method: 'post',
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    }).then(res=>{})
+}
 }
 
 export default withCookies(App)
