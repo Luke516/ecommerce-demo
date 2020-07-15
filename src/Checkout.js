@@ -196,7 +196,7 @@ class Checkout extends React.Component {
                             <input type="checkbox" className="normal-checkbox" checked={this.state.productsInCart[index].checked} onChange={()=>{this.toggleCheck(index)}}></input>
                         </Col>
                         <Col md={2} className={"d-flex align-items-center  justify-content-center"} style={{maxHeight: "90%"}}>
-                            <img style={{maxWidth:"90%", maxHeight: "90%"}} src={product.imageSourceUrl}></img>
+                            <img style={{maxWidth:"90px", maxHeight: "90px", display: "block"}} src={product.imageSourceUrl}></img>
                         </Col>
                         <Col md={3} className="align-items-center" style={{maxHeight: "90%"}}>
                             <strong key={product.id}>{product.name}</strong>

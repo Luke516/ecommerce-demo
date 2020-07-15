@@ -146,10 +146,12 @@ class Survey extends React.Component {
             answer4: -1,
             answer5: "",
             other: "其他",
-            unseen: [],
+            unseen: unseen,
             username: cookies.get('username')? cookies.get('username') : "",
             targetCategory: this.props.targetCategory
         }
+
+        console.log(this.state)
 
         this.changeFavicon = this.changeFavicon.bind(this);
         this.nextQuestion = this.nextQuestion.bind(this);
@@ -252,7 +254,7 @@ class Survey extends React.Component {
                                 <Form className="d-flex flex-column justify-content-center">
                                     {/* <div className="my-2"></div> */}
                                     <br/>
-                                    <Form.Check className="my-2" inline label="非常感興趣" name="survey3" type={'radio'} id={`inline-radio-1`} onChange={this.handleClick2} /><br/>
+                                    <Form.Check inline label="非常感興趣" name="survey3" type={'radio'} id={`inline-radio-1`} onChange={this.handleClick2} /><br/>
                                     <Form.Check inline label="有點感興趣" name="survey3" type={'radio'} id={`inline-radio-2`} onChange={this.handleClick2} /><br/>
                                     <Form.Check inline label="普通" name="survey3" type={'radio'} id={`inline-radio-3`} onChange={this.handleClick2} /><br/>
                                     <Form.Check inline label="不太感興趣" name="survey3" type={'radio'} id={`inline-radio-4`} onChange={this.handleClick2} /><br/>
@@ -274,13 +276,13 @@ class Survey extends React.Component {
                         <SurveyProductCell hideOption key={this.state.list4.id} product={this.state.list4} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
                         <Col xs={12} sm={6} md={4} lg={3} >
                             <div key={`inline-radio`} className="mb-3">
-                                <Form>
+                                <Form className="d-flex flex-column justify-content-center">
                                     {/* <div className="my-2"></div> */}
                                     <br/>
-                                    <Form.Check className="my-2" inline label="非常感興趣" name="survey4" type={'radio'} id={`inline-radio-1`} onChange={this.handleClick2} /><br/><br/>
-                                    <Form.Check inline label="有點感興趣" name="survey4" type={'radio'} id={`inline-radio-2`} onChange={this.handleClick2} /><br/><br/>
-                                    <Form.Check inline label="普通" name="survey4" type={'radio'} id={`inline-radio-3`} onChange={this.handleClick2} /><br/><br/>
-                                    <Form.Check inline label="不太感興趣" name="survey4" type={'radio'} id={`inline-radio-4`} onChange={this.handleClick2} /><br/><br/>
+                                    <Form.Check inline label="非常感興趣" name="survey4" type={'radio'} id={`inline-radio-1`} onChange={this.handleClick2} /><br/>
+                                    <Form.Check inline label="有點感興趣" name="survey4" type={'radio'} id={`inline-radio-2`} onChange={this.handleClick2} /><br/>
+                                    <Form.Check inline label="普通" name="survey4" type={'radio'} id={`inline-radio-3`} onChange={this.handleClick2} /><br/>
+                                    <Form.Check inline label="不太感興趣" name="survey4" type={'radio'} id={`inline-radio-4`} onChange={this.handleClick2} /><br/>
                                     <Form.Check inline label="非常不感興趣" name="survey4" type={'radio'} id={`inline-radio-5`} onChange={this.handleClick2} /><br/>
                                 </Form>
                             </div>
@@ -370,8 +372,6 @@ class Survey extends React.Component {
         const httpHeaders = { 'Content-Type' : 'application/json', 'X-Requested-With': 'XMLHttpRequest'}
         const myHeaders = new Headers(httpHeaders)
         const url = "http://localhost:5000/log/";
-        const req = new Request(url, {method: 'POST', headers: myHeaders})
-
         fetch(url, {
             method: 'post',
             headers: {
@@ -385,8 +385,7 @@ class Survey extends React.Component {
         });
 
         const url2 = "http://localhost:5000/finish/";
-        const req2 = new Request(url2, {method: 'POST', headers: myHeaders})
-        fetch(url, {
+        fetch(url2, {
             method: 'post',
             headers: {
                 'Accept': 'application/json, text/plain, */*',

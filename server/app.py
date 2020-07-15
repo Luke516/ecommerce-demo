@@ -27,9 +27,9 @@ def hello_world():
 def log():
     # Decoding and pre-processing base64 image
     payload = request.json
-    print(payload)
+    # print(payload)
     date = datetime.today().strftime('%Y-%m-%d')
-    logfile = date + "_" + payload["targetCategory"] + '_' + payload['username'] + ".txt"
+    logfile = date + "_" + payload["targetCategory"] + '_' + payload['username'] + ".json"
     with open(logfile, "a") as writer:
         json.dump(payload, writer)
 
@@ -71,8 +71,9 @@ def finish():
     username = payload["username"]
     events = userEvents[username]
     date = datetime.today().strftime('%Y-%m-%d')
-    logfile = date + "_" + payload["targetCategory"] + '_event_' + username + ".txt"
+    logfile = date + "_" + payload["targetCategory"] + '_event_' + username + ".json"
     with open(logfile, "a") as writer:
         json.dump(events, writer)
 
+    userEvents[username] = []
     return "QWQ"

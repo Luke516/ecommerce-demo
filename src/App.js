@@ -552,7 +552,8 @@ class App extends React.Component {
       controlProductId,
       captchaType,
       captchaId: captchaId,
-      navbarToggle: false
+      navbarToggle: false,
+      redirect: true
     })
   }
 
@@ -601,7 +602,8 @@ class App extends React.Component {
       cookies.set('username', this.state.username)
       this.setState({
         showLogin: this.state.captchaType == "YouCaptcha"? true: false,
-        userLogin: true
+        userLogin: true,
+        redirect: false
       })
     }
   }
@@ -613,7 +615,8 @@ class App extends React.Component {
     this.setState({
       showLogin: false,
       userLogin: false,
-      username: ""
+      username: "",
+      redirect: true
     })
   }
 
