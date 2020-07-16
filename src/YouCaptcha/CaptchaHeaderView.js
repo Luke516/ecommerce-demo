@@ -84,8 +84,8 @@ function CaptchaHeaderView(props) {
                         <h4>{flatData[decodeURIComponent(props.result.origin).split("/").pop().substr(0,10)].name}</h4>
                     </div>
                     <div>
-                        <Button className="mx-1" size="lg" target="_blank" rel="noopener noreferrer" href={"http://localhost:3000/Product?p=" + decodeURIComponent(props.result.origin).split("/").pop().substr(0,10)}>去看看</Button>
-                        <Button variant={"secondary"} className="mx-1" size="lg" target="_blank" rel="noopener noreferrer" href={""} onClick={props.closeAd}>略過</Button>
+                        <Button className="mx-1" style={{width: "7.5rem"}} size="lg" href={"http://localhost:3000/Product?p=" + decodeURIComponent(props.result.origin).split("/").pop().substr(0,10)}>去看看</Button>
+                        <Button variant={"secondary"} className="mx-1" style={{width: "7.5rem"}} size="lg" target="_blank" rel="noopener noreferrer" href={""} onClick={props.closeAd}>略過</Button>
                     </div>
                 </div>
             }

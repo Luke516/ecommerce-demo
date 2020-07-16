@@ -51,20 +51,13 @@ function CaptchaView(props) {
 
     const refreshCaptcha = () => {
         setRefreshing(true)
+        props.refreshCaptcha()
         // refetch(0).then(()=>{
         //     setRefreshing(false)
         // })
         setTimeout(()=>{
             setRefreshing(false)
         }, 500)
-    }
-
-    if(loading){
-        return(
-            <div>
-                loading...
-            </div>
-        )
     }
     if(error){
         return(
@@ -73,22 +66,86 @@ function CaptchaView(props) {
             </div>
         )
     }
+    if(loading){
+        return(
+            <div id="captchaBody">
+            <Row className="captcha-row">
+                <div className="youcaptcha-img-div"></div>
+                <div className="youcaptcha-img-div"></div>
+                <div className="youcaptcha-img-div"></div>
+            </Row>
+            <Row className="captcha-row">
+                <div className="youcaptcha-img-div"></div>
+                <div className="youcaptcha-img-div"></div>
+                <div className="youcaptcha-img-div"></div>
+            </Row>
+            <Row className="captcha-row">
+                <div className="youcaptcha-img-div"></div>
+                <div className="youcaptcha-img-div"></div>
+                <div className="youcaptcha-img-div"></div>
+            </Row>
+            <Row className="captcha-row ending align-items-center px-2">
+                <Button variant="white" className="text-muted cell" onClick={refreshCaptcha/*this.props.getCaptcha*/} 
+                    style={{textAlign:"left", paddingLeft:"0"}}>
+                    {/* <i className="fas fa-sync-alt"></i> */}
+                    <FontAwesomeIcon icon={faSyncAlt} className={refreshing?"rotating":""} style={{cursor: "pointer", marginLeft:"8px", marginRight:"8px"}} />
+                </Button>
+                <div className="captcha-error">
+                    {
+                        props.showEmptyMessage && 
+                        <span className="text-danger">請完成必要欄位</span>
+                    }
+                    {
+                        props.showWrongMessage && 
+                        <span className="text-danger">請再試一次</span>
+                    }
+                </div>
+                <div className="cell" style={{textAlign:"right"}}>
+                    <Button variant="primary" onClick={() => {verifyCaptcha()}}
+                    // <Button variant="primary" onClick={() => {props.toggleShowCaptcha()}}
+                        aria-controls="youcaptcha-collpase"
+                        aria-expanded={props.showCaptcha}>
+                        登入
+                    </Button>
+                </div>
+            </Row>
+            </div>
+        )
+    }
     return (
         <div id="captchaBody">
         <Row className="captcha-row">
-            <img id="captcha1" className={selected[0]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[0]} onClick={() => {toggleSelection(0)}/*this.props.selectCaptcha(1)*/}/>
-            <img id="captcha2" className={selected[1]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[1]} onClick={() => {toggleSelection(1)}/*this.props.selectCaptcha(2)*/}/>
-            <img id="captcha3" className={selected[2]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[2]} onClick={() => {toggleSelection(2)}/*this.props.selectCaptcha(3)*/}/>
+            <div className="youcaptcha-img-div">
+                <img id="captcha1" className={selected[0]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[0] + ""} onClick={() => {toggleSelection(0)}/*this.props.selectCaptcha(1)*/}/>
+            </div>
+            <div className="youcaptcha-img-div">
+                <img id="captcha2" className={selected[1]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[1] + ""} onClick={() => {toggleSelection(1)}/*this.props.selectCaptcha(2)*/}/>
+            </div>
+            <div className="youcaptcha-img-div">
+                <img id="captcha3" className={selected[2]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[2] + ""} onClick={() => {toggleSelection(2)}/*this.props.selectCaptcha(3)*/}/>
+            </div>
         </Row>
         <Row className="captcha-row">
-            <img id="captcha4" className={selected[3]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[3]} onClick={() => {toggleSelection(3)}/*this.props.selectCaptcha(4)*/}/>
-            <img id="captcha5" className={selected[4]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[4]} onClick={() => {toggleSelection(4)}/*this.props.selectCaptcha(5)*/}/>
-            <img id="captcha6" className={selected[5]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[5]} onClick={() => {toggleSelection(5)}/*this.props.selectCaptcha(6)*/}/>
+            <div className="youcaptcha-img-div">
+                <img id="captcha4" className={selected[3]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[3] + ""} onClick={() => {toggleSelection(3)}/*this.props.selectCaptcha(4)*/}/>
+            </div>
+            <div className="youcaptcha-img-div">
+                <img id="captcha5" className={selected[4]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[4] + ""} onClick={() => {toggleSelection(4)}/*this.props.selectCaptcha(5)*/}/>
+            </div>
+            <div className="youcaptcha-img-div">
+                <img id="captcha6" className={selected[5]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[5] + ""} onClick={() => {toggleSelection(5)}/*this.props.selectCaptcha(6)*/}/>
+            </div>
         </Row>
         <Row className="captcha-row">
-            <img id="captcha7" className={selected[6]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[6]} onClick={() => {toggleSelection(6)}/*this.props.selectCaptcha(7)*/}/>
-            <img id="captcha8" className={selected[7]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[7]} onClick={() => {toggleSelection(7)}/*this.props.selectCaptcha(8)*/}/>
-            <img id="captcha9" className={selected[8]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[8]} onClick={() => {toggleSelection(8)}/*this.props.selectCaptcha(9)*/}/>
+            <div className="youcaptcha-img-div">
+                <img id="captcha7" className={selected[6]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[6] + ""} onClick={() => {toggleSelection(6)}/*this.props.selectCaptcha(7)*/}/>
+            </div>
+            <div className="youcaptcha-img-div">
+                <img id="captcha8" className={selected[7]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[7] + ""} onClick={() => {toggleSelection(7)}/*this.props.selectCaptcha(8)*/}/>
+            </div>
+            <div className="youcaptcha-img-div">
+                <img id="captcha9" className={selected[8]? "selected youcaptcha-img": "youcaptcha-img"} src={data.targetCaptcha.candidates[8] + ""} onClick={() => {toggleSelection(8)}/*this.props.selectCaptcha(9)*/}/>
+            </div>
         </Row>
         <Row className="captcha-row ending align-items-center px-2">
             <Button variant="white" className="text-muted cell" onClick={refreshCaptcha/*this.props.getCaptcha*/} 

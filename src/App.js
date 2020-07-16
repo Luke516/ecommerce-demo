@@ -1,15 +1,10 @@
 import React from 'react';
-import Recaptcha from 'react-recaptcha';
-import logo from './logo.svg';
 import './App.css';
 import data from './data/metadata_all_with_detail_img_3_empty.json';
-// import data from './selectedProductsFromFile.json';
 import productIdToCaptchaId from './data/productIdToCaptchaId.json'
-import metadata_captcha from './data/metadata_captcha.json'
 import flatData from './data/flat_products_list_zh.json';
-import Home from './Home'
-import RCG from 'react-captcha-generator';
-import YouCaptchaApp from './YouCaptcha/YouCaptchaApp'
+import accountsData from './data/accounts.json';
+
 import Category from './Category'
 import Checkout from './Checkout'
 import Admin from './Admin'
@@ -19,32 +14,21 @@ import LoginModal from './LoginModal'
 import {translate} from './utils/translate'
 import {
   BrowserRouter as Router,
-  withRouter,
   Route,
   Link
 } from 'react-router-dom'
 import { withCookies, Cookies } from 'react-cookie';
-import { Col, Alert, Row, Nav, Navbar, NavDropdown, Form, FormControl, Button, SplitButton, Dropdown, Badge,
-  OverlayTrigger, Popover, ListGroup, InputGroup, Modal} from 'react-bootstrap';
+import { Col, Alert, Row, Nav, Navbar, Button, SplitButton, Dropdown, Badge,
+   Modal} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes, faShoppingCart, faCheck } from '@fortawesome/free-solid-svg-icons'
 
 class App extends React.Component {
 
-  getInitState() {
-
-  }
-
   constructor(props) {
     super(props);
     const { cookies } = props;
-    // console.log(cookies.get('products'))
 
-    let obj_keys = Object.keys(productIdToCaptchaId);
-    // let targetProductId = obj_keys[Math.floor(Math.random() *obj_keys.length)];
-    // let captchaIdList = productIdToCaptchaId[targetProductId]
-    // let captchaId = captchaIdList[Math.floor(Math.random() *captchaIdList.length)];
-    // console.log(ran_key)
     let testId = cookies.get('testId')? cookies.get('testId') : "3";
     let curSetting = cookies.get('username')? cookies.get('username') : "";
     
@@ -82,7 +66,8 @@ class App extends React.Component {
       targetCategory,
       targetProductId,
       controlProductId,
-      captchaId: captchaId,
+      captchaId,
+      captchaIdList,
       captcha: "",
       username: cookies.get('username')? cookies.get('username') : "",
       password: "",
@@ -116,6 +101,10 @@ class App extends React.Component {
     this.captchaSuccess = this.captchaSuccess.bind(this);
     this.updateCart = this.updateCart.bind(this);
     this.logEvent = this.logEvent.bind(this);
+    this.showAd = this.showAd.bind(this);
+    this.closeAd = this.closeAd.bind(this);
+    this.showDialog = this.showDialog.bind(this);
+    this.validateAccount = this.validateAccount.bind(this);
     // console.log(data)
   }
 
@@ -134,6 +123,7 @@ class App extends React.Component {
   }
 
   render (){
+    const targetProductData = flatData[this.state.targetProductId]
     return (
       <Router>
       <div className=''>
@@ -285,76 +275,40 @@ class App extends React.Component {
           <FontAwesomeIcon className="mx-2" icon={faCheck}/>
           已將<span className="mx-1">{this.state.showSuccessDialog}</span>件商品加入購物車
         </Alert>
-        <LoginModal showLogin={this.state.showLogin} closeDialog={this.closeDialog} 
+        <LoginModal showLogin={this.state.showLogin} closeDialog={this.closeDialog} showDialog={this.showDialog} 
           captchaVerified={this.state.captchaVerified} username={this.state.username} password={this.state.password}
           handleUserNameChange={this.handleUserNameChange} handlePasswordChange={this.handlePasswordChange}
           usernameValid={this.state.usernameValid} passwordValid={this.state.passwordValid}
           captchaType={this.state.captchaType} result={this.result} handleClick={this.handleClick}
           captcha={this.state.captcha} captchaId={this.state.captchaId} captchaSuccess={this.captchaSuccess}
-          userLogin={this.userLogin}
+          captchaIdList={this.state.captchaIdList} userLogin={this.userLogin}
           />
-        {/* <Modal show={this.state.showLogin} onHide={this.closeDialog}>
-          <Modal.Header closeButton>
+        {
+          <Modal dialogClassName="" show={this.state.showAd} onHide={this.closeAd}>
+            <Modal.Header closeButton>
             <Modal.Title>
-              {this.state.captchaVerified? translate("Welcome") + ", " + this.state.username : translate("Login Your Account")}
+              {translate("Welcome") + "，" + this.state.username}
             </Modal.Title>
           </Modal.Header>
-          <Modal.Body>
-            <Form >
-              <div style={{display: this.state.captchaVerified? "none": "block"}}>
-                <label htmlFor="basic-url">{translate("Username")}</label>                
-                <InputGroup className="mb-3" style={{borderRadius:"0.25rem", border: this.state.usernameValid? "": "2px solid red"}}>
-                    <FormControl 
-                    placeholder={translate("Enter username...")}
-                    aria-label="username"
-                    aria-describedby="basic-addon"
-                    onChange={this.handleUserNameChange}
-                    />
-                </InputGroup>
-                <label htmlFor="basic-url">{translate("Password")}</label>                
-                <InputGroup className="mb-3" style={{borderRadius:"0.25rem", border: this.state.passwordValid? "": "2px solid red"}}>
-                    <FormControl
-                    placeholder={translate("Enter password...")}
-                    aria-label="password"
-                    aria-describedby="basic-addon2"
-                    onChange={this.handlePasswordChange}
-                    />
-                </InputGroup>
+            <Modal.Body className="d-flex flex-column" style={{ overflowY: 'auto', height: "400px"}}>
+              <div className="d-flex justify-content-center align-items-center my-2" style={{height: "240px"}}>
+                <div className="d-flex justify-content-center" style={{maxHeight:"240px", maxWidth:"240px", overflow: "hidden"}}>
+                  <img src={targetProductData.url} style={{maxWidth: "240px", maxHeight:"240px", width: "auto", height: "auto"}} />
+                </div>
               </div>
-              {this.state.captchaType == "textCaptcha" && <RCG
-                result={this.result} // Callback function with code
-              />}
-              {this.state.captchaType == "textCaptcha" && <form onSubmit={this.handleClick}>
-                <input type='text' className={'xxx'} ref={ref => this.captchaEnter = ref} />
-                <input type='submit' />
-              </form>}
-              {this.state.captchaType == "YouCaptcha" && <YouCaptchaApp captchaId={this.state.captchaId} onVerify={() => {}} onSuccess={this.captchaSuccess}/>}
-              {this.state.captchaType == "ReCaptcha" && <Recaptcha sitekey="6LfG6rkUAAAAAOxhm3p9iOJZ-92gHJb_UGtsTxpE" 
-                render="explicit" 
-                onloadCallback={()=>{console.log("onload")}} 
-                verifyCallback={()=>{this.setState({captchaVerified: true})}}  />}
-            </Form>
-            <div className="mb-4"></div>
-          </Modal.Body> */}
-          {/* <Modal.Footer>
-            <Button variant="secondary" onClick={this.closeDialog}>
-              Cancel
-            </Button>
-            <Button variant="primary" style={{display: this.state.captchaVerified? "block": "none"}} onClick={this.userLogin}>
-              Login
-            </Button>
-          </Modal.Footer> */}
-        {/* </Modal> */}
-        {/* <Modal dialogClassName="modal-90w" show={this.state.showProductDetail} onHide={this.closeProductDetailDialog}>
-          <Modal.Body style={{ overflowY: 'auto'}}>
-            <Row>
-              <ProductDetail product={this.state.curProduct} addProductToCart={this.addProductToCart}/>
-            </Row>
-          </Modal.Body>
-        </Modal> */}
+              <div>
+                <h4>{targetProductData.name}</h4>
+                <div className="d-flex flex-row justify-content-center mt-3 mb-1">
+                  <Button size="lg" className="mx-2 w-25" >去看看</Button>
+                  <Button size="lg" className="mx-2 w-25" variant="secondary" onClick={this.closeAd}>略過</Button>
+                </div>
+              </div>
+            </Modal.Body>
+          </Modal>
+        }
         <Route exact path="/" render={(location) => (
-            !this.state.redirect?
-            <Home targetProductId={this.state.targetProductId} addProductToCart={this.addProductToCart} showProduct={this.showProduct} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId}/>:
+            // !this.state.redirect?
+            // <Home targetProductId={this.state.targetProductId} addProductToCart={this.addProductToCart} showProduct={this.showProduct} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId}/>:
             <Category name={this.state.targetCategory} data={data[this.state.targetCategory]} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId}/>
         )}/>
         <Route exact path="/Men's Fashion" render={(location) => (
@@ -464,12 +418,20 @@ class App extends React.Component {
     });
   }
 
+  showDialog() {
+    this.setState({
+      showLogin: true
+    })
+  }
+
   closeDialog() {
     this.setState({
       showLogin: false,
       captchaVerified: false,
       usernameValid: true,
-      passwordValid: true
+      passwordValid: true,
+      username: "",
+      password: ""
     },()=>{
       // if(this.state.userLogin){
       //   window.location.href = this.state.targetCategory;
@@ -551,7 +513,8 @@ class App extends React.Component {
       targetProductId,
       controlProductId,
       captchaType,
-      captchaId: captchaId,
+      captchaId,
+      captchaIdList,
       navbarToggle: false,
       redirect: true
     })
@@ -569,6 +532,9 @@ class App extends React.Component {
         usernameValid: this.state.username == ""? false: true,
         passwordValid: this.state.password == ""? false: true
       })
+      return false
+    }
+    else if(!this.validateAccount(this.state.username, this.state.password)){
       return false
     }
     else{
@@ -605,13 +571,19 @@ class App extends React.Component {
         userLogin: true,
         redirect: false
       })
+
+      if(this.state.captchaType !== "YouCaptcha"){
+        setTimeout(this.showAd, 500)
+      }
     }
   }
 
   userLogout() {
     const { cookies } = this.props;
-    
+
+    cookies.set('browsed', [])
     cookies.set('username', "")
+
     this.setState({
       showLogin: false,
       userLogin: false,
@@ -678,7 +650,28 @@ class App extends React.Component {
         },
         body: JSON.stringify(data)
     }).then(res=>{})
-}
+  }
+
+  showAd() {
+    this.setState({
+      showAd: true
+    })
+  }
+
+  closeAd(){
+    this.setState({
+      showAd: false
+    })
+  }
+
+  validateAccount(username, password) {
+    if(accountsData[username]){
+      if(accountsData[username] == password){
+        return true
+      }
+    }
+    return false
+  }
 }
 
 export default withCookies(App)

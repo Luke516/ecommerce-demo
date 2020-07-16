@@ -1,13 +1,11 @@
 import React from 'react';
 import './App.css';
-import priceData from './data/prices2All.json';
-import flatData from './data/flat_products_list_zh.json';
 
 import {withRouter} from 'react-router-dom'
 import { Modal, InputGroup, Form, FormControl,Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
-import { faGoogle, faFacebookF } from '@fortawesome/free-brands-svg-icons'
+import { faEye, faEyeSlash, faSyncAlt } from '@fortawesome/free-solid-svg-icons'
+// import { faGoogle, faFacebookF } from '@fortawesome/free-brands-svg-icons'
 import { translate } from './utils/translate';
 import RCG from 'react-captcha-generator';
 import Recaptcha from 'react-recaptcha';
@@ -22,7 +20,8 @@ class LoginModal extends React.Component {
             showPassword: false,
             empty: false,
             wrong: false,
-            captchaVerified: false
+            captchaVerified: false,
+            textCaptchaSeed: "QWQ"
         }
 
         this.handleClick = this.handleClick.bind(this)
@@ -30,6 +29,7 @@ class LoginModal extends React.Component {
         this.toggleShowPassword = this.toggleShowPassword.bind(this)
         this.recaptchaCheck = this.recaptchaCheck.bind(this)
         this.showLoginButton = this.showLoginButton.bind(this)
+        this.refreshTextCaptcha = this.refreshTextCaptcha.bind(this)
     }
   
     render (){
@@ -37,7 +37,7 @@ class LoginModal extends React.Component {
             <Modal show={this.props.showLogin} onHide={this.props.closeDialog} dialogClassName="login-dialog" centered>
                 <Modal.Header closeButton className="align-items-baseline" style={{borderBottom: 0}}>
                     <Modal.Title>
-                    {this.props.captchaVerified? translate("Welcome") + ", " + this.props.username : translate("Login Your Account")}
+                    {(this.props.captchaVerified && this.props.captchaType == "YouCaptcha") ? translate("Welcome") + ", " + this.props.username : translate("Login Your Account")}
                     </Modal.Title>
                     {
                         !this.props.captchaVerified &&
@@ -106,18 +106,23 @@ class LoginModal extends React.Component {
                             <p>完成驗證碼</p>
                         } */}
                         {this.props.captchaType == "textCaptcha" && 
-                            <div className="text-captcha">
-                                <RCG result={this.props.result} />
+                            <div className={this.props.captchaVerified? "text-captcha": "text-captcha"}>
+                                <RCG result={this.props.result} background={this.state.textCaptchaSeed} />
+                                <div className="mx-4" style={{cursor: "pointer"}} onClick={this.refreshTextCaptcha}>
+                                    <FontAwesomeIcon icon={faSyncAlt} />
+                                </div>
                             </div>
                         }
                         {this.props.captchaType == "textCaptcha" && 
                             <>
-                            <form className="d-flex flex-row" onSubmit={this.handleClick}>
-                                <input type='text' className={'d-flex w-75 form-control'} placeholder={translate("Enter captcha...")} ref={ref => this.captchaEnter = ref} />
-                                {/* <input type='submit' /> */}
-                                <Button className="mx-2" onClick={this.handleClick}>{translate("Proceed")}</Button>
+                            <form className={this.props.captchaVerified? "d-flex flex-row justify-content-center": "d-flex flex-row justify-content-center"} onSubmit={this.handleClick}>
+                                <div className={this.props.captchaVerified? "d-flex shrink100": "w-100 d-flex"}>
+                                    <input type='text' className={this.props.captchaVerified? "d-flex form-control": "d-flex w-75 form-control"} placeholder={translate("Enter captcha...")} ref={ref => this.captchaEnter = ref} />
+                                    <Button className={this.props.captchaVerified? "mx-2": "mx-2"} onClick={this.handleClick} style={{whiteSpace: "nowrap"}}>{translate("Proceed")}</Button>
+                                </div>
+                                {this.props.captchaVerified && <Button className="fadeIn2 px-2 w-25" onClick={this.props.userLogin}>{translate('Login Your Account')}</Button>}
                             </form>
-                            <div className="my-3 justify-content-center" style={{display: (this.state.empty || this.state.wrong)? "flex": "none"}}>
+                            <div className="mt-3 justify-content-center" style={{display: (this.state.empty || this.state.wrong)? "flex": "none"}}>
                                 <div className="captcha-error">
                                 {this.state.empty && <span className="text-danger">請完成必要欄位</span>}
                                 {this.state.wrong && <span className="text-danger">驗證碼錯誤</span>}
@@ -126,7 +131,7 @@ class LoginModal extends React.Component {
                             </>
                         }
                         {this.props.captchaType == "YouCaptcha" && 
-                            <YouCaptchaApp captchaId={this.props.captchaId} onVerify={() => {}} onSuccess={this.props.captchaSuccess} closeAd={this.props.closeDialog}/>}
+                            <YouCaptchaApp captchaId={this.props.captchaId} captchaIdList={this.props.captchaIdList} onVerify={() => {}} onSuccess={this.props.captchaSuccess} closeAd={this.props.closeDialog}/>}
                         {this.props.captchaType == "ReCaptcha" && 
                             <div onClick={this.recaptchaCheck}>
                                 <div className={(this.props.usernameValid && this.props.passwordValid)? (this.props.username == "" || this.props.password == "")? "disabled-element": "enabled-element": "disabled-element"}>
@@ -142,9 +147,9 @@ class LoginModal extends React.Component {
                                 </div>
                             </div>
                         }
-                        <div className="justify-content-center my-3" style={{display: (this.props.captchaVerified && this.props.captchaType !== "YouCaptcha")? "flex": "none"}}>
+                        <div className="justify-content-center mt-3" style={{display: (this.props.captchaVerified && this.props.captchaType == "ReCaptcha")? "flex": "none"}}>
                            {
-                               <Button className="px-2" onClick={this.props.userLogin}>{translate('Login Your Account')}</Button>
+                               <Button className="px-2 w-25" onClick={this.props.userLogin}>{translate('Login Your Account')}</Button>
                            }
                         </div>
                     </div>
@@ -209,6 +214,11 @@ class LoginModal extends React.Component {
                 empty: !this.props.captchaSuccess()
             })
         }
+    }
+
+    refreshTextCaptcha() {
+        this.props.closeDialog()
+        setTimeout(this.props.showDialog, 250)
     }
 
     showLoginButton() {

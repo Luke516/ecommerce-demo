@@ -85,11 +85,20 @@ function YouCaptchaApp(props) {
     }, 180)
   }
 
+  const refreshCaptcha = () => {
+    console.log("refreshCaptcha QWQ")
+    setFirstLoad(true)
+    let newCaptchaId = props.captchaIdList[Math.floor(Math.random() * props.captchaIdList.length)];
+    console.log(newCaptchaId)
+    setCaptchaId(newCaptchaId)
+  }
+
   useEffect(() => {
     if(!loading && !error){
       if(data.result.title.length > 50){
         data.result.title = data.result.title.substring(0,50) + "...";
       }
+      console.log(data)
       if(data.result.status != "incorrect"){
         if(props.onSuccess(true)){
           setShowWrongMessage(false)
@@ -128,25 +137,12 @@ function YouCaptchaApp(props) {
 
   return (
     <div className="App">
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header> */}
       <div id="demo" className={showAd? "completed": "device px-4"} style={{display: "block"}}>
-        <HeaderView captchaId={props.captchaId} toggleCaptcha={toggleCaptcha} showCaptcha={startCaptcha} result={loading? defaultResult: fetchData.result} showAd={showAd} verified={verified} closeAd={props.closeAd}/>
+        <HeaderView captchaId={captchaId} toggleCaptcha={toggleCaptcha} showCaptcha={startCaptcha} result={loading? defaultResult: fetchData.result} showAd={showAd} verified={verified} closeAd={props.closeAd}/>
         <Collapse in={showCaptcha}>
           <div id="youcaptcha-collpase">
-            <CaptchaView captchaId={props.captchaId} showWrongMessage={showWrongMessage} showEmptyMessage={showEmptyMessage} verifyCaptcha={verifyCaptcha} verified={verified} showCaptcha={showCaptcha} toggleShowCaptcha={toggleShowCaptcha}/>
+            <CaptchaView captchaId={captchaId} showWrongMessage={showWrongMessage} showEmptyMessage={showEmptyMessage} 
+            verifyCaptcha={verifyCaptcha} verified={verified} showCaptcha={showCaptcha} toggleShowCaptcha={toggleShowCaptcha} refreshCaptcha={refreshCaptcha}/>
           </div>
         </Collapse>
       </div>

@@ -1,50 +1,84 @@
 import React from 'react';
 import './App.css';
 import flatData from './data/flat_products_list_zh.json';
+import priceData from './data/prices2All.json';
 
 import TrackVisibility from 'react-on-screen';
 import queryString from 'query-string';
 import { Container, Row, Tabs, Tab, Nav, Dropdown, Col } from 'react-bootstrap';
-import ProductCell from './ProductCell'
 import ProductRow from './ProductRow'
 import {translate} from './utils/translate'
 
 class Category extends React.Component {
 
-    getRandomProduct(data) {
+    sortProducts(data, method = "recommand", order = 1) {
+        function compareByRecommand( a, b ) {
+            return a.recommand < b.recommand ? order : 
+                a.recommand > b.recommand ? -order : 0
+        }
+        function compareByPrice( a, b ) {
+            return a.price < b.price ? order : 
+                a.price > b.price ? -order : 0
+        }
+        function compareByPopular( a, b ) {
+            return a.popular < b.popular ? order : 
+                a.popular > b.popular ? -order : 0
+        }
+
+        if(method === "recommand") data = data.sort(compareByRecommand)
+        else if(method === "price") data = data.sort(compareByPrice)
+        else if(method === "popular") data = data.sort(compareByPopular)
+
+        return data
+    }
+
+    reorderProducts(orderMethod, order) {
+        let targetSubCategoryData = this.state.targetSubCategoryData
+        let subCategoryList = this.state.subCategoryList
+
+        if(targetSubCategoryData){
+            targetSubCategoryData.data = this.sortProducts(targetSubCategoryData.data, orderMethod, order)
+        }
+        for(let i = 0; i < subCategoryList.length; i++){
+            let subCategoryData = subCategoryList[i]
+            subCategoryList[i].data = this.sortProducts(subCategoryData.data, orderMethod, order)
+        }
+
+        this.setState({
+            targetSubCategoryData,
+            subCategoryList: subCategoryList.slice(),
+            orderMethod,
+            order
+        })
+    }
+
+    getAllproducts(data) {
         let obj_keys = Object.keys(data);
-        let ran_key = obj_keys[Math.floor(Math.random() *obj_keys.length)];
-        let selected_object = data[ran_key];
-        for(let i=0; i<100; i++){
-            if(typeof selected_object == "undefined"){
-                ran_key = obj_keys[Math.floor(Math.random() *obj_keys.length)];
-                selected_object = data[ran_key];
-            }
-            else if (Object.keys(selected_object).length < 1){
-                ran_key = obj_keys[Math.floor(Math.random() *obj_keys.length)];
-                selected_object = data[ran_key];
+        let products = []
+        for(let i=0; i<obj_keys.length; i++){
+            let key = obj_keys[i]
+            if(data[key].name){
+                let product = data[key]
+                product.category = []   
+                product.id = key
+                product.price = priceData[key][0]
+                product.popular = product.name.length % 17
+                product.recommand = (product.name.length * product.name.length) % 23
+                if(key == this.props.targetProductId || key == this.props.controlProductId){
+                    product.recommand = 8787
+                    product.popular = 8787
+                }
+                products.push(data[key])
             }
             else{
-                break;
+                let products2 = this.getAllproducts(data[key])
+                for(let p of products2){
+                    p.category.unshift(key)
+                }
+                products = products.concat(products2)
             }
         }
-        if (typeof selected_object == "undefined"){
-            return {
-                id: '',
-                name: 'unknown',
-                category: []
-            }
-        }
-        if(selected_object.hasOwnProperty('name')){
-            selected_object['id'] = ran_key
-            selected_object['category'] = []
-            return selected_object
-        }
-        else {
-            let return_object = this.getRandomProduct(selected_object)
-            return_object['category'].unshift(ran_key)
-            return return_object
-        }
+        return products
     }
 
     getAllSubCategoryData(data, targetSubCategory) {
@@ -53,18 +87,29 @@ class Category extends React.Component {
 
         for(let key of obj_keys){
             let selected_data = data[key];
-            if (typeof selected_data == "undefined"){
-            }
-            else if(!selected_data.hasOwnProperty('name')){
-                console.log(key)
-                console.log(targetSubCategory)
+            if (typeof selected_data == "undefined") continue
+            
+            if(!selected_data.hasOwnProperty('name')){
                 if (key == targetSubCategory){
                     continue
                 }
                 allSubCategoryData.push({
                     displayName: key,
                     name: this.props.name + '/' + key,
-                    data: selected_data
+                    data: this.sortProducts(this.getAllproducts(selected_data))
+                })
+            }
+        }
+        if(obj_keys.includes(targetSubCategory)){
+            let targetProductData = flatData[this.props.targetProductId]
+            let targetCategory = decodeURIComponent(targetProductData.url).split('/')[4];
+
+            let selected_data = data[targetSubCategory];
+            if (typeof selected_data !== "undefined" && targetCategory === this.props.name){
+                allSubCategoryData.unshift({
+                    displayName: targetSubCategory,
+                    name: this.props.name + '/' + targetSubCategory,
+                    data: this.sortProducts(this.getAllproducts(selected_data))
                 })
             }
         }
@@ -76,41 +121,36 @@ class Category extends React.Component {
         let targetCategory = decodeURIComponent(targetProductData.url).split('/')[4];
         let targetSubCategory = decodeURIComponent(targetProductData.url).split('/')[5];
         let subCategoryList = this.getAllSubCategoryData(this.props.data, targetSubCategory);
-        console.log(targetSubCategory)
-        let targetSubCategoryData = this.props.data[targetSubCategory]
-        targetSubCategoryData = {
-            displayName: targetSubCategory,
-            name: this.props.name + '/' + targetSubCategory,
-            data: targetSubCategoryData
-        }
-        if(targetCategory != this.props.name){
-            targetSubCategoryData = null
-        }else{
-            subCategoryList.unshift(targetSubCategoryData)
+        let targetSubCategoryData = null
+        
+        if(targetCategory === this.props.name){
+            targetSubCategoryData = subCategoryList[0]
         }
 
         subCategoryList.unshift({
             displayName: "all",
             name: this.props.name + '/' + "all",
-            data: this.props.data
+            data: this.sortProducts(this.getAllproducts(this.props.data))
         })
         
-        for(let c of subCategoryList){
-            console.log(c.name)
-        }
         return {
             targetSubCategoryData,
-            subCategoryList
+            subCategoryList,
+            orderMethod: "recommand",
+            order: 1
         }
     }
   
     constructor(props) {
       super(props);
-      let params = queryString.parse(this.props.location.search)
-      console.log(params)
-      this.getInitState = this.getInitState.bind(this);
-      this.getRandomProduct = this.getRandomProduct.bind(this)
+      
+      this.getInitState = this.getInitState.bind(this)
       this.getAllSubCategoryData = this.getAllSubCategoryData.bind(this)
+      this.getAllproducts = this.getAllproducts.bind(this)
+      this.sortProducts = this.sortProducts.bind(this)
+      this.reorderProducts = this.reorderProducts.bind(this)
+      
+      let params = queryString.parse(this.props.location.search)
       this.state = {
         ...this.getInitState(),
         subCategory: params.subCategory
@@ -125,76 +165,51 @@ class Category extends React.Component {
                     <div className="w-50">
                         <h2 className="mb-4 mt-4">{translate(this.props.name)}</h2>
                     </div>
-                    {/* <hr/> */}
                 </div>
                 <Tab.Container defaultActiveKey={this.state.subCategoryList[0].name} id="uncontrolled-tab-example">
                 <Nav variant="tabs" className="flex--column">
                     <Col md={10} style={{display: "flex", flexDirection: "row", flexWrap: "wrap"}}>
-                {
-                    this.state.subCategoryList.map(subCategoryData => {
-                        return (
-                        <Nav.Item key={subCategoryData.name} title={translate(subCategoryData.name.split('/')[1])} >
-                            <Nav.Link className={" btnq btnq-outline-primary"} eventKey={subCategoryData.name}>{translate(subCategoryData.name.split('/')[1])}</Nav.Link>
-                        </Nav.Item>
-                        )
-                    })
-                }
-                </Col>
+                    {
+                        this.state.subCategoryList.map(subCategoryData => {
+                            return (
+                            <Nav.Item key={subCategoryData.name} title={translate(subCategoryData.name.split('/')[1])} >
+                                <Nav.Link className={" btnq btnq-outline-primary"} eventKey={subCategoryData.name}>{translate(subCategoryData.name.split('/')[1])}</Nav.Link>
+                            </Nav.Item>
+                            )
+                        })
+                    }
+                    </Col>
+                    <Col md={2} className="d-flex justify-content-end">
                     <Dropdown style={{}/*{display: "flex", flexGrow: "1", justifyContent: "flex-end"}*/}>
                         <Dropdown.Toggle variant="" id="dropdown-basic" style={{color: "#495057"}}>
-                            <span className="mr-2">排序依據：推薦</span>
+                            <span>排序：</span>
+                            {this.state.orderMethod == "recommand" && <span className="mr-2">推薦</span>}
+                            {(this.state.orderMethod == "price" && this.state.order == 1) && <span className="mr-2">價格（高到低）</span>}
+                            {(this.state.orderMethod == "price" && this.state.order == -1) && <span className="mr-2">價格（低到高）</span>}
+                            {(this.state.orderMethod == "popular" && this.state.order == 1) && <span className="mr-2">人氣（高到低）</span>}
+                            {(this.state.orderMethod == "popular" && this.state.order == -1) && <span className="mr-2">人氣（低到高）</span>}
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu>
-                            <Dropdown.Item style={{color: "#495057"}}>
+                            <Dropdown.Item style={{color: "#495057"}} onClick={()=>{this.reorderProducts("recommand",1)}}>
                                 <span className="text--secondary">推薦</span>
                             </Dropdown.Item>
-                            <Dropdown.Item style={{color: "#495057"}}>
+                            <Dropdown.Item style={{color: "#495057"}} onClick={()=>{this.reorderProducts("popular",1)}}>
                                 <span className="text--secondary">人氣（高到低）</span>
                             </Dropdown.Item>
-                            <Dropdown.Item style={{color: "#495057"}}>
+                            <Dropdown.Item style={{color: "#495057"}} onClick={()=>{this.reorderProducts("popular",-1)}}>
                                 <span className="text--secondary">人氣（低到高）</span>
                             </Dropdown.Item>
-                            <Dropdown.Item style={{color: "#495057"}}>
+                            <Dropdown.Item style={{color: "#495057"}} onClick={()=>{this.reorderProducts("price",1)}}>
                                 <span className="text--secondary">價格（高到低）</span>
                             </Dropdown.Item>
-                            <Dropdown.Item style={{color: "#495057"}}>
+                            <Dropdown.Item style={{color: "#495057"}} onClick={()=>{this.reorderProducts("price",-1)}}>
                                 <span className="text--secondary">價格（低到高）</span>
                             </Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
-                </Nav>
-
-                <Row className="mt-4 d-flex align-items-center">
-                    <Col md={12}>
-                        
-                        {/* <Dropdown>
-                            <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
-                                Dropdown Button
-                            </Dropdown.Toggle>
-
-                            <Dropdown.Menu>
-                                <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                                <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                                <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown> */}
-                        {/* <Nav className="align-items-center" variant="pills" defaultActiveKey="/home">
-                            排序依據
-                            <Nav.Item>
-                                <Nav.Link href="/home">Active</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link eventKey="link-1">Option 2</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link eventKey="disabled" disabled>
-                                Disabled
-                                </Nav.Link>
-                            </Nav.Item>
-                        </Nav> */}
                     </Col>
-                </Row>
+                </Nav>
 
                 <Tab.Content>
                 {
