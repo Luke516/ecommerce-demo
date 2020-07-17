@@ -72,7 +72,7 @@ class ProductCell extends React.Component {
             price = price - price % 10
         }
         return (
-            <Col className="my-3 mx-" xs={12} sm={6} md={4} lg={3} style={{cursor: "pointer"}} ref={(el) => this.domElement = el}>
+            <Col className="my-3 mx-" xs={12} sm={6} md={4} lg={3} style={{cursor: "pointer"}} ref={(el) => this.domElement = el} onClick={this.detailButtonClick}>
                 <Card className="card-shadow" onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}
                     style={{border: "0", padding: "0rem", height: this.props.hideOption?"400px":"480px", justifyContent: "space-between", alignItems: "center"}}>
                     <div className="w-100">
@@ -127,7 +127,7 @@ class ProductCell extends React.Component {
 
     detailButtonClick() {
         let { history } = this.props
-        this.props.history.push('/Product?p=' + this.props.product.id) 
+        // this.props.history.push('/Product?p=' + this.props.product.id) 
         // console.log("Detail Click !!!")
 
         const timestamp = Date.now();
@@ -137,7 +137,8 @@ class ProductCell extends React.Component {
             type: "detailClick"
         })
 
-        this.props.showProduct({...this.props.product, ...this.state});
+        window.location.href = ('/Product?p=' + this.props.product.id) 
+        // this.props.showProduct({...this.props.product, ...this.state});
     }
 
     isInViewport(element, offset = 0) {

@@ -70,6 +70,14 @@ class Survey extends React.Component {
         const { cookies } = props;
         let settings = cookies.get('settings')? cookies.get('settings') : [];
         let browsed = cookies.get('browsed')? cookies.get('browsed') : [];
+        for(let i=0; i<browsed.length; i++){
+            if(browsed[i].id == this.props.targetProductId){
+                browsed.splice(i ,1)
+            }
+            if(browsed[i].id == this.props.controlProductId){
+                browsed.splice(i ,1)
+            }
+        }
         browsed = shuffle(browsed)
         console.log(browsed)
 
@@ -324,6 +332,7 @@ class Survey extends React.Component {
 
     otherFactor() {
         let factor = prompt("請填寫原因：")
+        if(!factor || factor == "") return
         this.setState({
             other: factor
         })

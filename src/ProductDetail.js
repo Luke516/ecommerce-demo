@@ -149,10 +149,15 @@ export default class ProductDetail extends React.Component {
             product,
             price,
             detailHtml: "",
-            list1
+            list1,
+            count: 1
         }, ()=>{
             fetch('./out6/' + this.state.product.id + '.html')
-            .then((r) => r.text())
+            .then((r) => {
+                let t = r.text()
+                console.log(t)
+                return t
+            })
             .then(text  => {
                 this.setState({
                     detailHtml: text
@@ -211,8 +216,13 @@ export default class ProductDetail extends React.Component {
     }
 
     componentWillMount() {
+        console.log( this.state.product.id )
         fetch('./out6/' + this.state.product.id + '.html')
-        .then((r) => r.text())
+        .then((r) => {
+            let t = r.text()
+            console.log(t)
+            return t
+        })
         .then(text  => {
             this.setState({
                 detailHtml: text

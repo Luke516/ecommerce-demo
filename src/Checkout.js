@@ -44,6 +44,7 @@ class Checkout extends React.Component {
       }
       this.clearCart = this.clearCart.bind(this)
       this.toggleAllChecks = this.toggleAllChecks.bind(this)
+      this.showSurvey = this.showSurvey.bind(this)
     }
 
     componentDidMount() {
@@ -63,11 +64,10 @@ class Checkout extends React.Component {
           })
         }
         else {
-          let productsInCart = cookies.get('products')? cookies.get('products') : [];
+          let productsInCart = this.state.productsInCart
           productsInCart.splice(index, 1)
 
           cookies.set('products', JSON.stringify(productsInCart))
-          this.props.updateCart()
 
           let totalPrice = 0.0;
           let totalCount = 0;
@@ -80,6 +80,8 @@ class Checkout extends React.Component {
             totalPrice,
             totalCount
           })
+
+          this.props.updateCart()
         }
     }
 
@@ -202,13 +204,13 @@ class Checkout extends React.Component {
                             <strong key={product.id}>{product.name}</strong>
                         </Col>
                         <Col md={2} className={"d-flex justify-content-center align-items-center"} style={{maxHeight: "90%"}}>
-                            <h5><strong className="text-success" key={product.id}>{"$" + product.displayPrice}</strong></h5>
+                            <h4><strong className="text-success" key={product.id}>{"$" + product.displayPrice}</strong></h4>
                         </Col>
                         <Col md={2} className={"d-flex justify-content-center align-items-center"} style={{maxHeight: "90%"}}>
                             <h6>x {product.count}</h6>
                         </Col>
                         <Col md={2} className="d-flex align-items-center" style={{maxHeight: "90%", justifyContent: "space-between"}}>
-                            <h5><strong className="text-success" key={product.id}>{"$" + (product.displayPrice * product.count)}</strong></h5>
+                            <h4><strong className="text-success" key={product.id}>{"$" + (product.displayPrice * product.count)}</strong></h4>
                             <Button variant="" className="mb-2" onClick={() => {this.clearCart(index)}}><FontAwesomeIcon icon={faTrash} /></Button>
                         </Col>
                     </Row>
@@ -221,17 +223,31 @@ class Checkout extends React.Component {
                 {/* <hr className="my-4" style={{width: "100%", height: "1px", border: "none", backgroundColor: "gray"}}/> */}
                 <div className="mt-4 mb-2 checkoutDiv shadow-sm">
                     <Row className="checkoutItem d-flex align-items-center" style={{height: "80px", paddingTop: "0rem"}}>
-                        <Col className={"d-flex justify-content-center mb--2"} md={3}>
-                            您已經選擇了{this.state.totalCount}件商品
+                        <Col className={"d-flex justify-content-center mb--2"} md={4}>
+                            <div>您已經選擇了{this.state.totalCount}件商品</div>
+                        </Col>
+                        <Col className={"d-flex justify-content-center mb--2"} md={4}>
+                            {
+                                (!this.props.userLogin) &&
+                                <div className="captcha-error">
+                                    <span className="text-danger">請先登入以完成結帳</span>
+                                </div>
+                            }
+                            {
+                                (this.state.totalCount < 1 || this.state.totalCount > 3) &&
+                                <div className="captcha-error">
+                                    <span className="text-danger">請選擇1~3件商品</span>
+                                </div>
+                            }
                         </Col>
                         {/* <Col md={3}></Col> */}
-                        <Col md={7} className="text-right">
+                        <Col md={2} className="text-right">
                             <div className="d-inline"><strong>
                                 {translate("Total")}
                             </strong></div>
                         </Col>
                         <Col className="" md={2}>
-                            <h5 className="d-inline"><strong className="text-success">{"$" + this.state.totalPrice}</strong></h5>
+                            <h3 className="d-inline"><strong className="text-success">{"$" + this.state.totalPrice}</strong></h3>
                         </Col>
                     </Row>
                 </div>
@@ -244,7 +260,7 @@ class Checkout extends React.Component {
                     </Button> */}
                     {
                         this.state.captchaVerified && 
-                        <Button onClick={this.props.showSurvey} variant="primary" size="lg" className={"mx-1 px-4"}>
+                        <Button onClick={this.showSurvey} variant="primary" size="lg" className={"mx-1 px-4"}>
                             {/* {translate("Proceed")} */}
                             確認結帳
                         </Button>
@@ -253,6 +269,12 @@ class Checkout extends React.Component {
                 <div className="footer1 my-4"></div>
             </Container>
         )
+    }
+
+    showSurvey() {
+        if(this.props.userLogin && this.state.totalCount > 0 && this.state.totalCount <= 3){
+            this.props.showSurvey()
+        }
     }
 }
 

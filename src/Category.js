@@ -45,7 +45,7 @@ class Category extends React.Component {
         }
 
         this.setState({
-            targetSubCategoryData,
+            targetSubCategoryData: Object.assign(targetSubCategoryData),
             subCategoryList: subCategoryList.slice(),
             orderMethod,
             order
@@ -184,8 +184,8 @@ class Category extends React.Component {
                         <Dropdown.Toggle variant="" id="dropdown-basic" style={{color: "#495057"}}>
                             <span>排序：</span>
                             {this.state.orderMethod == "recommand" && <span className="mr-2">推薦</span>}
-                            {(this.state.orderMethod == "price" && this.state.order == 1) && <span className="mr-2">價格（高到低）</span>}
-                            {(this.state.orderMethod == "price" && this.state.order == -1) && <span className="mr-2">價格（低到高）</span>}
+                            {(this.state.orderMethod == "price" && this.state.order == 1) && <span className="mr-2">價格（降序）</span>}
+                            {(this.state.orderMethod == "price" && this.state.order == -1) && <span className="mr-2">價格（升序）</span>}
                             {(this.state.orderMethod == "popular" && this.state.order == 1) && <span className="mr-2">人氣（高到低）</span>}
                             {(this.state.orderMethod == "popular" && this.state.order == -1) && <span className="mr-2">人氣（低到高）</span>}
                         </Dropdown.Toggle>
@@ -194,17 +194,17 @@ class Category extends React.Component {
                             <Dropdown.Item style={{color: "#495057"}} onClick={()=>{this.reorderProducts("recommand",1)}}>
                                 <span className="text--secondary">推薦</span>
                             </Dropdown.Item>
-                            <Dropdown.Item style={{color: "#495057"}} onClick={()=>{this.reorderProducts("popular",1)}}>
+                            {/* <Dropdown.Item style={{color: "#495057"}} onClick={()=>{this.reorderProducts("popular",1)}}>
                                 <span className="text--secondary">人氣（高到低）</span>
                             </Dropdown.Item>
                             <Dropdown.Item style={{color: "#495057"}} onClick={()=>{this.reorderProducts("popular",-1)}}>
                                 <span className="text--secondary">人氣（低到高）</span>
-                            </Dropdown.Item>
+                            </Dropdown.Item> */}
                             <Dropdown.Item style={{color: "#495057"}} onClick={()=>{this.reorderProducts("price",1)}}>
-                                <span className="text--secondary">價格（高到低）</span>
+                                <span className="text--secondary">價格（降序）</span>
                             </Dropdown.Item>
                             <Dropdown.Item style={{color: "#495057"}} onClick={()=>{this.reorderProducts("price",-1)}}>
-                                <span className="text--secondary">價格（低到高）</span>
+                                <span className="text--secondary">價格（升序）</span>
                             </Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>

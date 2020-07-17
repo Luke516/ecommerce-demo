@@ -285,7 +285,7 @@ class App extends React.Component {
           captchaIdList={this.state.captchaIdList} userLogin={this.userLogin} wrongPassword={this.state.wrongPassword}
           />
         {
-          <Modal dialogClassName="" show={this.state.showAd} onHide={this.closeAd}>
+          <Modal dialogClassName="" show={this.state.showAd} onHide={this.closeAd} centered>
             <Modal.Header closeButton>
             <Modal.Title>
               {translate("Welcome") + "，" + this.state.username}
@@ -300,7 +300,7 @@ class App extends React.Component {
               <div>
                 <h4>{targetProductData.name}</h4>
                 <div className="d-flex flex-row justify-content-center mt-3 mb-1">
-                  <Button size="lg" className="mx-2 w-25" >去看看</Button>
+                  <Button size="lg" className="mx-2 w-25" href={"http://localhost:3000/Product?p=" + decodeURIComponent(targetProductData.url).split("/").pop().substr(0,10)}>去看看</Button>
                   <Button size="lg" className="mx-2 w-25" variant="secondary" onClick={this.closeAd}>略過</Button>
                 </div>
               </div>
@@ -334,7 +334,7 @@ class App extends React.Component {
             <Category name="Health and Household" data={data["Health and Household"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId}/>
         )}/>
         <Route exact path="/Checkout" render={(location) => (
-            <Checkout captchaId={this.state.captchaId} toggleCategoryNav={this.toggleCategoryNav}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} showSurvey={this.showSurvey} updateCart={this.updateCart}/>
+            <Checkout captchaId={this.state.captchaId} toggleCategoryNav={this.toggleCategoryNav}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} showSurvey={this.showSurvey} updateCart={this.updateCart} userLogin={this.state.userLogin}/>
         )}/>
         <Route exact path="/Product" render={(location) => (
             this.state.curProduct?

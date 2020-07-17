@@ -51,6 +51,7 @@ function CaptchaView(props) {
 
     const refreshCaptcha = () => {
         setRefreshing(true)
+        setSelected([false, false, false, false, false, false, false, false, false]);
         props.refreshCaptcha()
         // refetch(0).then(()=>{
         //     setRefreshing(false)
