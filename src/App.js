@@ -144,6 +144,7 @@ class App extends React.Component {
 
             <Nav>
               <SplitButton className={ this.state.targetCategory=="Men's Fashion"? "mr-3 target-category": "mr-3" } tag={Link} href="Men's Fashion"
+                style={{display: this.state.targetCategory=="Men's Fashion"? "flex": "none"}}
                 variant={this.state.targetCategory=="Men's Fashion"?'':''}
                 title={translate(`Men's Fashion`)}>
                 {
@@ -155,6 +156,7 @@ class App extends React.Component {
                 }
               </SplitButton>
               <SplitButton className={ this.state.targetCategory=="Women's Fashion"? "mr-3 target-category": "mr-3" } tag={Link} href="Women's Fashion"
+                style={{display: this.state.targetCategory=="Women's Fashion"? "flex": "none"}}
                 variant={this.state.targetCategory=="Women's Fashion"?'':''}
                 title={translate(`Women's Fashion`)}>
                 {
@@ -164,6 +166,7 @@ class App extends React.Component {
                 }
               </SplitButton>
               <SplitButton className={ this.state.targetCategory=="Home and Kitchen"? "mr-3 target-category": "mr-3" } tag={Link} href="Home and Kitchen"
+                style={{display: this.state.targetCategory=="Home and Kitchen"? "flex": "none"}}
                 variant={this.state.targetCategory=="Home and Kitchen"?'':''}
                 title={translate(`Home and Kitchen`)}>
                 {
@@ -173,6 +176,7 @@ class App extends React.Component {
                 }
               </SplitButton>
               <SplitButton className={ this.state.targetCategory=="Electronics"? "mr-3 target-category": "mr-3" } tag={Link} href="Electronics"
+                style={{display: this.state.targetCategory=="Electronics"? "flex": "none"}}
                 variant={this.state.targetCategory=="Electronics"?'':''}
                 title={translate(`Electronics`)}>
                 {
@@ -182,6 +186,7 @@ class App extends React.Component {
                 }
               </SplitButton>
               <SplitButton className={ this.state.targetCategory=="Beauty and Personal Care"? "mr-3 target-category": "mr-3" } tag={Link} href="Beauty and Personal Care"
+                style={{display: this.state.targetCategory=="Beauty and Personal Care"? "flex": "none"}}
                 variant={this.state.targetCategory=="Beauty and Personal Care"?'':''}
                 title={translate(`Beauty and Personal Care`)}>
                 {
@@ -191,6 +196,7 @@ class App extends React.Component {
                 }
               </SplitButton>
               <SplitButton className={ this.state.targetCategory=="Luggage"? "mr-3 target-category": "mr-3" } tag={Link} href="Luggage"
+                style={{display: this.state.targetCategory=="Luggage"? "flex": "none"}}
                 variant={this.state.targetCategory=="Luggage"?'':''}
                 title={translate(`Luggage`)}>
                 {
@@ -200,6 +206,7 @@ class App extends React.Component {
                 }
               </SplitButton>
               <SplitButton className={ this.state.targetCategory=="Health and Household"? "mr-3 target-category": "mr-3" } tag={Link} href="Health and Household"
+                style={{display: this.state.targetCategory=="Men's Fashion"? "flex": "none"}}
                 variant={this.state.targetCategory=="Health and Household"?'':''}
                 title={translate(`Health and Household`)}>
                 {
