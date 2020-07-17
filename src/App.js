@@ -80,7 +80,8 @@ class App extends React.Component {
       showSuccessDialog: -1,
       captchaType,
       redirect: cookies.get('username')? cookies.get('username') != "" ? false: true: true,
-      showAd: false
+      showAd: false,
+      wrongPassword: false
     };
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleUserNameChange = this.handleUserNameChange.bind(this);
@@ -281,7 +282,7 @@ class App extends React.Component {
           usernameValid={this.state.usernameValid} passwordValid={this.state.passwordValid}
           captchaType={this.state.captchaType} result={this.result} handleClick={this.handleClick}
           captcha={this.state.captcha} captchaId={this.state.captchaId} captchaSuccess={this.captchaSuccess}
-          captchaIdList={this.state.captchaIdList} userLogin={this.userLogin}
+          captchaIdList={this.state.captchaIdList} userLogin={this.userLogin} wrongPassword={this.state.wrongPassword}
           />
         {
           <Modal dialogClassName="" show={this.state.showAd} onHide={this.closeAd}>
@@ -516,7 +517,8 @@ class App extends React.Component {
       captchaId,
       captchaIdList,
       navbarToggle: false,
-      redirect: true
+      redirect: true,
+      wrongPassword: false
     })
   }
 
@@ -534,10 +536,7 @@ class App extends React.Component {
       })
       return false
     }
-    else if(!this.validateAccount(this.state.username, this.state.password)){
-      return false
-    }
-    else{
+    else {
       this.setState({
         usernameValid: true,
         passwordValid: true,
@@ -549,21 +548,44 @@ class App extends React.Component {
         timestamp,
         type: "captchaVerified"
       })
-      setTimeout(
+      if(this.state.captchaType == "YouCaptcha"){
+        if(this.userLogin()){
+          this.setState({
+            captchaVerified: true
+          })
+        }
+      }
+      else{
         this.setState({
           captchaVerified: true
-        }, ()=>{
-          if(this.state.captchaType == "YouCaptcha"){
-            this.userLogin()
-          }
-        }), 100
-      )
+        })
+      }
+      // setTimeout(
+        
+      //   this.setState({
+      //     captchaVerified: true
+      //   }, ()=>{
+      //     if(this.state.captchaType == "YouCaptcha"){
+      //       this.userLogin()
+      //     }
+      //   }), 100
+      // )
     }
     return true
   }
 
   userLogin() {
     const { cookies } = this.props;
+    if(!this.validateAccount(this.state.username, this.state.password)){
+      console.log("not valid account")
+      this.closeDialog()
+      this.setState({
+        wrongPassword: true
+      })
+      setTimeout(this.showDialog, 500)
+      return false
+    }
+
     if (this.state.username != ""){
       cookies.set('username', this.state.username)
       this.setState({
@@ -575,6 +597,8 @@ class App extends React.Component {
       if(this.state.captchaType !== "YouCaptcha"){
         setTimeout(this.showAd, 500)
       }
+
+      return true
     }
   }
 
@@ -595,7 +619,10 @@ class App extends React.Component {
   handleUserNameChange(e) {
     console.log(e);
     const text = e.target.value
-    this.setState({username: text});
+    this.setState({
+      username: text,
+      wrongPassword: false
+    });
     // if (text) {
     //     this.setState({inputDanger: false});
     // }
@@ -604,7 +631,10 @@ class App extends React.Component {
   handlePasswordChange(e) {
     console.log(e);
     const text = e.target.value
-    this.setState({password: text});
+    this.setState({
+      password: text,
+      wrongPassword: false
+    });
     // if (text) {
     //     this.setState({inputDanger: false});
     // }

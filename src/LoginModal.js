@@ -87,6 +87,14 @@ class LoginModal extends React.Component {
                                 </InputGroup.Text>
                             </InputGroup.Append>
                         </InputGroup>
+                        {
+                            this.props.wrongPassword &&
+                            <div className="justify-content-center" style={{display: this.props.wrongPassword? "flex": "none"}}>
+                                <div className="captcha-error">
+                                    <span className="text-danger">帳號或密碼錯誤</span>
+                                </div>
+                            </div>
+                        }
                         <div>
                             <a href="#" className="text-">忘記密碼？</a>
                         </div>
