@@ -72,10 +72,10 @@ class ProductCell extends React.Component {
             price = price - price % 10
         }
         return (
-            <Col className="my-3 mx-" xs={12} sm={6} md={4} lg={3} style={{cursor: "pointer"}} ref={(el) => this.domElement = el} onClick={this.detailButtonClick}>
+            <Col className="my-3 mx-" xs={12} sm={6} md={4} lg={3} style={{cursor: "pointer"}} ref={(el) => this.domElement = el} >
                 <Card className="card-shadow" onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}
                     style={{border: "0", padding: "0rem", height: this.props.hideOption?"400px":"480px", justifyContent: "space-between", alignItems: "center"}}>
-                    <div className="w-100">
+                    <div className="w-100"  onClick={this.detailButtonClick}>
                     {this.props.checkbox &&
                         <input id="1-2" onChange={this.changeAnswer} type="checkbox" className=""></input>
                     }

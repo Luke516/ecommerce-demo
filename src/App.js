@@ -206,7 +206,7 @@ class App extends React.Component {
                 }
               </SplitButton>
               <SplitButton className={ this.state.targetCategory=="Health and Household"? "mr-3 target-category": "mr-3" } tag={Link} href="Health and Household"
-                style={{display: this.state.targetCategory=="Men's Fashion"? "flex": "none"}}
+                style={{display: this.state.targetCategory=="Health and Household"? "flex": "none"}}
                 variant={this.state.targetCategory=="Health and Household"?'':''}
                 title={translate(`Health and Household`)}>
                 {

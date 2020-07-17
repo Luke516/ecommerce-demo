@@ -200,10 +200,10 @@ class Category extends React.Component {
                             <Dropdown.Item style={{color: "#495057"}} onClick={()=>{this.reorderProducts("popular",-1)}}>
                                 <span className="text--secondary">人氣（低到高）</span>
                             </Dropdown.Item> */}
-                            <Dropdown.Item style={{color: "#495057"}} onClick={()=>{this.reorderProducts("price",1)}}>
+                            <Dropdown.Item style={{color: "#495057"}} onClick={()=>{/*this.reorderProducts("price",1)*/}}>
                                 <span className="text--secondary">價格（降序）</span>
                             </Dropdown.Item>
-                            <Dropdown.Item style={{color: "#495057"}} onClick={()=>{this.reorderProducts("price",-1)}}>
+                            <Dropdown.Item style={{color: "#495057"}} onClick={()=>{/*this.reorderProducts("price",-1)*/}}>
                                 <span className="text--secondary">價格（升序）</span>
                             </Dropdown.Item>
                         </Dropdown.Menu>
