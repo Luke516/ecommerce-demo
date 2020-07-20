@@ -670,9 +670,10 @@ class App extends React.Component {
   }
 
   logEvent(event){
+    const timestamp = Date.now();
     let data={
-        username: this.state.username,
-        event: event
+        username: this.props.username,
+        event: {...event, timestamp}
     }
     const proxyurl = "https://cors-anywhere.herokuapp.com/";
     const httpHeaders = { 'Content-Type' : 'application/json', 'X-Requested-With': 'XMLHttpRequest'}
@@ -688,7 +689,7 @@ class App extends React.Component {
         },
         body: JSON.stringify(data)
     }).then(res=>{})
-  }
+}
 
   showAd() {
     this.setState({

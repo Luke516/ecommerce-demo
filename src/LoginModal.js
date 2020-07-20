@@ -34,7 +34,7 @@ class LoginModal extends React.Component {
   
     render (){
         return (
-            <Modal show={this.props.showLogin} onHide={this.props.closeDialog} dialogClassName="login-dialog" centered backdrop="static">
+            <Modal show={this.props.showLogin} onHide={this.props.closeDialog} dialogClassName="login-dialog" centered backdrop={this.props.captchaVerified? true : "static"}>
                 <Modal.Header closeButton className="align-items-baseline" style={{borderBottom: 0}}>
                     <Modal.Title>
                     {(this.props.captchaVerified && this.props.captchaType == "YouCaptcha") ? translate("Welcome") + ", " + this.props.username : translate("Login Your Account")}

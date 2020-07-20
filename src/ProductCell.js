@@ -144,19 +144,27 @@ class ProductCell extends React.Component {
     isInViewport(element, offset = 0) {
         if (!element) return false;
         const top = element.getBoundingClientRect().top;
+        const bottom = element.getBoundingClientRect().bottom;
 
         const isVisible = element.offsetWidth || element.offsetHeight || element.getClientRects().length
-        const inViewport = (top + offset) >= 0 && (top - offset) <= window.innerHeight
-        return isVisible && inViewport
+        const topInViewport = (top + offset) >= 0 && (top - offset) <= window.innerHeight
+        const bottomInViewport = (bottom + offset) >= 0 && (bottom - offset) <= window.innerHeight
+        return isVisible && (topInViewport || bottomInViewport)
     }
     
     logPosition() {
         // const { isVisible, inViewport  } = this.props;
         // console.log( this.isInViewport(this.domElement) )
+        const yOffset = 72
         if(this.isInViewport(this.domElement)){
-            console.log("position QWQ!")
-            console.log(this.props.product.id)
-            console.log(this.domElement.getClientRects())
+            // console.log("position QWQ!")
+            // console.log(this.props.product.id)
+            let productPosition = this.domElement.getClientRects()[0]
+            productPosition.id = this.props.product.id
+            productPosition.y += yOffset
+            // console.log(productPosition)
+
+            this.logEvent(productPosition)
         }
     }
 
@@ -183,9 +191,10 @@ class ProductCell extends React.Component {
     }
 
     logEvent(event){
+        const timestamp = Date.now();
         let data={
             username: this.props.username,
-            event: event
+            event: {...event, timestamp}
         }
         const proxyurl = "https://cors-anywhere.herokuapp.com/";
         const httpHeaders = { 'Content-Type' : 'application/json', 'X-Requested-With': 'XMLHttpRequest'}
