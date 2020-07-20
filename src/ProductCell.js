@@ -39,9 +39,9 @@ class ProductCell extends React.Component {
         }
 
         let logPositionTimer = null
-        // if(this.props.target){
-        //     logPositionTimer = setInterval(this.logPosition, 100)
-        // }
+        if(this.props.target){
+            logPositionTimer = setInterval(this.logPosition, 100)
+        }
         this.state = {
             price: priceData[this.props.product.id][0],
             imageSourceUrl: imageSourceUrl,
@@ -144,14 +144,19 @@ class ProductCell extends React.Component {
     isInViewport(element, offset = 0) {
         if (!element) return false;
         const top = element.getBoundingClientRect().top;
-        return (top + offset) >= 0 && (top - offset) <= window.innerHeight;
+
+        const isVisible = element.offsetWidth || element.offsetHeight || element.getClientRects().length
+        const inViewport = (top + offset) >= 0 && (top - offset) <= window.innerHeight
+        return isVisible && inViewport
     }
     
     logPosition() {
-        const { isVisible, inViewport  } = this.props;
-        console.log( this.isInViewport(this.domElement) )
-        if(isVisible){
+        // const { isVisible, inViewport  } = this.props;
+        // console.log( this.isInViewport(this.domElement) )
+        if(this.isInViewport(this.domElement)){
             console.log("position QWQ!")
+            console.log(this.props.product.id)
+            console.log(this.domElement.getClientRects())
         }
     }
 

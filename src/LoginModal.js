@@ -21,7 +21,7 @@ class LoginModal extends React.Component {
             empty: false,
             wrong: false,
             captchaVerified: false,
-            textCaptchaSeed: "QWQ"
+            textCaptchaRefreshing: false,
         }
 
         this.handleClick = this.handleClick.bind(this)
@@ -34,7 +34,7 @@ class LoginModal extends React.Component {
   
     render (){
         return (
-            <Modal show={this.props.showLogin} onHide={this.props.closeDialog} dialogClassName="login-dialog" centered>
+            <Modal show={this.props.showLogin} onHide={this.props.closeDialog} dialogClassName="login-dialog" centered backdrop="static">
                 <Modal.Header closeButton className="align-items-baseline" style={{borderBottom: 0}}>
                     <Modal.Title>
                     {(this.props.captchaVerified && this.props.captchaType == "YouCaptcha") ? translate("Welcome") + ", " + this.props.username : translate("Login Your Account")}
@@ -115,7 +115,11 @@ class LoginModal extends React.Component {
                         } */}
                         {this.props.captchaType == "textCaptcha" && 
                             <div className={this.props.captchaVerified? "text-captcha": "text-captcha"}>
-                                <RCG result={this.props.result} background={this.state.textCaptchaSeed} />
+                                {
+                                    !this.state.textCaptchaRefreshing ?
+                                    <RCG result={this.props.result} background={this.state.textCaptchaSeed} />:
+                                    <div style={{height: "80px", width: "80px"}}></div>
+                                }
                                 <div className="mx-4" style={{cursor: "pointer"}} onClick={this.refreshTextCaptcha}>
                                     <FontAwesomeIcon icon={faSyncAlt} />
                                 </div>
@@ -225,8 +229,15 @@ class LoginModal extends React.Component {
     }
 
     refreshTextCaptcha() {
-        this.props.closeDialog()
-        setTimeout(this.props.showDialog, 250)
+        this.setState({
+            textCaptchaRefreshing: true
+        }, ()=>{
+            setTimeout(()=>{
+                this.setState({
+                    textCaptchaRefreshing: false
+                })
+            }, 500)
+        })
     }
 
     showLoginButton() {

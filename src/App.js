@@ -29,7 +29,7 @@ class App extends React.Component {
     super(props);
     const { cookies } = props;
 
-    let testId = cookies.get('testId')? cookies.get('testId') : "3";
+    let testId = cookies.get('testId')? cookies.get('testId') : "1";
     let curSetting = cookies.get('username')? cookies.get('username') : "";
     
     let targetCategory = "Men's Fashion";
@@ -81,7 +81,8 @@ class App extends React.Component {
       captchaType,
       redirect: cookies.get('username')? cookies.get('username') != "" ? false: true: true,
       showAd: false,
-      wrongPassword: false
+      wrongPassword: false,
+      testId
     };
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleUserNameChange = this.handleUserNameChange.bind(this);
@@ -279,7 +280,7 @@ class App extends React.Component {
             }
           </div>
         </Navbar>
-        <Alert variant="success" className="shadow-sm" style={{position: "fixed", bottom: "2rem", width: "40%", left: "30%", zIndex: "1200", textAlign: "center", display: this.state.showSuccessDialog > 0? "block" : "none"}}>
+        <Alert variant="success" className="shadow-sm fadeOut" style={{position: "fixed", bottom: "2rem", width: "40%", left: "30%", zIndex: "1200", textAlign: "center", display: this.state.showSuccessDialog > 0? "block" : "none"}}>
           <FontAwesomeIcon className="mx-2" icon={faCheck}/>
           已將<span className="mx-1">{this.state.showSuccessDialog}</span>件商品加入購物車
         </Alert>
@@ -476,7 +477,7 @@ class App extends React.Component {
   nextTest() {
     const { cookies } = this.props;
     this.userLogout()
-    let testId = cookies.get('testId')? cookies.get('testId') : "3";
+    let testId = cookies.get('testId')? cookies.get('testId') : "1";
     if(testId == "1"){
         testId = "2"
     }

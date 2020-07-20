@@ -70,6 +70,8 @@ class Survey extends React.Component {
         const { cookies } = props;
         let settings = cookies.get('settings')? cookies.get('settings') : [];
         let browsed = cookies.get('browsed')? cookies.get('browsed') : [];
+        let testId = cookies.get('testId')? cookies.get('testId') : "1";
+
         for(let i=0; i<browsed.length; i++){
             if(browsed[i].id == this.props.targetProductId){
                 browsed.splice(i ,1)
@@ -156,7 +158,8 @@ class Survey extends React.Component {
             other: "其他",
             unseen: unseen,
             username: cookies.get('username')? cookies.get('username') : "",
-            targetCategory: this.props.targetCategory
+            targetCategory: this.props.targetCategory,
+            testId
         }
 
         console.log(this.state)
@@ -314,8 +317,14 @@ class Survey extends React.Component {
                     </Col>
                 </Row>
                 <div className="w-100 justify-content-center align-items-center flex-column" style={{height: "80%", display: this.state.questionId == 6? "flex": "none"}}>
-                    <h2>感謝您的回答！接下來將進行下一階段的實驗</h2>
-                    <button type="button"  size="lg" className="mx-1 my-2" style={{display: "block"}} onClick={() => {this.finish()}}>繼續</button> 
+                    {
+                        this.state.testId == "3"?
+                        <h2>本次實驗已經全部完成，感謝您的協助！</h2> :
+                        <h2>感謝您的回答！接下來將進行下一階段的實驗</h2>
+                    }
+                    {
+                        <button type="button"  size="lg" className="mx-1 my-2" style={{display: "block"}} onClick={() => {this.finish()}}>繼續</button> 
+                    }
                 </div>
                 {
                     (this.state.questionId > 0 && this.state.questionId < 6) &&
