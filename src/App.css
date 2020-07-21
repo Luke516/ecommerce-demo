@@ -112,7 +112,8 @@ input[type=checkbox]
   -o-transform: scale(2); /* Opera */
   transform: scale(2);
   padding: 10px !important;
-  margin-left: 8px !important;
+  margin-left: 12px !important;
+  margin-right: 12px !important;
 }
 
 .normal-checkbox
@@ -380,6 +381,11 @@ div::-webkit-scrollbar {
 
 .survey-nav {
   position: absolute;
+}
+
+.survey-btn {
+  width: 120px;
+  height: 40px;
 }
 
 .disabled-element {

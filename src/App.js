@@ -18,7 +18,7 @@ import {
   Link
 } from 'react-router-dom'
 import { withCookies, Cookies } from 'react-cookie';
-import { Col, Alert, Row, Nav, Navbar, Button, SplitButton, Dropdown, Badge,
+import { Col, Alert, Container, Row, Nav, Navbar, Button, SplitButton, Dropdown, Badge,
    Modal} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes, faShoppingCart, faCheck } from '@fortawesome/free-solid-svg-icons'
@@ -132,6 +132,7 @@ class App extends React.Component {
       <Router>
       <div className=''>
         <Navbar bg="light" expand="lg" className="shadow-sm px-4" style={{display: this.state.navbarToggle? "none": "flex"}}>
+          <Container>
           <Navbar.Brand href="/">
             <img
               alt=""
@@ -281,6 +282,7 @@ class App extends React.Component {
               </>
             }
           </div>
+          </Container>
         </Navbar>
         <Alert variant="success" className="shadow-sm fadeOut" style={{position: "fixed", bottom: "2rem", width: "40%", left: "30%", zIndex: "1200", textAlign: "center", display: this.state.showSuccessDialog > 0? "block" : "none"}}>
           <FontAwesomeIcon className="mx-2" icon={faCheck}/>

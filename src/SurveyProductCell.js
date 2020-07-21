@@ -46,7 +46,7 @@ class SurveyProductCell extends React.Component {
         // if(title.length > 42)
         //     title = this.props.product.name.slice(0,42) + "..."
         return (
-            <Col className="my-3 mx-" xs={12} sm={6} md={4} lg={3} style={{cursor: "pointer"}}>
+            <Col className="my-3 mx-" xs={12} sm={6} md={4} lg={3} style={{cursor: "pointer"}} onClick={this.detailButtonClick}>
                 <div className="d-flex flex-column align-items-center" style={{backgroundColor:"white", border: "1px solid black", padding: "1rem", height: this.props.hideOption?"400px":"480px"}}>
                     <div className="w-100" onClick={this.detailButtonClick}>
                     {this.props.checkbox &&
@@ -58,7 +58,7 @@ class SurveyProductCell extends React.Component {
                     </div>
                     <div className={"d-block w-100"} style={{justifyContent: "flex-end", flex: "none", padding: 0}}>
                         <div onClick={this.detailButtonClick} style={{padding: "1rem"}}>
-                            <div style={{lineHeight: "1.5rem", height: "4.5rem", overflowY: "scroll"}}>{title}</div>
+                            <div style={{lineHeight: "1.5rem", height: "4.5rem", overflowY: "scroll"}}><h5>{title}</h5></div>
                             {
                                 !this.props.hideOption &&
                                 <h4 className="text-success text-right"><strong>{"$" + this.state.price}</strong></h4>

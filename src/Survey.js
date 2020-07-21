@@ -154,12 +154,13 @@ class Survey extends React.Component {
             answer2: [],
             answer3: -1,
             answer4: -1,
-            answer5: "",
+            answer5: [],
             other: "其他",
             unseen: unseen,
             username: cookies.get('username')? cookies.get('username') : "",
             targetCategory: this.props.targetCategory,
-            testId
+            testId,
+            empty: false
         }
 
         console.log(this.state)
@@ -194,6 +195,7 @@ class Survey extends React.Component {
                     <img width="60" height="60" src="https://www.nthu.edu.tw//public/images/about10/cis-1-1.jpg"/>
                     <span className="mx-2">國立清華大學datalab實驗室</span>
                 </div>
+                <Container className="vh-100">
                 <Row className={"mb--4"}>
                     {
                         (this.state.questionId > 0 && this.state.questionId < 6) &&
@@ -206,11 +208,11 @@ class Survey extends React.Component {
                 {this.state.questionId == 0 &&
                     // <Col xs={12}>
                     <div className="w-100 d-flex justify-content-center align-items-center flex-column" style={{height: "80%"}}>
-                        <h2>恭喜！你已經完成了本階段的任務。</h2>
+                        <h2>恭喜！您已經完成了本階段的任務。</h2>
                         <p className="mt-4">
                             接下來，我們會請您回答五題簡單的問題。請憑您剛剛瀏覽網頁的印象來作答。
                         </p>
-                        <button type="button" onClick={this.nextQuestion}>開始</button>
+                        <button className="survey-btn" type="button" onClick={this.nextQuestion}>開始</button>
                     </div>
                     // </Col>
                 }
@@ -290,11 +292,11 @@ class Survey extends React.Component {
                                 <Form className="d-flex flex-column justify-content-center">
                                     {/* <div className="my-2"></div> */}
                                     <br/>
-                                    <Form.Check inline label="非常感興趣" name="survey4" type={'radio'} id={`inline-radio-1`} onChange={this.handleClick2} /><br/>
-                                    <Form.Check inline label="有點感興趣" name="survey4" type={'radio'} id={`inline-radio-2`} onChange={this.handleClick2} /><br/>
-                                    <Form.Check inline label="普通" name="survey4" type={'radio'} id={`inline-radio-3`} onChange={this.handleClick2} /><br/>
-                                    <Form.Check inline label="不太感興趣" name="survey4" type={'radio'} id={`inline-radio-4`} onChange={this.handleClick2} /><br/>
-                                    <Form.Check inline label="非常不感興趣" name="survey4" type={'radio'} id={`inline-radio-5`} onChange={this.handleClick2} /><br/>
+                                    <Form.Check inline label="非常感興趣" name="survey4" type={'radio'} id={`inline-radio-11`} onChange={this.handleClick2} /><br/>
+                                    <Form.Check inline label="有點感興趣" name="survey4" type={'radio'} id={`inline-radio-12`} onChange={this.handleClick2} /><br/>
+                                    <Form.Check inline label="普通" name="survey4" type={'radio'} id={`inline-radio-13`} onChange={this.handleClick2} /><br/>
+                                    <Form.Check inline label="不太感興趣" name="survey4" type={'radio'} id={`inline-radio-14`} onChange={this.handleClick2} /><br/>
+                                    <Form.Check inline label="非常不感興趣" name="survey4" type={'radio'} id={`inline-radio-15`} onChange={this.handleClick2} /><br/>
                                 </Form>
                             </div>
                         </Col>
@@ -302,18 +304,25 @@ class Survey extends React.Component {
                     </Row>
                 </Row>
                 <Row style={{display: this.state.questionId == 5? "block": "none"}}>
-                    {/* <h4>在本次購買的過程中，您覺得影響您最後決定的主要因素是？</h4> */}
                     <div className="d-flex flex-column align-items-center">
-                        <h5>在本階段實驗的過程中，您覺得在所有影響您最後選擇商品的因素中，最主要因素為何？</h5>
-                        {/* <h5>(如果您在其他地方看到這款商品)</h5> */}
+                        <h5>在本次任務的過程中，您覺得影響您選擇商品的因素為何？請勾選您覺得<strong>最重要的兩項</strong></h5>
                     </div>
                     <Col className="my-4 d-flex justify-content-center" sm={12}>
-                        <div key={`inline-radio`} className="mb-3">
-                            <Form.Check inline label="外觀" type={'radio'} name="survey5" id={`inline-radio-1`} onChange={this.handleClick2} />
-                            <Form.Check inline label="敘述" type={'radio'} name="survey5" id={`inline-radio-2`} onChange={this.handleClick2} />
-                            <Form.Check inline label="價格" type={'radio'} name="survey5" id={`inline-radio-3`} onChange={this.handleClick2} />
-                            <Form.Check onClick={this.otherFactor} inline label={this.state.other} type={'radio'} name="survey5" id={`inline-radio-4`} onChange={this.handleClick2} />
+                        <div key={`inline-radio`} className="mb-3 w-50">
+                            <Form.Check inline label={`商品外觀`} type={'checkbox'} name="survey5" id={`inline-radio-21`} onChange={this.handleClick2} /><br/><br/>
+                            <Form.Check inline label={`商品價格`} type={'checkbox'} name="survey5" id={`inline-radio-22`} onChange={this.handleClick2} /><br/><br/>
+                            <Form.Check inline label={`商品說明`} type={'checkbox'} name="survey5" id={`inline-radio-23`} onChange={this.handleClick2} /><br/><br/>
+                            <Form.Check inline label={`自身對商品的需求`} type={'checkbox'} name="survey5" id={`inline-radio-24`} onChange={this.handleClick2} /><br/><br/>
+                            {/* <Form.Check onClick={this.otherFactor} inline label={this.state.other} type={'radio'} name="survey5" id={`inline-radio-4`} onChange={this.handleClick2} /> */}
                         </div>
+                    </Col>
+                    <div className="d-flex flex-column align-items-center">
+                        <h5>如果您覺得還有在上述選項中沒包含到的其他因素，請填寫在下方的欄位(非必填)：</h5>
+                    </div>
+                    <Col className="my-4 d-flex justify-content-center" sm={12}>
+                        <Form.Group controlId="exampleForm.ControlTextarea1" className="w-50" >
+                            <Form.Control as="textarea" rows="3" ref={(ref)=>{this.otherTextField = ref}} />
+                        </Form.Group>
                     </Col>
                 </Row>
                 <div className="w-100 justify-content-center align-items-center flex-column" style={{height: "80%", display: this.state.questionId == 6? "flex": "none"}}>
@@ -323,18 +332,26 @@ class Survey extends React.Component {
                         <h2>感謝您的回答！接下來將進行下一階段的實驗</h2>
                     }
                     {
-                        <button type="button"  size="lg" className="mx-1 my-2" style={{display: "block"}} onClick={() => {this.finish()}}>繼續</button> 
+                        <button className="survey-btn" type="button"  size="lg" className="mx-1 my-2" style={{display: "block"}} onClick={() => {this.finish()}}>繼續</button> 
                     }
                 </div>
                 {
-                    (this.state.questionId > 0 && this.state.questionId < 6) &&
+                    this.state.empty &&
                     <Row className="my-2 d-flex justify-content-center">
-                        <button type="button" size="lg" className="mx-1" style={{display: this.state.questionId == 1? "none": "block"}} onClick={() => this.prevQuestion()}>上一題</button>
-                        <button type="button"  size="lg" className="mx-1" style={{display: this.state.questionId == 5? "none": "block"}} onClick={() => this.nextQuestion()}>下一題</button>
-                        <button type="button"  size="lg" className="mx-1" style={{display: this.state.questionId == 5? "block": "none"}} onClick={() => {this.nextQuestion()}}>完成</button> 
-                        {/* <button type="button"  size="lg" className="mx-1" style={{display: this.state.questionId == 5? "block": "none"}} onClick={() => {this.setState({showDialog: true})}}>完成</button> */}
+                        <h3 className="text-danger">
+                            請完成作答再前往下一題
+                        </h3>
                     </Row>
                 }
+                {
+                    (this.state.questionId > 0 && this.state.questionId < 6) &&
+                    <Row className="my-2 d-flex justify-content-center">
+                        <button className="survey-btn mx-1" type="button" size="lg" style={{display: this.state.questionId == 1? "none": "block"}} onClick={() => this.prevQuestion()}>上一題</button>
+                        <button className="survey-btn mx-1" type="button" size="lg" style={{display: this.state.questionId == 5? "none": "block"}} onClick={() => this.nextQuestion()}>下一題</button>
+                        <button className="survey-btn mx-1" type="button" size="lg" style={{display: this.state.questionId == 5? "block": "none"}} onClick={() => {this.nextQuestion()}}>完成</button> 
+                    </Row>
+                }
+            </Container>
             </div>
         )
     }
@@ -353,15 +370,42 @@ class Survey extends React.Component {
     }
 
     checkValid() {
-        if(this.state.questionId == 1){
+        if(this.state.questionId == 1 && this.state.answer1.length < 1){
+            return false
         }
+        if(this.state.questionId == 2 && this.state.answer2.length < 1){
+            return false
+        }
+        if(this.state.questionId == 3 && this.state.answer3 == -1){
+            return false
+        }
+        if(this.state.questionId == 4 && this.state.answer4 == -1){
+            return false
+        }
+        if(this.state.questionId == 5 && this.state.answer5.length !== 2){
+            return false
+        }
+        return true
     }
 
     nextQuestion() {
         console.log("nextQuestion")
+        // console.log(this.otherTextField.value)
+        if(!this.checkValid()){
+            this.setState({
+                empty: true
+            })
+            return
+        }
+        else{
+            this.setState({
+                empty: false
+            })
+        }
         let nextQuestionId = Math.min(this.state.questionId + 1, 6)
         this.setState({
-            questionId: nextQuestionId
+            questionId: nextQuestionId,
+            other: this.otherTextField.value? this.otherTextField.value: "其他"
         })
     }
 
@@ -462,8 +506,16 @@ class Survey extends React.Component {
             })
         }
         else if(e.target.name == "survey5"){
+            let answer5 = this.state.answer5
+            if(answer5.includes(answer)){
+                let index = answer5.indexOf(answer)
+                answer5.splice(index, 1)
+            }   
+            else{
+                answer5.push(answer)
+            }
             this.setState({
-                answer5: answer
+                answer5: answer5
             })
         }
     }
