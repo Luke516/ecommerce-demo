@@ -377,6 +377,10 @@ class Survey extends React.Component {
             showDialog: false
         })
         this.logResult()
+
+        document.title = 'KocoShop';
+        this.changeFavicon("/shopping-cart.png");
+
         this.props.nextTest()
         this.props.clearCart()
         setTimeout(()=>{
