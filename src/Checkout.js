@@ -43,6 +43,7 @@ class Checkout extends React.Component {
         allChecked: true
       }
       this.clearCart = this.clearCart.bind(this)
+      this.toggleCheck = this.toggleCheck.bind(this)
       this.toggleAllChecks = this.toggleAllChecks.bind(this)
       this.showSurvey = this.showSurvey.bind(this)
     }
@@ -156,7 +157,12 @@ class Checkout extends React.Component {
     }
 
     render (){
-        console.log(this.state.productsInCart)
+        // console.log(this.state.productsInCart)
+        let formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+        });
+        let totalPrice = formatter.format(this.state.totalPrice).split('.')[0];
         return (
             <Container>
                 <Row>
@@ -204,13 +210,13 @@ class Checkout extends React.Component {
                             <strong key={product.id}>{product.name}</strong>
                         </Col>
                         <Col md={2} className={"d-flex justify-content-center align-items-center"} style={{maxHeight: "90%"}}>
-                            <h4><strong className="text-success" key={product.id}>{"$" + product.displayPrice}</strong></h4>
+                            <h4><strong className="text-success" key={product.id}>{formatter.format(product.displayPrice).split('.')[0]}</strong></h4>
                         </Col>
                         <Col md={2} className={"d-flex justify-content-center align-items-center"} style={{maxHeight: "90%"}}>
                             <h6>x {product.count}</h6>
                         </Col>
                         <Col md={2} className="d-flex align-items-center" style={{maxHeight: "90%", justifyContent: "space-between"}}>
-                            <h4><strong className="text-success" key={product.id}>{"$" + (product.displayPrice * product.count)}</strong></h4>
+                            <h4><strong className="text-success" key={product.id}>{formatter.format(product.displayPrice * product.count).split('.')[0]}</strong></h4>
                             <Button variant="" className="mb-2" onClick={() => {this.clearCart(index)}}><FontAwesomeIcon icon={faTrash} /></Button>
                         </Col>
                     </Row>
@@ -247,7 +253,7 @@ class Checkout extends React.Component {
                             </strong></div>
                         </Col>
                         <Col className="" md={2}>
-                            <h3 className="d-inline"><strong className="text-success">{"$" + this.state.totalPrice}</strong></h3>
+                            <h3 className="d-inline"><strong className="text-success">{totalPrice}</strong></h3>
                         </Col>
                     </Row>
                 </div>

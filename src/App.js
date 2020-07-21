@@ -284,7 +284,7 @@ class App extends React.Component {
           </div>
           </Container>
         </Navbar>
-        <Alert variant="success" className="shadow-sm fadeOut" style={{position: "fixed", bottom: "2rem", width: "40%", left: "30%", zIndex: "1200", textAlign: "center", display: this.state.showSuccessDialog > 0? "block" : "none"}}>
+        <Alert variant="success" className="shadow-sm fadeOut" style={{position: "fixed", width: "40%", left: "30%", zIndex: "1200", textAlign: "center", display: this.state.showSuccessDialog > 0? "block" : "none"}}>
           <FontAwesomeIcon className="mx-2" icon={faCheck}/>
           已將<span className="mx-1">{this.state.showSuccessDialog}</span>件商品加入購物車
         </Alert>
@@ -605,11 +605,9 @@ class App extends React.Component {
         userLogin: true,
         redirect: false
       })
-
-      if(this.state.captchaType !== "YouCaptcha"){
-        setTimeout(this.showAd, 500)
-      }
-
+      // if(this.state.captchaType !== "YouCaptcha"){
+      //   setTimeout(this.showAd, 500)
+      // }
       return true
     }
   }

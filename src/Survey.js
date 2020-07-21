@@ -208,7 +208,7 @@ class Survey extends React.Component {
                 {this.state.questionId == 0 &&
                     // <Col xs={12}>
                     <div className="w-100 d-flex justify-content-center align-items-center flex-column" style={{height: "80%"}}>
-                        <h2>恭喜！您已經完成了本階段的任務。</h2>
+                        <h2>恭喜！您已經完成了此任務。</h2>
                         <p className="mt-4">
                             接下來，我們會請您回答五題簡單的問題。請憑您剛剛瀏覽網頁的印象來作答。
                         </p>

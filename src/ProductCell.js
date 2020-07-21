@@ -87,6 +87,11 @@ class ProductCell extends React.Component {
         else{
             price = price - price % 10
         }
+        let formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+        });
+        price = formatter.format(price).split('.')[0];
         return (
             <Col className="my-3 mx-" xs={12} sm={6} md={4} lg={3} style={{cursor: "pointer"}} ref={(el) => this.domElement = el} >
                 <Card className="card-shadow" onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}
@@ -104,7 +109,7 @@ class ProductCell extends React.Component {
                             <Card.Title style={{lineHeight: "1.5rem", height: "4.5rem", overflowY: "scroll", paddingLeft: this.state.hover? "3px": "0",  paddingRight: this.state.hover? "3px": "0"}}>{title}</Card.Title>
                             {
                                 !this.props.hideOption &&
-                                <h4 className="text-success text-right"><strong>{"$" + price}</strong></h4>
+                                <h4 className="text-success text-right"><strong>{price}</strong></h4>
                             }
                             {/* {
                                 !this.props.hideOption &&

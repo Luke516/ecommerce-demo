@@ -43,7 +43,7 @@ class ProductRow extends React.Component {
       }
       return (
         <>
-        <Row className="ml--4 mt-2">
+        <Row className="mt-2 Dd-flex flex-row align-items-end">
             {
                 (this.props.name.includes("all") && this.props.orderMethod == "recommand") ?
                 this.props.data.slice(2, count).map(element => {
