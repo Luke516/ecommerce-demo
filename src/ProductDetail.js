@@ -273,8 +273,14 @@ export default class ProductDetail extends React.Component {
         else{
             price = price - price % 10
         }
+        let formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+        });
+        price = formatter.format(price).split('.')[0];
+
         return (
-            <Container style={{maxWidth: "1300px"}}>
+            <Container style={{/*maxWidth: "1300px"*/}}>
             <Row style={{height:"1.5rem"}}></Row>
             <Row>
                 {/* <Col xs={12} sm={12} md={12} lg={12} style={{paddingLeft: "4rem", paddingRight: "4rem"}}>
@@ -307,16 +313,16 @@ export default class ProductDetail extends React.Component {
                 </Col>
                 <Col xs={12} sm={12} md={7} lg={7}>
                     <Card style={{padding: "1rem", maxHeight: "700px", overflowY: "scroll", justifyContent: "space-between", alignItems: "center", border: "none"}}>
-                        <Card.Body className={"d-block"} style={{justifyContent: "flex-end", flex: "none"}}>
+                        <Card.Body className={"d-block w-100"} style={{justifyContent: "flex-end", flex: "none"}}>
                             {/* <Card.Title style={{height: "5rem"}}>{title}</Card.Title> */}
-                            <div dangerouslySetInnerHTML={{ __html: this.state.detailHtml }} ></div>
+                            <div style={{maxHeight: "500px", overflowY: "scroll"}} dangerouslySetInnerHTML={{ __html: this.state.detailHtml }} ></div>
                             <div style={{height: "2rem"}}></div>
                             <div className="d-flex flex-row justify-content-between align-itemas-center">
                                 <div>
-                                    <h2 className="display-4 text-success d-inline"><strong>{"$" + price}</strong></h2>
+                                    <h2 className="display-4 text-success d-inline"><strong>{price}</strong></h2>
                                     <span className="mx-2 text-secondary" style={{fontSize: "10px"}}>不含運費</span>
                                 </div>
-                                <div className="">
+                                <div className="d-flex align-items-center">
                                     <span className="mx-2 d-inline">數量</span>
                                     <Button className="my-2" size="sm" variant="outline-secondary" onClick={this.minusCount}>
                                         <FontAwesomeIcon icon={faMinus}/>

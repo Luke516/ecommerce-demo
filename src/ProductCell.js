@@ -22,6 +22,7 @@ class ProductCell extends React.Component {
         this.mouseEnter = this.mouseEnter.bind(this)
         this.mouseLeave = this.mouseLeave.bind(this)
         this.logEvent = this.logEvent.bind(this)
+        this.handleScroll = this.handleScroll.bind(this)
 
         let imageSourceUrl = "https://youcaptcha.s3-us-west-2.amazonaws.com/seed/"
         for (let category of this.props.product.category){
@@ -39,9 +40,9 @@ class ProductCell extends React.Component {
         }
 
         let logPositionTimer = null
-        if(this.props.target){
-            logPositionTimer = setInterval(this.logPosition, 100)
-        }
+        // if(this.props.target){
+        //     logPositionTimer = setInterval(this.logPosition, 100)
+        // }
         this.state = {
             price: priceData[this.props.product.id][0],
             imageSourceUrl: imageSourceUrl,
@@ -49,6 +50,21 @@ class ProductCell extends React.Component {
             logPositionTimer,
             hover: false
         };
+    }
+
+    componentDidMount() {
+        window.addEventListener('scroll', this.handleScroll, { passive: true })
+        this.handleScroll()
+    }
+    
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.handleScroll)
+    }
+    
+    handleScroll(event) {
+        if(this.props.target){
+            this.logPosition()
+        }
     }
   
     render (){
@@ -71,6 +87,11 @@ class ProductCell extends React.Component {
         else{
             price = price - price % 10
         }
+        let formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+        });
+        price = formatter.format(price).split('.')[0];
         return (
             <Col className="my-3 mx-" xs={12} sm={6} md={4} lg={3} style={{cursor: "pointer"}} ref={(el) => this.domElement = el} >
                 <Card className="card-shadow" onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}
@@ -88,7 +109,7 @@ class ProductCell extends React.Component {
                             <Card.Title style={{lineHeight: "1.5rem", height: "4.5rem", overflowY: "scroll", paddingLeft: this.state.hover? "3px": "0",  paddingRight: this.state.hover? "3px": "0"}}>{title}</Card.Title>
                             {
                                 !this.props.hideOption &&
-                                <h4 className="text-success text-right"><strong>{"$" + price}</strong></h4>
+                                <h4 className="text-success text-right"><strong>{price}</strong></h4>
                             }
                             {/* {
                                 !this.props.hideOption &&
@@ -160,11 +181,16 @@ class ProductCell extends React.Component {
             // console.log("position QWQ!")
             // console.log(this.props.product.id)
             let productPosition = this.domElement.getClientRects()[0]
-            productPosition.id = this.props.product.id
             productPosition.y += yOffset
             // console.log(productPosition)
 
-            this.logEvent(productPosition)
+            this.logEvent({
+                product: this.props.product.id,
+                x: productPosition.x,
+                y: productPosition.y,
+                width: productPosition.width,
+                height: productPosition.height
+            })
         }
     }
 

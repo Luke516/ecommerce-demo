@@ -60,7 +60,7 @@ def event():
     else:
         userEvents[username].append(event)
 
-    print(userEvents[username])
+    # print(userEvents[username])
     return "QWQ"
 
 @app.route('/finish/', methods=['POST'])

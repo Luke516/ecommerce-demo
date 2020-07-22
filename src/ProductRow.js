@@ -37,11 +37,19 @@ class ProductRow extends React.Component {
     }
   
     render (){
+      let count = this.state.count
+      if(this.props.name.includes("all") && this.props.orderMethod == "recommand"){
+        count = Math.min(count+2, this.props.data.length)
+      }
       return (
         <>
-        <Row className="ml--4 mt-2">
+        <Row className="mt-2 Dd-flex flex-row align-items-end">
             {
-                this.props.data.slice(0, this.state.count).map(element => {
+                (this.props.name.includes("all") && this.props.orderMethod == "recommand") ?
+                this.props.data.slice(2, count).map(element => {
+                    return <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target={this.props.target} isVisible={this.props.isVisible } username={this.state.username} />
+                }):
+                this.props.data.slice(0, count).map(element => {
                     return <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target={this.props.target} isVisible={this.props.isVisible } username={this.state.username} />
                 })
             }

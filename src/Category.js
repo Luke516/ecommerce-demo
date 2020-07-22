@@ -5,7 +5,7 @@ import priceData from './data/prices2All.json';
 
 import TrackVisibility from 'react-on-screen';
 import queryString from 'query-string';
-import { Container, Row, Tabs, Tab, Nav, Dropdown, Col } from 'react-bootstrap';
+import { Container, Row, Tabs, Tab, Nav, Dropdown, Col, Carousel, Button } from 'react-bootstrap';
 import ProductRow from './ProductRow'
 import {translate} from './utils/translate'
 
@@ -123,6 +123,8 @@ class Category extends React.Component {
         let subCategoryList = this.getAllSubCategoryData(this.props.data, targetSubCategory);
         let targetSubCategoryData = null
         
+        let controlProductData = flatData[this.props.controlProductId]
+
         if(targetCategory === this.props.name){
             targetSubCategoryData = subCategoryList[0]
         }
@@ -134,6 +136,8 @@ class Category extends React.Component {
         })
         
         return {
+            controlProductData,
+            targetProductData,
             targetSubCategoryData,
             subCategoryList,
             orderMethod: "recommand",
@@ -149,12 +153,18 @@ class Category extends React.Component {
       this.getAllproducts = this.getAllproducts.bind(this)
       this.sortProducts = this.sortProducts.bind(this)
       this.reorderProducts = this.reorderProducts.bind(this)
+      this.productClick = this.productClick.bind(this)
       
       let params = queryString.parse(this.props.location.search)
       this.state = {
         ...this.getInitState(),
         subCategory: params.subCategory
       }
+    }
+
+    productClick(productId) {
+        console.log(productId)
+        window.location.href = ('/Product?p=' + productId) 
     }
   
     render (){
@@ -218,15 +228,63 @@ class Category extends React.Component {
                             this.state.targetSubCategoryData && subCategoryData.name == this.state.targetSubCategoryData.name?
                             <Tab.Pane key={this.state.targetSubCategoryData.name} eventKey={this.state.targetSubCategoryData.name} title={translate(this.state.targetSubCategoryData.name.split('/')[1])} >
                                 <TrackVisibility partialVisibility>
-                                    <ProductRow name={this.state.targetSubCategoryData.name} data={this.state.targetSubCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target targetProductId={this.props.targetProductId}/>
+                                    <ProductRow name={this.state.targetSubCategoryData.name} data={this.state.targetSubCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target targetProductId={this.props.targetProductId} orderMethod={this.state.orderMethod}/>
                                 </TrackVisibility>
                             </Tab.Pane>:
                             this.state.targetSubCategoryData && subCategoryData.displayName == "all"?
                             <Tab.Pane key={subCategoryData.name} eventKey={subCategoryData.name} title={translate(subCategoryData.name.split('/')[1])} >
-                                <ProductRow name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target targetProductId={this.props.targetProductId} controlProductId={this.props.controlProductId}/>
+                                <Container className="my-4 w-100 d-flex flex-row" style={{minHeight: "360px"}}>
+                                    <Carousel className="w-100" indicators={false}>
+                                        <Carousel.Item>
+                                            <Row className="mt-4 justify-content-center" style={{minHeight: "360px", minWidth: "320px"}}>
+                                                <Col sm={5} className={"d-flex justify-content-center flex-column"} 
+                                                style={{maxHeight: "320px", maxWidth: "320px", padding: "1rem"}}>
+                                                    <div className="d-flex"></div>
+                                                    <img
+                                                    src={this.state.targetProductData.url}
+                                                    alt="First slide"
+                                                    style={{maxWidth: "320px", maxHeight:"320px", width: "auto", height: "auto"}}
+                                                    />
+                                                    <div className="d-flex" ></div>
+                                                </Col>
+                                                <Col sm={6} className="d-flex flex-column text-center" style={{justifyContent: "space-evenly"}}>
+                                                    <h2>{this.state.targetProductData.name}</h2>
+                                                    <div className="d-flex flex-row justify-content-center">
+                                                        <Button variant="primary" size="lg" className="w-50" onClick={()=>{this.productClick(this.props.targetProductId)}}>
+                                                            {translate("Check It Out")}
+                                                        </Button>
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                        </Carousel.Item>
+                                        <Carousel.Item>
+                                            <Row className="mt-4 justify-content-center" style={{minHeight: "360px", minWidth: "320px"}}>
+                                                <Col sm={5} className={"d-flex justify-content-center flex-column"} 
+                                                style={{maxHeight: "320px", maxWidth: "320px", padding: "1rem"}}>
+                                                    <div className="d-flex"></div>
+                                                    <img
+                                                    src={this.state.controlProductData.url}
+                                                    alt="First slide"
+                                                    style={{maxWidth: "320px", maxHeight:"320px", width: "auto", height: "auto"}}
+                                                    />
+                                                    <div className="d-flex" ></div>
+                                                </Col>
+                                                <Col sm={6} className="d-flex flex-column text-center" style={{justifyContent: "space-evenly"}}>
+                                                    <h2>{this.state.controlProductData.name}</h2>
+                                                    <div className="d-flex flex-row justify-content-center" onClick={()=>{this.productClick(this.props.controlProductId)}}>
+                                                        <Button variant="primary" size="lg" className="w-50" >
+                                                            {translate("Check It Out")}
+                                                        </Button>
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                        </Carousel.Item>
+                                    </Carousel>
+                                </Container>
+                                <ProductRow name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target targetProductId={this.props.targetProductId} controlProductId={this.props.controlProductId} orderMethod={this.state.orderMethod} />
                             </Tab.Pane>:
                             <Tab.Pane key={subCategoryData.name} eventKey={subCategoryData.name} title={translate(subCategoryData.name.split('/')[1])} >
-                                <ProductRow name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
+                                <ProductRow name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} orderMethod={this.state.orderMethod}/>
                             </Tab.Pane>
                         )
                     })
@@ -245,7 +303,7 @@ class Category extends React.Component {
                                 <h2 className="mb-4 mt-4">{translate(subCategoryData.name.split('/')[0])} / {translate(subCategoryData.name.split('/')[1])}</h2>
                                 <hr/>
                             </div>
-                            <ProductRow key={subCategoryData.name} name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
+                            <ProductRow key={subCategoryData.name} name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} targetProductId={this.props.targetProductId} controlProductId={this.props.controlProductId} orderMethod={this.state.orderMethod} />
                             <div className="footer1 my-4"></div>
                         </Container>
                     )
