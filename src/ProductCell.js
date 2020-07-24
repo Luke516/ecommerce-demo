@@ -23,6 +23,8 @@ class ProductCell extends React.Component {
         this.mouseLeave = this.mouseLeave.bind(this)
         this.logEvent = this.logEvent.bind(this)
         this.handleScroll = this.handleScroll.bind(this)
+        this.imgError = this.imgError.bind(this)
+        this.reloadImg = this.reloadImg.bind(this)
 
         let imageSourceUrl = "https://youcaptcha.s3-us-west-2.amazonaws.com/seed/"
         for (let category of this.props.product.category){
@@ -102,7 +104,7 @@ class ProductCell extends React.Component {
                     }
                     </div>
                     <div onClick={this.detailButtonClick} className="d-flex justify-content-center" style={{maxHeight:"200px", maxWidth:"200px", overflow: "hidden"}}>
-                        <img src={this.state.imageSourceUrl} style={{maxWidth: "200px", maxHeight:"200px", width: "auto", height: "auto"}}></img>
+                        <img src={this.state.imageSourceUrl} style={{maxWidth: "200px", maxHeight:"200px", width: "auto", height: "auto"}} onError={this.imgError}></img>
                     </div>
                     <Card.Body className={"d-block w-100"} style={{justifyContent: "flex-end", flex: "none", padding: 0}}>
                         <div onClick={this.detailButtonClick} style={{padding: "1rem"}}>
@@ -228,14 +230,30 @@ class ProductCell extends React.Component {
         const url = "http://localhost:5000/event/";
         const req = new Request(url, {method: 'POST', headers: myHeaders})
 
-        fetch(url, {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        }).then(res=>{})
+        // fetch(url, {
+        //     method: 'post',
+        //     headers: {
+        //         'Accept': 'application/json, text/plain, */*',
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify(data)
+        // }).then(res=>{})
+    }
+
+    imgError(e){
+        console.log("imgError")
+        console.log(e)
+        let source = e.src;
+        e.src = "QWQ" + e.src;
+        setTimeout(this.reloadImg, 100, e);
+    }
+
+    reloadImg(e)
+    {
+        console.log("reload Img")
+        console.log(e)
+        let source = e.src;
+        e.src = source.slice(5);
     }
 }
 

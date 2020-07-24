@@ -530,7 +530,8 @@ class App extends React.Component {
       captchaIdList,
       navbarToggle: false,
       redirect: true,
-      wrongPassword: false
+      wrongPassword: false,
+      showLogin: true
     })
   }
 

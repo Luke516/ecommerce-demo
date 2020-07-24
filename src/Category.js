@@ -6,6 +6,8 @@ import priceData from './data/prices2All.json';
 import TrackVisibility from 'react-on-screen';
 import queryString from 'query-string';
 import { Container, Row, Tabs, Tab, Nav, Dropdown, Col, Carousel, Button } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faInfo, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 import ProductRow from './ProductRow'
 import {translate} from './utils/translate'
 
@@ -118,12 +120,18 @@ class Category extends React.Component {
 
     getInitState() {
         let targetProductData = flatData[this.props.targetProductId]
+        targetProductData.id = this.props.targetProductId
+        targetProductData.price = priceData[this.props.targetProductId][0]
+        targetProductData.imageSourceUrl = targetProductData.url
         let targetCategory = decodeURIComponent(targetProductData.url).split('/')[4];
         let targetSubCategory = decodeURIComponent(targetProductData.url).split('/')[5];
         let subCategoryList = this.getAllSubCategoryData(this.props.data, targetSubCategory);
         let targetSubCategoryData = null
         
         let controlProductData = flatData[this.props.controlProductId]
+        controlProductData.id = this.props.controlProductId
+        controlProductData.price = priceData[this.props.controlProductId][0]
+        controlProductData.imageSourceUrl = controlProductData.url
 
         if(targetCategory === this.props.name){
             targetSubCategoryData = subCategoryList[0]
@@ -154,6 +162,7 @@ class Category extends React.Component {
       this.sortProducts = this.sortProducts.bind(this)
       this.reorderProducts = this.reorderProducts.bind(this)
       this.productClick = this.productClick.bind(this)
+      this.logEvent = this.logEvent.bind(this)
       
       let params = queryString.parse(this.props.location.search)
       this.state = {
@@ -168,6 +177,32 @@ class Category extends React.Component {
     }
   
     render (){
+        let targetProductPrice = parseInt(this.state.targetProductData.price * 31)
+        if(targetProductPrice % 100 < 20){
+            targetProductPrice = targetProductPrice - (targetProductPrice%100) - 1;
+        }
+        else if(targetProductPrice % 100 > 90){
+            targetProductPrice = targetProductPrice - (targetProductPrice%100) + 99;
+        }
+        else{
+            targetProductPrice = targetProductPrice - targetProductPrice % 10
+        }
+
+        let controlProductPrice = parseInt(this.state.controlProductData.price * 31)
+        if(controlProductPrice % 100 < 20){
+            controlProductPrice = controlProductPrice - (controlProductPrice%100) - 1;
+        }
+        else if(controlProductPrice % 100 > 90){
+            controlProductPrice = controlProductPrice - (controlProductPrice%100) + 99;
+        }
+        else{
+            controlProductPrice = controlProductPrice - controlProductPrice % 10
+        }
+
+        let formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+        });
         if(!this.state.subCategory){
             return (
                 <Container>
@@ -247,11 +282,18 @@ class Category extends React.Component {
                                                     />
                                                     <div className="d-flex" ></div>
                                                 </Col>
-                                                <Col sm={6} className="d-flex flex-column text-center" style={{justifyContent: "space-evenly"}}>
-                                                    <h2>{this.state.targetProductData.name}</h2>
-                                                    <div className="d-flex flex-row justify-content-center">
-                                                        <Button variant="primary" size="lg" className="w-50" onClick={()=>{this.productClick(this.props.targetProductId)}}>
+                                                <Col sm={6} className="d-flex flex-column text-center" style={{justifyContent: "center"}}>
+                                                     <div>   
+                                                        <h2 style={{height: "5rem", overflowY: "hidden"}}>{this.state.targetProductData.name}</h2>
+                                                        <h2 className="text-success text-right">{formatter.format(targetProductPrice).split('.')[0]}</h2>
+                                                    </div>
+                                                    <div className="d-flex flex-row justify-content-center mt-4">
+                                                        <Button variant="outline-primary" size="lg" className="w-50 mx-2" onClick={()=>{this.productClick(this.props.targetProductId)}}>
                                                             {translate("Check It Out")}
+                                                        </Button>
+                                                        <Button size="lg" variant="primary" className="w-50 mx-2" style={{borderTopLeftRadius: "0", borderTopRightRadius: "0"}}
+                                                            onClick={(e)=>{this.props.addProductToCart({...this.state.targetProductData})}}>
+                                                            <span className="text-md"><FontAwesomeIcon className="mx-2" icon={faShoppingCart} />{translate("Add To Cart")}</span>
                                                         </Button>
                                                     </div>
                                                 </Col>
@@ -269,11 +311,18 @@ class Category extends React.Component {
                                                     />
                                                     <div className="d-flex" ></div>
                                                 </Col>
-                                                <Col sm={6} className="d-flex flex-column text-center" style={{justifyContent: "space-evenly"}}>
-                                                    <h2>{this.state.controlProductData.name}</h2>
-                                                    <div className="d-flex flex-row justify-content-center" onClick={()=>{this.productClick(this.props.controlProductId)}}>
-                                                        <Button variant="primary" size="lg" className="w-50" >
+                                                <Col sm={6} className="d-flex flex-column text-center" style={{justifyContent: "center"}}>
+                                                    <div>
+                                                        <h2 style={{height: "5rem", overflowY: "hidden"}}>{this.state.controlProductData.name}</h2>
+                                                        <h2 className="text-success text-right">{formatter.format(controlProductPrice).split('.')[0]}</h2>
+                                                    </div>
+                                                    <div className="d-flex flex-row justify-content-center mt-4">
+                                                        <Button variant="outline-primary" size="lg" className="w-50 mx-2" onClick={()=>{this.productClick(this.props.controlProductId)}}>
                                                             {translate("Check It Out")}
+                                                        </Button>
+                                                        <Button size="lg" variant="primary" className="w-50 mx-2" style={{borderTopLeftRadius: "0", borderTopRightRadius: "0"}}
+                                                            onClick={(e)=>{this.props.addProductToCart({...this.state.controlProductData})}}>
+                                                            <span className="text-md"><FontAwesomeIcon className="mx-2" icon={faShoppingCart} />{translate("Add To Cart")}</span>
                                                         </Button>
                                                     </div>
                                                 </Col>
@@ -310,6 +359,28 @@ class Category extends React.Component {
                 }
             }
         }
+    }
+
+    logEvent(event){
+        const timestamp = Date.now();
+        let data={
+            username: this.props.username,
+            event: {...event, timestamp}
+        }
+        const proxyurl = "https://cors-anywhere.herokuapp.com/";
+        const httpHeaders = { 'Content-Type' : 'application/json', 'X-Requested-With': 'XMLHttpRequest'}
+        const myHeaders = new Headers(httpHeaders)
+        const url = "http://localhost:5000/event/";
+        const req = new Request(url, {method: 'POST', headers: myHeaders})
+
+        // fetch(url, {
+        //     method: 'post',
+        //     headers: {
+        //         'Accept': 'application/json, text/plain, */*',
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify(data)
+        // }).then(res=>{})
     }
 }
 

@@ -6,7 +6,7 @@ import YouCaptchaApp from './YouCaptcha/YouCaptchaApp'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import queryString from 'query-string';
-import { ListGroup, Container, Row, Col, Carousel, Button, Card, CardDeck, InputGroup, Form, FormControl } from 'react-bootstrap';
+import { ListGroup, Container, Row, Col, Carousel, Button, Card, CardDeck, InputGroup, Form, FormControl, Breadcrumb } from 'react-bootstrap';
 import ProductCell from './ProductCell'
 import ProductRow from './ProductRow'
 import { translate } from './utils/translate';
@@ -32,8 +32,8 @@ class Checkout extends React.Component {
         }
         product.displayPrice = price
         product.checked = true
-        totalPrice = totalPrice + parseFloat(product.displayPrice) * product.count
-        totalCount = totalCount + product.count
+        totalPrice = totalPrice + parseFloat(product.displayPrice) * 1//product.count
+        totalCount = totalCount + 1//product.count
       }
       this.state = {
         productsInCart: productsInCart,
@@ -73,8 +73,8 @@ class Checkout extends React.Component {
           let totalPrice = 0.0;
           let totalCount = 0;
           for(let product of productsInCart){
-            totalPrice = totalPrice + parseFloat(product.displayPrice) * product.count
-            totalCount = totalCount + product.count
+            totalPrice = totalPrice + parseFloat(product.displayPrice) * 1//product.count
+            totalCount = totalCount + 1//product.count
           }
           this.setState({
             productsInCart: productsInCart.slice(),
@@ -122,11 +122,11 @@ class Checkout extends React.Component {
         let totalCount = this.state.totalCount
         let totalPrice = this.state.totalPrice
         if(productsInCart[id].checked){
-            totalCount += productsInCart[id].count
+            totalCount += 1//productsInCart[id].count
             totalPrice = totalPrice + (productsInCart[id].displayPrice * productsInCart[id].count)
         }
         else{
-            totalCount -= productsInCart[id].count
+            totalCount -= 1//productsInCart[id].count
             totalPrice = totalPrice - (productsInCart[id].displayPrice * productsInCart[id].count)
         }
 
@@ -165,10 +165,17 @@ class Checkout extends React.Component {
         let totalPrice = formatter.format(this.state.totalPrice).split('.')[0];
         return (
             <Container>
+                <Row style={{height:"1.5rem"}}></Row>
                 <Row>
-                <h2 className="my-4">
+                <Breadcrumb>
+                    <Breadcrumb.Item href="/">{translate("home")}</Breadcrumb.Item>
+                    <Breadcrumb.Item href={""}>{"購物車"}</Breadcrumb.Item>
+                </Breadcrumb>
+                </Row>
+                <Row>
+                <h2 className="my-2">
                     {/* {translate("Checkout")} */}
-                    購物車
+                    購物車 (請選3~10件商品)
                 </h2>
                 </Row>
             {
@@ -240,9 +247,9 @@ class Checkout extends React.Component {
                                 </div>
                             }
                             {
-                                (this.state.totalCount < 1 || this.state.totalCount > 3) &&
+                                (this.state.totalCount < 3 || this.state.totalCount > 10) &&
                                 <div className="captcha-error">
-                                    <span className="text-danger">請選擇1~3件商品</span>
+                                    <span className="text-danger">請選擇3~10件商品</span>
                                 </div>
                             }
                         </Col>
@@ -278,7 +285,7 @@ class Checkout extends React.Component {
     }
 
     showSurvey() {
-        if(this.props.userLogin && this.state.totalCount > 0 && this.state.totalCount <= 3){
+        if(this.props.userLogin && this.state.totalCount > 2 && this.state.totalCount <= 10){
             this.props.showSurvey()
         }
     }
