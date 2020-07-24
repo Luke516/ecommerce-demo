@@ -34,14 +34,14 @@ class App extends React.Component {
     let testId = cookies.get('testId')? cookies.get('testId') : "1";
     let curSetting = cookies.get('username')? cookies.get('username') : "";
     
-    let targetCategory = "Men's Fashion";
-    let targetProductId = "B07M9QXCP7"
-    let controlProductId = "B07HXZH7WD"
+    let targetCategory = "Women's Fashion";
+    let targetProductId = "B07MHL5R18"
+    let controlProductId = "B07N7FSMKQ"
     let captchaType = "YouCaptcha"
     if(testId == "1"){
-      targetCategory = "Men's Fashion";
-      targetProductId = "B07M9QXCP7"
-      controlProductId = "B07HXZH7WD"
+      targetCategory = "Women's Fashion";
+      targetProductId = "B07MHL5R18"
+      controlProductId = "B07N7FSMKQ"
       captchaType = "YouCaptcha"
     }
     if(testId == "2"){
@@ -495,14 +495,14 @@ class App extends React.Component {
     cookies.set('browsed', [])
     cookies.set('products', [])
 
-    let targetCategory = "Men's Fashion";
-    let targetProductId = "B07M9QXCP7"
-    let controlProductId = "B07HXZH7WD"
+    let targetCategory = "Women's Fashion";
+    let targetProductId = "B07MHL5R18"
+    let controlProductId = "B07N7FSMKQ"
     let captchaType = "YouCaptcha"
     if(testId == "1"){
-      targetCategory = "Men's Fashion";
-      targetProductId = "B07M9QXCP7"
-      controlProductId = "B07HXZH7WD"
+      targetCategory = "Women's Fashion";
+      targetProductId = "B07MHL5R18"
+      controlProductId = "B07N7FSMKQ"
       captchaType = "YouCaptcha"
     }
     if(testId == "2"){
