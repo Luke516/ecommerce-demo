@@ -12,6 +12,7 @@ import Survey from './Survey'
 import ProductDetail from './ProductDetail'
 import LoginModal from './LoginModal'
 import {translate} from './utils/translate'
+import {logEvent} from './utils/utlis'
 import {
   BrowserRouter as Router,
   Route,
@@ -104,7 +105,6 @@ class App extends React.Component {
     this.nextTest = this.nextTest.bind(this);
     this.captchaSuccess = this.captchaSuccess.bind(this);
     this.updateCart = this.updateCart.bind(this);
-    this.logEvent = this.logEvent.bind(this);
     this.showAd = this.showAd.bind(this);
     this.closeAd = this.closeAd.bind(this);
     this.showDialog = this.showDialog.bind(this);
@@ -118,11 +118,9 @@ class App extends React.Component {
         showLogin: true
       })
 
-      const timestamp = Date.now();
-      this.logEvent({
-        timestamp,
-        type: "showLogin"
-      })
+      logEvent(this.state.username,
+        {type: "showLogin"}
+      )
     }
   }
 
@@ -350,8 +348,8 @@ class App extends React.Component {
         )}/>
         <Route exact path="/Product" render={(location) => (
             this.state.curProduct?
-              <ProductDetail product={this.state.curProduct} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} targetCategory={this.state.targetCategory}/>
-            :<ProductDetail product={null} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} targetCategory={this.state.targetCategory}/>
+              <ProductDetail product={this.state.curProduct} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} targetCategory={this.state.targetCategory} username={this.state.username}/>
+            :<ProductDetail product={null} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} targetCategory={this.state.targetCategory} username={this.state.username}/>
         )}/>
         <Route exact path="/Admin" render={(location) => (
             <Admin location={location.location} />
@@ -389,12 +387,12 @@ class App extends React.Component {
     this.setState({
       showSuccessDialog: count
     })
-    const timestamp = Date.now();
-    this.logEvent({
-      timestamp,
-      product: product.id,
-      type: "addToCart"
-    })
+    
+    logEvent(this.state.username,
+      {
+        product: product.id,
+        type: "addToCart"
+      })
     setTimeout(() => {
       this.setState({
         showSuccessDialog: -1
@@ -556,9 +554,8 @@ class App extends React.Component {
       })
     }
     if(captchaPass){
-      const timestamp = Date.now();
-      this.logEvent({
-        timestamp,
+      
+      logEvent(this.state.username,{
         type: "captchaVerified"
       })
       if(this.state.captchaType == "YouCaptcha"){
@@ -671,28 +668,6 @@ class App extends React.Component {
       showCategoryNav: !this.state.showCategoryNav
     })
   }
-
-  logEvent(event){
-    const timestamp = Date.now();
-    let data={
-        username: this.state.username,
-        event: {...event, timestamp}
-    }
-    const proxyurl = "https://cors-anywhere.herokuapp.com/";
-    const httpHeaders = { 'Content-Type' : 'application/json', 'X-Requested-With': 'XMLHttpRequest'}
-    const myHeaders = new Headers(httpHeaders)
-    const url = "http://localhost:5000/event/";
-    const req = new Request(url, {method: 'POST', headers: myHeaders})
-
-    fetch(url, {
-        method: 'post',
-        headers: {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    }).then(res=>{})
-}
 
   showAd() {
     this.setState({

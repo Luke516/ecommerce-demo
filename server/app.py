@@ -63,6 +63,22 @@ def event():
     # print(userEvents[username])
     return "QWQ"
 
+@app.route('/events/', methods=['POST'])
+def events():
+    # Decoding and pre-processing base64 image
+    events = request.json
+    # print(payload)
+    for e in events:
+        username = e["username"]
+        event = e["event"]
+        if username not in userEvents:
+            userEvents[username] = [event]
+        else:
+            userEvents[username].append(event)
+
+    # print(userEvents[username])
+    return "QWQ"
+
 @app.route('/finish/', methods=['POST'])
 def finish():
     # Decoding and pre-processing base64 image

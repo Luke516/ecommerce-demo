@@ -111,20 +111,6 @@ class Home extends React.Component {
             <h3 className="ml--4 mt-4">{translate("All Products")}</h3>
             <hr/>
         </Row>
-        {/* <Row className="ml-4 mt-2">
-            {
-                this.state.list1.map(element => {
-                    return <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
-                })
-            }
-        </Row>
-        <Row className="ml-4 mt-2">
-            {
-                this.state.list2.map(element => {
-                    return <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
-                })
-            }
-        </Row> */}
         <ProductRow name={""} data={data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
         <div className="footer1 my-4"></div>
         <Row className="context-dark">

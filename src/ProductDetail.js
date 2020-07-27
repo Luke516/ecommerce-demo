@@ -346,7 +346,7 @@ export default class ProductDetail extends React.Component {
             <Row className="ml-2" style={{padding: "20px"}}>
                 {
                     this.state.list1.map(element => {
-                        return <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
+                        return <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}  username={this.props.username}/>
                     })
                 }
             </Row>

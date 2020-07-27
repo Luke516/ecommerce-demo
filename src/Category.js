@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfo, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 import ProductRow from './ProductRow'
 import {translate} from './utils/translate'
+import {logEvent} from './utils/utlis'
 
 class Category extends React.Component {
 
@@ -162,7 +163,6 @@ class Category extends React.Component {
       this.sortProducts = this.sortProducts.bind(this)
       this.reorderProducts = this.reorderProducts.bind(this)
       this.productClick = this.productClick.bind(this)
-      this.logEvent = this.logEvent.bind(this)
       
       let params = queryString.parse(this.props.location.search)
       this.state = {
@@ -359,28 +359,6 @@ class Category extends React.Component {
                 }
             }
         }
-    }
-
-    logEvent(event){
-        const timestamp = Date.now();
-        let data={
-            username: this.props.username,
-            event: {...event, timestamp}
-        }
-        const proxyurl = "https://cors-anywhere.herokuapp.com/";
-        const httpHeaders = { 'Content-Type' : 'application/json', 'X-Requested-With': 'XMLHttpRequest'}
-        const myHeaders = new Headers(httpHeaders)
-        const url = "http://localhost:5000/event/";
-        const req = new Request(url, {method: 'POST', headers: myHeaders})
-
-        // fetch(url, {
-        //     method: 'post',
-        //     headers: {
-        //         'Accept': 'application/json, text/plain, */*',
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify(data)
-        // }).then(res=>{})
     }
 }
 

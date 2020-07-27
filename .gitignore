@@ -26,6 +26,7 @@ yarn-error.log*
 src/out2
 public/out2
 src/out6
-public/out6
+public/out*
 
 server/*.json
+server/old

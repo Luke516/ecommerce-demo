@@ -10,21 +10,12 @@ import SurveyProductCell from './SurveyProductCell'
 import ProductRow from './ProductRow'
 import data from './data/metadata_all_with_detail_img_3_empty.json';
 import flatData from './data/flat_products_list_zh.json';
-import { shuffle } from './utils/utlis';
+import { shuffle, logSurvey, logFinish } from './utils/utlis';
 import { translate } from './utils/translate';
 
 class Survey extends React.Component {
 
     changeFavicon(src) {
-        // var link = document.createElement('link'),
-        //     oldLink = document.getElementById('dynamic-favicon');
-        // link.id = 'dynamic-favicon';
-        // link.rel = 'shortcut icon';
-        // link.href = src;
-        // if (oldLink) {
-        //  document.head.removeChild(oldLink);
-        // }
-        // document.head.appendChild(link);
         const favicon = document.getElementById('favicon');
         favicon.setAttribute("href", src);
     }
@@ -144,7 +135,7 @@ class Survey extends React.Component {
         list2 = shuffle(list2)
 
         this.state = {
-            questionId: 1,
+            questionId: 7,
             list1,
             list2,
             list3: targetProduct,
@@ -201,10 +192,10 @@ class Survey extends React.Component {
                 <Container className="vh-100">
                 <Row className={"mb--4"}>
                     {
-                        ((this.state.questionId > 0 && this.state.questionId < 6) || (this.state.questionId == 7)) &&
+                        ((this.state.questionId > 0 && this.state.questionId < 6) || (this.state.questionId > 6)) &&
                         <Col xs={12} className="d-flex flex-row justify-content-center align-items-center my-2">
                             {/* <h2 className="mt-4">{translate("Survey") + " (" + (parseInt(this.state.questionId)-1)+ "/5)"}</h2> */}
-                            <h2 className="mt--4">{"第" + (Math.min(parseInt(this.state.questionId),6))+ "題，共" + (this.state.testId == "3"?"6":"5") + "題"}</h2>
+                            <h2 className="mt--4">{"第" + (Math.min(parseInt(this.state.questionId),6))+ "題，共" + (this.state.testId == "3"?"8":"5") + "題"}</h2>
                         </Col>
                     }
                 </Row>
@@ -218,14 +209,14 @@ class Survey extends React.Component {
                         {
                             this.state.testId == "3" &&
                             <p>
-                                注意：最後一次問卷將有六題而非五題
+                                注意：最後一次問卷將有八題而非五題
                             </p>
                         }
                         <button className="survey-btn" type="button" onClick={this.nextQuestion}>開始</button>
                     </div>
                     // </Col>
                 }
-                {((this.state.questionId > 0 && this.state.questionId < 6) || (this.state.questionId == 7)) &&
+                {((this.state.questionId > 0 && this.state.questionId < 6) || (this.state.questionId > 6)) &&
                     <div className="my-4 d-flex justify-content-center">
                         <span className={this.state.questionId == 1? "mx-2 black-dot": "mx-2 dot"}></span>
                         <span className={this.state.questionId == 2? "mx-2 black-dot": "mx-2 dot"}></span>
@@ -233,6 +224,8 @@ class Survey extends React.Component {
                         <span className={this.state.questionId == 4? "mx-2 black-dot": "mx-2 dot"}></span>
                         <span className={this.state.questionId == 5? "mx-2 black-dot": "mx-2 dot"}></span>
                         <span style={{display: this.state.testId == "3"? "block": "none"}} className={this.state.questionId == 7? "mx-2 black-dot": "mx-2 dot"}></span>
+                        <span style={{display: this.state.testId == "3"? "block": "none"}} className={this.state.questionId == 8? "mx-2 black-dot": "mx-2 dot"}></span>
+                        <span style={{display: this.state.testId == "3"? "block": "none"}} className={this.state.questionId == 9? "mx-2 black-dot": "mx-2 dot"}></span>
                     </div>
                 }
                 <Row style={{display: this.state.questionId == 1? "block": "none"}}>
@@ -346,27 +339,40 @@ class Survey extends React.Component {
                         <button className="survey-btn" type="button"  size="lg" className="mx-1 my-2" style={{display: "block"}} onClick={() => {this.finish()}}>繼續</button> 
                     }
                 </div>
-                <div className="w-100 justify-content-center align-items-center flex-column" style={{height: "80%", display: this.state.questionId == 7? "flex": "none"}}>
-                <Row style={{display: this.state.questionId == 7? "block": "none"}}>
+                <div className="w-100 justify-content-center align-items-center flex-column" style={{ display: this.state.questionId > 6? "flex": "none"}}>
+                <Row className="my-4" style={{display: this.state.questionId > 6? "block": "none"}}>
                     <div className="d-flex flex-column align-items-center">
-                        <h5>在三次不同的任務中，我們分別採用了三種不同的驗證碼，如下圖：</h5>
+                        <h5>在三次不同的任務中，我們分別採用了三種不同的驗證碼 (CAPTCHA)，如下圖：</h5>
                     </div>
-                    <Row style={{height: "360px"}}>
-                        <Col md={4} className="px-1">
-                            <h5>ReCaptcha</h5>
-                            <img height="100" src="https://i.imgur.com/ZZIoHjQ.jpg"></img>
-                        </Col>
+                    <Row className="my-3">
                         <Col md={4} className="px-1">
                             <h5>TextCaptcha</h5>
-                            <img height="100" src="https://i.imgur.com/bL9JESW.jpg"></img>
+                            <span>文字驗證碼，最傳統的驗證碼形式。</span><br/>
+                            <span>題目為輸入經過處理的文字</span>
+                            <div className="mt-2" style={{minHeight: "360px"}}>
+                                <img width="240" src="https://i.imgur.com/Fb80XyH.jpg"></img>
+                            </div>
+                        </Col>
+                        <Col md={4} className="px-1">
+                            <h5>ReCaptcha</h5>
+                            <span>Google所提出的圖像驗證碼</span><br/>
+                            <span>題目為找出指定類型的照片</span>
+                            <div className="mt-2" style={{minHeight: "360px"}}>
+                                <img width="240" src="https://i.imgur.com/yAaN0xC.jpg"></img>
+                            </div>
                         </Col>
                         <Col md={4} className="px-1">
                             <h5>YouCaptcha</h5>
-                            <img height="320" src="https://i.imgur.com/9CmPnPr.jpg"></img>
+                            <span>與ReCaptcha類似的圖像驗證碼</span><br/>
+                            <span>題目為找出相同物品的圖片</span>
+                            <div className="mt-2" style={{minHeight: "360px"}}>
+                                <img width="240" src="https://i.imgur.com/9CmPnPr.jpg"></img>
+                            </div>
                         </Col>
                     </Row>
-                    <Row className="my-4">
-                        <Col md={12}><h4>請將這三種驗證碼按＂難易度＂排名</h4></Col>
+                    <hr className="my-4" style={{width: "100%", height: "1px", border: "none", backgroundColor: "gray"}}/>
+                    <Row className="my-4" style={{display: this.state.questionId == 7 ? "flex": "none"}}>
+                        <Col className="mb-2" md={12}><h4>請將這三種驗證碼按＂解題難易度＂排名</h4></Col>
                         <Col md={4} className="d-flex flex-row">
                             <span>第一名：</span>
                             <DropdownButton variant="outline-secondary" id="dropdown-basic-button" title={this.state.answer61[0] == ""? "請選擇": this.state.answer61[0]}>
@@ -392,8 +398,8 @@ class Survey extends React.Component {
                             </DropdownButton>
                         </Col>
                     </Row>
-                    <Row className="my-4">
-                        <Col md={12}><h4>請將這三種驗證碼按＂解題的成就感＂排名</h4></Col>
+                    <Row className="my-4" style={{display: this.state.questionId == 8 ? "flex": "none"}}>
+                        <Col className="mb-2" md={12}><h4>請將這三種驗證碼按＂解題成就感＂排名</h4></Col>
                         <Col md={4} className="d-flex flex-row">
                             <span>第一名：</span>
                             <DropdownButton variant="outline-secondary" id="dropdown-basic-button" title={this.state.answer62[0] == ""? "請選擇": this.state.answer62[0]}>
@@ -419,8 +425,8 @@ class Survey extends React.Component {
                             </DropdownButton>
                         </Col>
                     </Row>
-                    <Row className="my-4">
-                        <Col md={12}><h4>請將這三種驗證碼按＂您個人的喜好＂排名</h4></Col>
+                    <Row className="my-4" style={{display: this.state.questionId == 9 ? "flex": "none"}}>
+                        <Col className="mb-2" md={12}><h4>請將這三種驗證碼按＂您個人的喜好＂排名</h4></Col>
                         <Col md={4} className="d-flex flex-row">
                             <span>第一名：</span>
                             <DropdownButton variant="outline-secondary" id="dropdown-basic-button" title={this.state.answer63[0] == ""? "請選擇": this.state.answer63[0]}>
@@ -465,11 +471,11 @@ class Survey extends React.Component {
                     </Row>
                 }
                 {
-                    (this.state.questionId == 7) &&
+                    (this.state.questionId > 6) &&
                     <Row className="my-2 d-flex justify-content-center">
                         <button className="survey-btn mx-1" type="button" size="lg" style={{display: this.state.questionId == 1? "none": "block"}} onClick={() => this.prevQuestion()}>上一題</button>
-                        <button className="survey-btn mx-1" type="button" size="lg" style={{display: this.state.questionId == 7? "none": "block"}} onClick={() => this.nextQuestion()}>下一題</button>
-                        <button className="survey-btn mx-1" type="button" size="lg" style={{display: this.state.questionId == 7? "block": "none"}} onClick={() => {this.nextQuestion()}}>完成</button> 
+                        <button className="survey-btn mx-1" type="button" size="lg" style={{display: this.state.questionId == 9? "none": "block"}} onClick={() => this.nextQuestion()}>下一題</button>
+                        <button className="survey-btn mx-1" type="button" size="lg" style={{display: this.state.questionId == 9? "block": "none"}} onClick={() => {this.nextQuestion()}}>完成</button> 
                     </Row>
                 }
             </Container>
@@ -506,6 +512,30 @@ class Survey extends React.Component {
         if(this.state.questionId == 5 && this.state.answer5.length !== 2){
             return false
         }
+        if(this.state.questionId == 7){
+            if(!this.state.answer61.includes("ReCaptcha"))
+                return false
+            if(!this.state.answer61.includes("YouCaptcha"))
+                return false
+            if(!this.state.answer61.includes("TextCaptcha"))
+                return false
+        }
+        if(this.state.questionId == 8){
+            if(!this.state.answer62.includes("ReCaptcha"))
+                return false
+            if(!this.state.answer62.includes("YouCaptcha"))
+                return false
+            if(!this.state.answer62.includes("TextCaptcha"))
+                return false
+        }
+        if(this.state.questionId == 9){
+            if(!this.state.answer63.includes("ReCaptcha"))
+                return false
+            if(!this.state.answer63.includes("YouCaptcha"))
+                return false
+            if(!this.state.answer63.includes("TextCaptcha"))
+                return false
+        }
         return true
     }
 
@@ -523,11 +553,11 @@ class Survey extends React.Component {
                 empty: false
             })
         }
-        let nextQuestionId = Math.min(this.state.questionId + 1, 6)
-        if(nextQuestionId == 6 && this.state.testId == "3"){
+        let nextQuestionId = this.state.questionId + 1
+        if(nextQuestionId == 6){
             nextQuestionId = 7
         }
-        if(this.state.questionId == 7){
+        if(this.state.questionId == 9){
             nextQuestionId = 6
         }
         this.setState({
@@ -561,35 +591,9 @@ class Survey extends React.Component {
     }
 
     logResult() {
-        let data = this.state
-        const proxyurl = "https://cors-anywhere.herokuapp.com/";
-        const httpHeaders = { 'Content-Type' : 'application/json', 'X-Requested-With': 'XMLHttpRequest'}
-        const myHeaders = new Headers(httpHeaders)
-        const url = "http://localhost:5000/log/";
-        fetch(url, {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        }).then(res=>res.json())
-        .then((res) => {
-            console.log(res)
-        });
 
-        const url2 = "http://localhost:5000/finish/";
-        fetch(url2, {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        }).then(res=>res.json())
-        .then((res) => {
-            console.log(res)
-        });
+        logSurvey(this.state)
+        logFinish()
     }
 
     handleClick(productId, selected) {

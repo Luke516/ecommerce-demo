@@ -9,6 +9,7 @@ import { Container, Row, Col, Carousel, Button, Card, CardDeck, InputGroup, Form
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfo, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 import { translate } from './utils/translate';
+import { logEvent, logPosition } from './utils/utlis'
 
 class ProductCell extends React.Component {
   
@@ -21,7 +22,6 @@ class ProductCell extends React.Component {
         this.addProductToCart = this.addProductToCart.bind(this);
         this.mouseEnter = this.mouseEnter.bind(this)
         this.mouseLeave = this.mouseLeave.bind(this)
-        this.logEvent = this.logEvent.bind(this)
         this.handleScroll = this.handleScroll.bind(this)
         this.imgError = this.imgError.bind(this)
         this.reloadImg = this.reloadImg.bind(this)
@@ -153,15 +153,12 @@ class ProductCell extends React.Component {
         // this.props.history.push('/Product?p=' + this.props.product.id) 
         // console.log("Detail Click !!!")
 
-        const timestamp = Date.now();
-        this.logEvent({
-            timestamp,
+        logEvent(this.props.username, {
             product: this.props.product.id,
             type: "detailClick"
         })
 
         window.location.href = ('/Product?p=' + this.props.product.id) 
-        // this.props.showProduct({...this.props.product, ...this.state});
     }
 
     isInViewport(element, offset = 0) {
@@ -178,15 +175,14 @@ class ProductCell extends React.Component {
     logPosition() {
         // const { isVisible, inViewport  } = this.props;
         // console.log( this.isInViewport(this.domElement) )
-        const yOffset = 72
+        const yOffset = 72 //browser nav
         if(this.isInViewport(this.domElement)){
-            // console.log("position QWQ!")
-            // console.log(this.props.product.id)
+
             let productPosition = this.domElement.getClientRects()[0]
             productPosition.y += yOffset
-            // console.log(productPosition)
 
-            this.logEvent({
+            const timestamp = Date.now();
+            logPosition(this.props.username, timestamp, {
                 product: this.props.product.id,
                 x: productPosition.x,
                 y: productPosition.y,
@@ -197,47 +193,17 @@ class ProductCell extends React.Component {
     }
 
     mouseEnter() {
-        const timestamp = Date.now();
-        // console.log(this.props.product.id)
-        // console.log("mouseEnter")
-        this.logEvent({
-            timestamp,
+        logEvent(this.props.username, {
             product: this.props.product.id,
             type: "mouseEnter"
         })
     }
 
     mouseLeave(){
-        const timestamp = Date.now();
-        // console.log(this.props.product.id)
-        // console.log("mouseLeave")
-        this.logEvent({
-            timestamp,
+        logEvent(this.props.username, {
             product: this.props.product.id,
             type: "mouseLeave"
         })
-    }
-
-    logEvent(event){
-        const timestamp = Date.now();
-        let data={
-            username: this.props.username,
-            event: {...event, timestamp}
-        }
-        const proxyurl = "https://cors-anywhere.herokuapp.com/";
-        const httpHeaders = { 'Content-Type' : 'application/json', 'X-Requested-With': 'XMLHttpRequest'}
-        const myHeaders = new Headers(httpHeaders)
-        const url = "http://localhost:5000/event/";
-        const req = new Request(url, {method: 'POST', headers: myHeaders})
-
-        // fetch(url, {
-        //     method: 'post',
-        //     headers: {
-        //         'Accept': 'application/json, text/plain, */*',
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify(data)
-        // }).then(res=>{})
     }
 
     imgError(e){
