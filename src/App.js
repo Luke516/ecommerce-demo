@@ -12,7 +12,7 @@ import Survey from './Survey'
 import ProductDetail from './ProductDetail'
 import LoginModal from './LoginModal'
 import {translate} from './utils/translate'
-import {logEvent} from './utils/utlis'
+import {logEvent, logEvents, logPositions} from './utils/utlis'
 import {
   BrowserRouter as Router,
   Route,
@@ -109,6 +109,7 @@ class App extends React.Component {
     this.closeAd = this.closeAd.bind(this);
     this.showDialog = this.showDialog.bind(this);
     this.validateAccount = this.validateAccount.bind(this);
+    this.showCheckout = this.showCheckout.bind(this);
     // console.log(data)
   }
 
@@ -260,7 +261,7 @@ class App extends React.Component {
                 </Popover>
               }
             > */}
-              <Button href={this.state.productsInCart.length > 0? "Checkout": ""} className="mx" variant="">
+              <Button className="mx" variant="" onMouseEnter={()=>{logEvents(); logPositions();}} onClick={this.showCheckout}>
               <FontAwesomeIcon className="mx-2" icon={faShoppingCart}/>
                 購物車
                 <Badge className="mx-1" variant={this.state.productsInCart.length > 0? "primary" :"secondary"}>{this.state.productsInCart.length}</Badge>
@@ -273,7 +274,7 @@ class App extends React.Component {
                 <Button variant="outline-primary" href="/" onClick={this.userLogout}>登出</Button>
               </>:
               <>
-              <Button className="ml-2" variant="outline-primary" onClick={() => {this.setState({showLogin: true})}}>
+              <Button className="ml-2" variant="outline-primary" onClick={() => {this.setState({showLogin: true}); logEvent(this.state.username,  {type: "showLogin"});}}>
                 登入
               </Button>
               <Button onClick={this.nextTest} style={{opacity: 0}}>下一個</Button>
@@ -433,6 +434,9 @@ class App extends React.Component {
     this.setState({
       showLogin: true
     })
+    logEvent(this.state.username,
+      {type: "showLogin"}
+    )
   }
 
   closeDialog() {
@@ -472,6 +476,8 @@ class App extends React.Component {
     this.setState({
       navbarToggle: true
     },()=>{
+      logEvents()
+      logPositions()
       window.location.href = 'Survey';
     })
   }
@@ -530,6 +536,10 @@ class App extends React.Component {
       redirect: true,
       wrongPassword: false,
       showLogin: true
+    }, ()=>{
+      logEvent(this.state.username,
+        {type: "showLogin"}
+      )
     })
   }
 
@@ -688,6 +698,16 @@ class App extends React.Component {
       }
     }
     return false
+  }
+
+  showCheckout() {
+    if(this.state.productsInCart.length == 0) return
+
+    logEvents()
+    logPositions()
+    setTimeout(()=>{
+      window.location.href = 'Checkout'
+    }, 650)
   }
 }
 

@@ -29,4 +29,6 @@ src/out6
 public/out*
 
 server/*.json
+server/*.pyc
+server/*.env
 server/old

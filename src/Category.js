@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfo, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 import ProductRow from './ProductRow'
 import {translate} from './utils/translate'
-import {logEvent} from './utils/utlis'
+import {logEvent, logEvents, logPositions} from './utils/utlis'
 
 class Category extends React.Component {
 
@@ -172,7 +172,8 @@ class Category extends React.Component {
     }
 
     productClick(productId) {
-        console.log(productId)
+        logEvents()
+        logPositions()
         window.location.href = ('/Product?p=' + productId) 
     }
   
@@ -263,7 +264,7 @@ class Category extends React.Component {
                             this.state.targetSubCategoryData && subCategoryData.name == this.state.targetSubCategoryData.name?
                             <Tab.Pane key={this.state.targetSubCategoryData.name} eventKey={this.state.targetSubCategoryData.name} title={translate(this.state.targetSubCategoryData.name.split('/')[1])} >
                                 <TrackVisibility partialVisibility>
-                                    <ProductRow name={this.state.targetSubCategoryData.name} data={this.state.targetSubCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target targetProductId={this.props.targetProductId} orderMethod={this.state.orderMethod}/>
+                                    <ProductRow name={this.state.targetSubCategoryData.name} data={this.state.targetSubCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target targetProductId={this.props.targetProductId} controlProductId={this.props.controlProductId} orderMethod={this.state.orderMethod}/>
                                 </TrackVisibility>
                             </Tab.Pane>:
                             this.state.targetSubCategoryData && subCategoryData.displayName == "all"?

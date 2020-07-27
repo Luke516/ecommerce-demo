@@ -205,8 +205,8 @@ class Checkout extends React.Component {
                 this.state.productsInCart.map((product, index) => {
                     
                     return (
-                    <>
-                    <Row key={product.id} className="my-3 checkoutItem">
+                    <React.Fragment key={product.id}>
+                    <Row className="my-3 checkoutItem">
                         <Col md={1} className={"d-flex align-items-center justify-content-center"} style={{maxHeight: "90%"}}>
                             <input type="checkbox" className="normal-checkbox" checked={this.state.productsInCart[index].checked} onChange={()=>{this.toggleCheck(index)}}></input>
                         </Col>
@@ -228,7 +228,7 @@ class Checkout extends React.Component {
                         </Col>
                     </Row>
                     {index < this.state.productsInCart.length-1 && <hr className="my--4" style={{width: "100%", height: "1px", border: "none", backgroundColor: "rgba(0, 0, 0, 0.125)"}}/>}
-                    </>
+                    </React.Fragment>
                     )}
                 )
                 }

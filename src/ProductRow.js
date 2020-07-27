@@ -32,7 +32,15 @@ class ProductRow extends React.Component {
       const {cookies} = this.props
       let browsed = cookies.get('browsed')? cookies.get('browsed') : [];
       if(browsed.length < 4){
-        cookies.set('browsed', this.props.data.slice(0, this.state.count))
+        browsed = []
+        let browsing = this.props.data.slice(0, this.state.count)
+        for(let b of browsing){
+            if(b.id != this.props.targetProductId && b.id != this.props.controlProductId){
+                browsed.push(b)
+            }
+        }
+        cookies.set('browsed', browsed)
+        console.log(browsed)
       }
     }
   

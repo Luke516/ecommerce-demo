@@ -10,7 +10,7 @@ import SurveyProductCell from './SurveyProductCell'
 import ProductRow from './ProductRow'
 import data from './data/metadata_all_with_detail_img_3_empty.json';
 import flatData from './data/flat_products_list_zh.json';
-import { shuffle, logSurvey, logFinish } from './utils/utlis';
+import { shuffle, logSurvey, logFinish, logEvents } from './utils/utlis';
 import { translate } from './utils/translate';
 
 class Survey extends React.Component {
@@ -135,7 +135,7 @@ class Survey extends React.Component {
         list2 = shuffle(list2)
 
         this.state = {
-            questionId: 7,
+            questionId: 0,
             list1,
             list2,
             list3: targetProduct,
@@ -204,14 +204,12 @@ class Survey extends React.Component {
                     <div className="w-100 d-flex justify-content-center align-items-center flex-column" style={{height: "80%"}}>
                         <h2>恭喜！您已經完成了此任務。</h2>
                         <p className="mt-4">
-                            接下來，我們會請您回答五題簡單的問題。請憑您剛剛瀏覽網頁的印象來作答。
+                            {
+                                this.state.testId == "3"?
+                                "接下來，我們會請您回答八題簡單的問題。請憑您剛剛瀏覽網頁的印象來作答。" :
+                                "接下來，我們會請您回答五題簡單的問題。請憑您剛剛瀏覽網頁的印象來作答。"
+                            }
                         </p>
-                        {
-                            this.state.testId == "3" &&
-                            <p>
-                                注意：最後一次問卷將有八題而非五題
-                            </p>
-                        }
                         <button className="survey-btn" type="button" onClick={this.nextQuestion}>開始</button>
                     </div>
                     // </Col>
@@ -264,7 +262,7 @@ class Survey extends React.Component {
                     </div>
                     <Row className="my--2">
                         <Col xs={12} sm={6} md={4} lg={3} style={{paddingLeft: "5px", paddingRight: "5px"}}></Col>
-                        <SurveyProductCell hideOption key={this.state.list3.id} product={this.state.list3} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
+                        <SurveyProductCell hideOption key={this.state.list3.id} product={this.state.list3} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} handleClick={this.handleClick}/>
                         <Col xs={12} sm={6} md={4} lg={3}>
                             <div key={`inline-radio`} className="mb-3">
                                 <Form className="d-flex flex-column justify-content-center">
@@ -289,7 +287,7 @@ class Survey extends React.Component {
                     </div>
                     <Row className="my--2">
                     <Col xs={12} sm={6} md={4} lg={3} style={{paddingLeft: "5px", paddingRight: "5px"}}></Col>
-                        <SurveyProductCell hideOption key={this.state.list4.id} product={this.state.list4} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct}/>
+                        <SurveyProductCell hideOption key={this.state.list4.id} product={this.state.list4} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} handleClick={this.handleClick}/>
                         <Col xs={12} sm={6} md={4} lg={3} >
                             <div key={`inline-radio`} className="mb-3">
                                 <Form className="d-flex flex-column justify-content-center">
@@ -335,7 +333,6 @@ class Survey extends React.Component {
                         <h2>感謝您的回答！接下來將進行下一階段的實驗</h2>
                     }
                     {
-                        this.state.testId !== "3" &&
                         <button className="survey-btn" type="button"  size="lg" className="mx-1 my-2" style={{display: "block"}} onClick={() => {this.finish()}}>繼續</button> 
                     }
                 </div>
@@ -376,25 +373,25 @@ class Survey extends React.Component {
                         <Col md={4} className="d-flex flex-row">
                             <span>第一名：</span>
                             <DropdownButton variant="outline-secondary" id="dropdown-basic-button" title={this.state.answer61[0] == ""? "請選擇": this.state.answer61[0]}>
-                                <Dropdown.Item href="#/action-1" onSelect={()=>{let answer61 = this.state.answer61; answer61[0]="ReCaptcha"; this.setState({answer61: answer61.slice()})}}>ReCaptcha</Dropdown.Item>
-                                <Dropdown.Item href="#/action-2" onSelect={()=>{let answer61 = this.state.answer61; answer61[0]="TextCaptcha"; this.setState({answer61: answer61.slice()})}}>TextCaptcha</Dropdown.Item>
-                                <Dropdown.Item href="#/action-3" onSelect={()=>{let answer61 = this.state.answer61; answer61[0]="YouCaptcha"; this.setState({answer61: answer61.slice()})}}>YouCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer61 = this.state.answer61; answer61[0]="ReCaptcha"; this.setState({answer61: answer61.slice()})}}>ReCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer61 = this.state.answer61; answer61[0]="TextCaptcha"; this.setState({answer61: answer61.slice()})}}>TextCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer61 = this.state.answer61; answer61[0]="YouCaptcha"; this.setState({answer61: answer61.slice()})}}>YouCaptcha</Dropdown.Item>
                             </DropdownButton>
                         </Col>
                         <Col md={4} className="d-flex flex-row">
                             <span>第二名：</span>
                             <DropdownButton variant="outline-secondary" id="dropdown-basic-button" title={this.state.answer61[1] == ""? "請選擇": this.state.answer61[1]}>
-                                <Dropdown.Item href="#/action-1" onSelect={()=>{let answer61 = this.state.answer61; answer61[1]="ReCaptcha"; this.setState({answer61: answer61.slice()})}}>ReCaptcha</Dropdown.Item>
-                                <Dropdown.Item href="#/action-2" onSelect={()=>{let answer61 = this.state.answer61; answer61[1]="TextCaptcha"; this.setState({answer61: answer61.slice()})}}>TextCaptcha</Dropdown.Item>
-                                <Dropdown.Item href="#/action-3" onSelect={()=>{let answer61 = this.state.answer61; answer61[1]="YouCaptcha"; this.setState({answer61: answer61.slice()})}}>YouCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer61 = this.state.answer61; answer61[1]="ReCaptcha"; this.setState({answer61: answer61.slice()})}}>ReCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer61 = this.state.answer61; answer61[1]="TextCaptcha"; this.setState({answer61: answer61.slice()})}}>TextCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer61 = this.state.answer61; answer61[1]="YouCaptcha"; this.setState({answer61: answer61.slice()})}}>YouCaptcha</Dropdown.Item>
                             </DropdownButton>
                         </Col>
                         <Col md={4} className="d-flex flex-row">
                             <span>第三名：</span>
                             <DropdownButton variant="outline-secondary" id="dropdown-basic-button" title={this.state.answer61[2] == ""? "請選擇": this.state.answer61[2]}>
-                                <Dropdown.Item href="#/action-1" onSelect={()=>{let answer61 = this.state.answer61; answer61[2]="ReCaptcha"; this.setState({answer61: answer61.slice()})}}>ReCaptcha</Dropdown.Item>
-                                <Dropdown.Item href="#/action-2" onSelect={()=>{let answer61 = this.state.answer61; answer61[2]="TextCaptcha"; this.setState({answer61: answer61.slice()})}}>TextCaptcha</Dropdown.Item>
-                                <Dropdown.Item href="#/action-3" onSelect={()=>{let answer61 = this.state.answer61; answer61[2]="YouCaptcha"; this.setState({answer61: answer61.slice()})}}>YouCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer61 = this.state.answer61; answer61[2]="ReCaptcha"; this.setState({answer61: answer61.slice()})}}>ReCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer61 = this.state.answer61; answer61[2]="TextCaptcha"; this.setState({answer61: answer61.slice()})}}>TextCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer61 = this.state.answer61; answer61[2]="YouCaptcha"; this.setState({answer61: answer61.slice()})}}>YouCaptcha</Dropdown.Item>
                             </DropdownButton>
                         </Col>
                     </Row>
@@ -403,25 +400,25 @@ class Survey extends React.Component {
                         <Col md={4} className="d-flex flex-row">
                             <span>第一名：</span>
                             <DropdownButton variant="outline-secondary" id="dropdown-basic-button" title={this.state.answer62[0] == ""? "請選擇": this.state.answer62[0]}>
-                                <Dropdown.Item href="#/action-1" onSelect={()=>{let answer62 = this.state.answer62; answer62[0]="ReCaptcha"; this.setState({answer62: answer62.slice()})}}>ReCaptcha</Dropdown.Item>
-                                <Dropdown.Item href="#/action-2" onSelect={()=>{let answer62 = this.state.answer62; answer62[0]="TextCaptcha"; this.setState({answer62: answer62.slice()})}}>TextCaptcha</Dropdown.Item>
-                                <Dropdown.Item href="#/action-3" onSelect={()=>{let answer62 = this.state.answer62; answer62[0]="YouCaptcha"; this.setState({answer62: answer62.slice()})}}>YouCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer62 = this.state.answer62; answer62[0]="ReCaptcha"; this.setState({answer62: answer62.slice()})}}>ReCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer62 = this.state.answer62; answer62[0]="TextCaptcha"; this.setState({answer62: answer62.slice()})}}>TextCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer62 = this.state.answer62; answer62[0]="YouCaptcha"; this.setState({answer62: answer62.slice()})}}>YouCaptcha</Dropdown.Item>
                             </DropdownButton>
                         </Col>
                         <Col md={4} className="d-flex flex-row">
                             <span>第二名：</span>
                             <DropdownButton variant="outline-secondary" id="dropdown-basic-button" title={this.state.answer62[1] == ""? "請選擇": this.state.answer62[1]}>
-                                <Dropdown.Item href="#/action-1" onSelect={()=>{let answer62 = this.state.answer62; answer62[1]="ReCaptcha"; this.setState({answer62: answer62.slice()})}}>ReCaptcha</Dropdown.Item>
-                                <Dropdown.Item href="#/action-2" onSelect={()=>{let answer62 = this.state.answer62; answer62[1]="TextCaptcha"; this.setState({answer62: answer62.slice()})}}>TextCaptcha</Dropdown.Item>
-                                <Dropdown.Item href="#/action-3" onSelect={()=>{let answer62 = this.state.answer62; answer62[1]="YouCaptcha"; this.setState({answer62: answer62.slice()})}}>YouCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer62 = this.state.answer62; answer62[1]="ReCaptcha"; this.setState({answer62: answer62.slice()})}}>ReCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer62 = this.state.answer62; answer62[1]="TextCaptcha"; this.setState({answer62: answer62.slice()})}}>TextCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer62 = this.state.answer62; answer62[1]="YouCaptcha"; this.setState({answer62: answer62.slice()})}}>YouCaptcha</Dropdown.Item>
                             </DropdownButton>
                         </Col>
                         <Col md={4} className="d-flex flex-row">
                             <span>第三名：</span>
                             <DropdownButton variant="outline-secondary" id="dropdown-basic-button" title={this.state.answer62[2] == ""? "請選擇": this.state.answer62[2]}>
-                                <Dropdown.Item href="#/action-1" onSelect={()=>{let answer62 = this.state.answer62; answer62[2]="ReCaptcha"; this.setState({answer62: answer62.slice()})}}>ReCaptcha</Dropdown.Item>
-                                <Dropdown.Item href="#/action-2" onSelect={()=>{let answer62 = this.state.answer62; answer62[2]="TextCaptcha"; this.setState({answer62: answer62.slice()})}}>TextCaptcha</Dropdown.Item>
-                                <Dropdown.Item href="#/action-3" onSelect={()=>{let answer62 = this.state.answer62; answer62[2]="YouCaptcha"; this.setState({answer62: answer62.slice()})}}>YouCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer62 = this.state.answer62; answer62[2]="ReCaptcha"; this.setState({answer62: answer62.slice()})}}>ReCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer62 = this.state.answer62; answer62[2]="TextCaptcha"; this.setState({answer62: answer62.slice()})}}>TextCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer62 = this.state.answer62; answer62[2]="YouCaptcha"; this.setState({answer62: answer62.slice()})}}>YouCaptcha</Dropdown.Item>
                             </DropdownButton>
                         </Col>
                     </Row>
@@ -430,25 +427,25 @@ class Survey extends React.Component {
                         <Col md={4} className="d-flex flex-row">
                             <span>第一名：</span>
                             <DropdownButton variant="outline-secondary" id="dropdown-basic-button" title={this.state.answer63[0] == ""? "請選擇": this.state.answer63[0]}>
-                                <Dropdown.Item href="#/action-1" onSelect={()=>{let answer63 = this.state.answer63; answer63[0]="ReCaptcha"; this.setState({answer63: answer63.slice()})}}>ReCaptcha</Dropdown.Item>
-                                <Dropdown.Item href="#/action-2" onSelect={()=>{let answer63 = this.state.answer63; answer63[0]="TextCaptcha"; this.setState({answer63: answer63.slice()})}}>TextCaptcha</Dropdown.Item>
-                                <Dropdown.Item href="#/action-3" onSelect={()=>{let answer63 = this.state.answer63; answer63[0]="YouCaptcha"; this.setState({answer63: answer63.slice()})}}>YouCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer63 = this.state.answer63; answer63[0]="ReCaptcha"; this.setState({answer63: answer63.slice()})}}>ReCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer63 = this.state.answer63; answer63[0]="TextCaptcha"; this.setState({answer63: answer63.slice()})}}>TextCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer63 = this.state.answer63; answer63[0]="YouCaptcha"; this.setState({answer63: answer63.slice()})}}>YouCaptcha</Dropdown.Item>
                             </DropdownButton>
                         </Col>
                         <Col md={4} className="d-flex flex-row">
                             <span>第二名：</span>
                             <DropdownButton variant="outline-secondary" id="dropdown-basic-button" title={this.state.answer63[1] == ""? "請選擇": this.state.answer63[1]}>
-                                <Dropdown.Item href="#/action-1" onSelect={()=>{let answer63 = this.state.answer63; answer63[1]="ReCaptcha"; this.setState({answer63: answer63.slice()})}}>ReCaptcha</Dropdown.Item>
-                                <Dropdown.Item href="#/action-2" onSelect={()=>{let answer63 = this.state.answer63; answer63[1]="TextCaptcha"; this.setState({answer63: answer63.slice()})}}>TextCaptcha</Dropdown.Item>
-                                <Dropdown.Item href="#/action-3" onSelect={()=>{let answer63 = this.state.answer63; answer63[1]="YouCaptcha"; this.setState({answer63: answer63.slice()})}}>YouCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer63 = this.state.answer63; answer63[1]="ReCaptcha"; this.setState({answer63: answer63.slice()})}}>ReCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer63 = this.state.answer63; answer63[1]="TextCaptcha"; this.setState({answer63: answer63.slice()})}}>TextCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer63 = this.state.answer63; answer63[1]="YouCaptcha"; this.setState({answer63: answer63.slice()})}}>YouCaptcha</Dropdown.Item>
                             </DropdownButton>
                         </Col>
                         <Col md={4} className="d-flex flex-row">
                             <span>第三名：</span>
                             <DropdownButton variant="outline-secondary" id="dropdown-basic-button" title={this.state.answer63[2] == ""? "請選擇": this.state.answer63[2]}>
-                                <Dropdown.Item href="#/action-1" onSelect={()=>{let answer63 = this.state.answer63; answer63[2]="ReCaptcha"; this.setState({answer63: answer63.slice()})}}>ReCaptcha</Dropdown.Item>
-                                <Dropdown.Item href="#/action-2" onSelect={()=>{let answer63 = this.state.answer63; answer63[2]="TextCaptcha"; this.setState({answer63: answer63.slice()})}}>TextCaptcha</Dropdown.Item>
-                                <Dropdown.Item href="#/action-3" onSelect={()=>{let answer63 = this.state.answer63; answer63[2]="YouCaptcha"; this.setState({answer63: answer63.slice()})}}>YouCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer63 = this.state.answer63; answer63[2]="ReCaptcha"; this.setState({answer63: answer63.slice()})}}>ReCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer63 = this.state.answer63; answer63[2]="TextCaptcha"; this.setState({answer63: answer63.slice()})}}>TextCaptcha</Dropdown.Item>
+                                <Dropdown.Item href="#" onSelect={()=>{let answer63 = this.state.answer63; answer63[2]="YouCaptcha"; this.setState({answer63: answer63.slice()})}}>YouCaptcha</Dropdown.Item>
                             </DropdownButton>
                         </Col>
                     </Row>
@@ -554,7 +551,7 @@ class Survey extends React.Component {
             })
         }
         let nextQuestionId = this.state.questionId + 1
-        if(nextQuestionId == 6){
+        if(nextQuestionId == 6 && this.state.testId == "3") {
             nextQuestionId = 7
         }
         if(this.state.questionId == 9){
@@ -582,18 +579,27 @@ class Survey extends React.Component {
         })
         this.logResult()
 
+        if(this.state.testId == "3"){
+            return
+        }
+
         document.title = 'KocoShop';
         this.changeFavicon("/shopping-cart.png");
 
-        this.props.nextTest()
-        this.props.clearCart()
-        this.props.history.push('') 
+        setTimeout(()=>{
+            this.props.nextTest()
+            this.props.clearCart()
+            this.props.history.push('') 
+        }, 250)
     }
 
     logResult() {
 
         logSurvey(this.state)
-        logFinish()
+        logEvents()
+        setTimeout(() => {
+            logFinish(this.state)
+        }, 200)
     }
 
     handleClick(productId, selected) {
@@ -613,7 +619,7 @@ class Survey extends React.Component {
             answer.splice(index, 1)
         }
 
-        console.log(answer)
+        // console.log(answer)
 
         if(this.state.questionId == 1){
             this.setState({answer1: answer.slice()})

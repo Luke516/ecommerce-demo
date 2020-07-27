@@ -2,16 +2,18 @@ from io import BytesIO
 
 import requests
 from flask import Flask, request, json, jsonify, render_template
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from datetime import datetime
 
 app = Flask(__name__)
 CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 # Uncomment this line if you are making a Cross domain request
 # CORS(app)
 
 userEvents = {}
+userPositions = {}
 
 @app.route('/')
 def index():
@@ -24,6 +26,7 @@ def hello_world():
 
 
 @app.route('/log/', methods=['POST'])
+@cross_origin()
 def log():
     # Decoding and pre-processing base64 image
     payload = request.json
@@ -48,6 +51,7 @@ def log():
 
 
 @app.route('/event/', methods=['POST'])
+@cross_origin()
 def event():
     # Decoding and pre-processing base64 image
     payload = request.json
@@ -64,10 +68,11 @@ def event():
     return "QWQ"
 
 @app.route('/events/', methods=['POST'])
+@cross_origin()
 def events():
     # Decoding and pre-processing base64 image
     events = request.json
-    # print(payload)
+    print(len(events))
     for e in events:
         username = e["username"]
         event = e["event"]
@@ -79,7 +84,26 @@ def events():
     # print(userEvents[username])
     return "QWQ"
 
+@app.route('/positions/', methods=['POST'])
+@cross_origin()
+def positions():
+    # Decoding and pre-processing base64 image
+    events = request.json
+    print(len(events))
+    # print(payload)
+    for e in events:
+        username = e["username"]
+        event = e["event"]
+        if username not in userPositions:
+            userPositions[username] = [event]
+        else:
+            userPositions[username].append(event)
+
+    # print(userEvents[username])
+    return "QWQ"
+
 @app.route('/finish/', methods=['POST'])
+@cross_origin()
 def finish():
     # Decoding and pre-processing base64 image
     payload = request.json
@@ -91,5 +115,11 @@ def finish():
     with open(logfile, "a") as writer:
         json.dump(events, writer)
 
+    positions = userPositions[username]
+    logfile2 = date + "_" + payload["targetCategory"] + '_position_' + username + ".json"
+    with open(logfile2, "a") as writer:
+        json.dump(positions, writer)
+
     userEvents[username] = []
+    userPositions[username] = []
     return "QWQ"

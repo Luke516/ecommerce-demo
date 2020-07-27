@@ -9,7 +9,7 @@ import { Container, Row, Col, Carousel, Button, Card, CardDeck, InputGroup, Form
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfo, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 import { translate } from './utils/translate';
-import { logEvent, logPosition } from './utils/utlis'
+import { logEvent, logPosition, logEvents, logPositions } from './utils/utlis'
 
 class ProductCell extends React.Component {
   
@@ -157,8 +157,9 @@ class ProductCell extends React.Component {
             product: this.props.product.id,
             type: "detailClick"
         })
-
-        window.location.href = ('/Product?p=' + this.props.product.id) 
+        logEvents()
+        logPositions()
+        // window.location.href = ('/Product?p=' + this.props.product.id) 
     }
 
     isInViewport(element, offset = 0) {

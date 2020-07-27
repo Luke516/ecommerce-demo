@@ -25,21 +25,26 @@ export function logEvent(username, event){
   const timestamp = Date.now();
   let data={
       username,
-      timestamp,
-      event
+      event: {
+        ...event,
+        timestamp
+      }
   }
-  if(events.length < 1000){
+  if(events.length < 200){
     events.push(data)
   }
   else{
+    events.push(data)
     logEvents()
   }
+  console.log(events.length)
 }
 
 export function logEvents(){
-  let data = events
-
+  let data = events.slice()
+  console.log("log events " + data.length)
   const url = serverUrl + "events/";
+  events = []
 
   fetch(url, {
       method: 'post',
@@ -67,7 +72,7 @@ export function logSurvey(data) {
   })
 }
 
-export function logFinish() {
+export function logFinish(data) {
   
   const url = serverUrl + "finish/";
   fetch(url, {
@@ -76,7 +81,10 @@ export function logFinish() {
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json'
       },
-      body: JSON.stringify({})
+      body: JSON.stringify({
+        username: data.username,
+        targetCategory: data.targetCategory
+      })
   }).then(res=>{
     // res.json()
   })
@@ -86,21 +94,26 @@ export function logPosition(username, timestamp, event) {
   
   let data={
       username,
-      timestamp,
-      event
+      event: {
+        ...event,
+        timestamp
+      }
   }
-  if(positions.length < 1000){
+  if(positions.length < 200){
     positions.push(data)
   }
   else{
+    positions.push(data)
     logPositions()
   }
 }
 
 export function logPositions() {
-  let data = positions
+  console.log("log positions " + positions.length)
+  let data = positions.slice()
+  positions = []
 
-  const url = serverUrl + "events/";
+  const url = serverUrl + "positions/";
 
   fetch(url, {
       method: 'post',
