@@ -169,6 +169,7 @@ class Survey extends React.Component {
         this.finish = this.finish.bind(this);
         this.otherFactor = this.otherFactor.bind(this);
         this.logResult = this.logResult.bind(this);
+        this.showSummary = this.showSummary.bind(this);
 
         document.title = '問卷！';
         this.changeFavicon("/logo192.png");
@@ -195,7 +196,7 @@ class Survey extends React.Component {
                         ((this.state.questionId > 0 && this.state.questionId < 6) || (this.state.questionId > 6)) &&
                         <Col xs={12} className="d-flex flex-row justify-content-center align-items-center my-2">
                             {/* <h2 className="mt-4">{translate("Survey") + " (" + (parseInt(this.state.questionId)-1)+ "/5)"}</h2> */}
-                            <h2 className="mt--4">{"第" + (Math.min(parseInt(this.state.questionId),6))+ "題，共" + (this.state.testId == "3"?"8":"5") + "題"}</h2>
+                            <h2 className="mt--4">{"第" + (Math.min(parseInt(this.state.questionId),5) + Math.max(parseInt(this.state.questionId)-6, 0))+ "題，共" + (this.state.testId == "3"?"8":"5") + "題"}</h2>
                         </Col>
                     }
                 </Row>
@@ -329,17 +330,21 @@ class Survey extends React.Component {
                 <div className="w-100 justify-content-center align-items-center flex-column" style={{height: "80%", display: this.state.questionId == 6? "flex": "none"}}>
                     {
                         this.state.testId == "3"?
-                        <h2>本次實驗已經全部完成，感謝您的協助！</h2> :
+                        <h2>本次實驗已經全部完成，感謝您的協助！ (請先別關閉本頁面)</h2> :
                         <h2>感謝您的回答！接下來將進行下一階段的實驗</h2>
                     }
                     {
                         <button className="survey-btn" type="button"  size="lg" className="mx-1 my-2" style={{display: "block"}} onClick={() => {this.finish()}}>繼續</button> 
                     }
+                    {
+                        this.state.testId == "3" &&
+                        <button className="survey-btn" type="button"  size="lg" className="mx-1 my-2" style={{display: "block", opacity: "0"}} onClick={() => {this.showSummary()}}>繼續</button> 
+                    }
                 </div>
                 <div className="w-100 justify-content-center align-items-center flex-column" style={{ display: this.state.questionId > 6? "flex": "none"}}>
                 <Row className="my-4" style={{display: this.state.questionId > 6? "block": "none"}}>
                     <div className="d-flex flex-column align-items-center">
-                        <h5>在三次不同的任務中，我們分別採用了三種不同的驗證碼 (CAPTCHA)，如下圖：</h5>
+                        <h5>在三次不同的任務中，我們在登入時分別採用了三種不同的驗證碼 (CAPTCHA)，如下圖：</h5>
                     </div>
                     <Row className="my-3">
                         <Col md={4} className="px-1">
@@ -369,7 +374,7 @@ class Survey extends React.Component {
                     </Row>
                     <hr className="my-4" style={{width: "100%", height: "1px", border: "none", backgroundColor: "gray"}}/>
                     <Row className="my-4" style={{display: this.state.questionId == 7 ? "flex": "none"}}>
-                        <Col className="mb-2" md={12}><h4>請將這三種驗證碼按＂解題難易度＂排名</h4></Col>
+                        <Col className="mb-2" md={12}><h4>請將這三種驗證碼按＂解題難易度＂排名　(最簡單到最難)</h4></Col>
                         <Col md={4} className="d-flex flex-row">
                             <span>第一名：</span>
                             <DropdownButton variant="outline-secondary" id="dropdown-basic-button" title={this.state.answer61[0] == ""? "請選擇": this.state.answer61[0]}>
@@ -396,7 +401,7 @@ class Survey extends React.Component {
                         </Col>
                     </Row>
                     <Row className="my-4" style={{display: this.state.questionId == 8 ? "flex": "none"}}>
-                        <Col className="mb-2" md={12}><h4>請將這三種驗證碼按＂解題成就感＂排名</h4></Col>
+                        <Col className="mb-2" md={12}><h4>請將這三種驗證碼按＂解題成就感＂排名　(最有成就感到最沒有)</h4></Col>
                         <Col md={4} className="d-flex flex-row">
                             <span>第一名：</span>
                             <DropdownButton variant="outline-secondary" id="dropdown-basic-button" title={this.state.answer62[0] == ""? "請選擇": this.state.answer62[0]}>
@@ -423,7 +428,7 @@ class Survey extends React.Component {
                         </Col>
                     </Row>
                     <Row className="my-4" style={{display: this.state.questionId == 9 ? "flex": "none"}}>
-                        <Col className="mb-2" md={12}><h4>請將這三種驗證碼按＂您個人的喜好＂排名</h4></Col>
+                        <Col className="mb-2" md={12}><h4>請將這三種驗證碼按＂您個人的喜好＂排名　(最喜歡到最不喜歡)</h4></Col>
                         <Col md={4} className="d-flex flex-row">
                             <span>第一名：</span>
                             <DropdownButton variant="outline-secondary" id="dropdown-basic-button" title={this.state.answer63[0] == ""? "請選擇": this.state.answer63[0]}>
@@ -450,6 +455,92 @@ class Survey extends React.Component {
                         </Col>
                     </Row>
                 </Row>
+                </div>
+                <div className="w-100 justify-content-center align-items-center flex-column" style={{ display: this.state.questionId == -87? "flex": "none"}}>
+                    <div className="w-100 d-flex flex-column align-items-center">
+                        <h5>在三次不同的任務中，我們在登入時分別採用了三種不同的驗證碼 (CAPTCHA)，如下圖：</h5>
+                    </div>
+                    <Row className="w-100 my-3">
+                        <Col md={4} className="px-1">
+                            <h5>TextCaptcha</h5>
+                            <span>文字驗證碼，最傳統的驗證碼形式。</span><br/>
+                            <span>題目為輸入經過處理的文字</span>
+                            <div className="mt-2" style={{minHeight: "360px"}}>
+                                <img width="240" src="https://i.imgur.com/Fb80XyH.jpg"></img>
+                            </div>
+                        </Col>
+                        <Col md={4} className="px-1">
+                            <h5>ReCaptcha</h5>
+                            <span>Google所提出的圖像驗證碼</span><br/>
+                            <span>題目為找出指定類型的照片</span>
+                            <div className="mt-2" style={{minHeight: "360px"}}>
+                                <img width="240" src="https://i.imgur.com/yAaN0xC.jpg"></img>
+                            </div>
+                        </Col>
+                        <Col md={4} className="px-1">
+                            <h5>YouCaptcha</h5>
+                            <span>與ReCaptcha類似的圖像驗證碼</span><br/>
+                            <span>題目為找出相同物品的圖片</span>
+                            <div className="mt-2" style={{minHeight: "360px"}}>
+                                <img width="240" src="https://i.imgur.com/9CmPnPr.jpg"></img>
+                            </div>
+                        </Col>
+                    </Row>
+                    <hr className="my-4" style={{width: "100%", height: "1px", border: "none", backgroundColor: "gray"}}/>
+                    <Row className="my-4">
+                        <Col className="mb-2" md={12}><h4>請將這三種驗證碼按＂解題難易度＂排名　(最簡單到最難)</h4></Col>
+                        <Col md={4} className="d-flex flex-row">
+                            <span>第一名：</span>
+                            <DropdownButton variant="outline-secondary" id="dropdown-basic-button" title={this.state.answer61[0] == ""? "請選擇": this.state.answer61[0]}>
+                            </DropdownButton>
+                        </Col>
+                        <Col md={4} className="d-flex flex-row">
+                            <span>第二名：</span>
+                            <DropdownButton variant="outline-secondary" id="dropdown-basic-button" title={this.state.answer61[1] == ""? "請選擇": this.state.answer61[1]}>
+                            </DropdownButton>
+                        </Col>
+                        <Col md={4} className="d-flex flex-row">
+                            <span>第三名：</span>
+                            <DropdownButton variant="outline-secondary" id="dropdown-basic-button" title={this.state.answer61[2] == ""? "請選擇": this.state.answer61[2]}>
+                            </DropdownButton>
+                        </Col>
+                    </Row>
+                    <Row className="my-4" >
+                        <Col className="mb-2" md={12}><h4>請將這三種驗證碼按＂解題成就感＂排名　(最有成就感到最沒有)</h4></Col>
+                        <Col md={4} className="d-flex flex-row">
+                            <span>第一名：</span>
+                            <DropdownButton variant="outline-secondary" id="dropdown-basic-button" title={this.state.answer62[0] == ""? "請選擇": this.state.answer62[0]}>
+                            </DropdownButton>
+                        </Col>
+                        <Col md={4} className="d-flex flex-row">
+                            <span>第二名：</span>
+                            <DropdownButton variant="outline-secondary" id="dropdown-basic-button" title={this.state.answer62[1] == ""? "請選擇": this.state.answer62[1]}>
+                            </DropdownButton>
+                        </Col>
+                        <Col md={4} className="d-flex flex-row">
+                            <span>第三名：</span>
+                            <DropdownButton variant="outline-secondary" id="dropdown-basic-button" title={this.state.answer62[2] == ""? "請選擇": this.state.answer62[2]}>
+                            </DropdownButton>
+                        </Col>
+                    </Row>
+                    <Row className="my-4" >
+                        <Col className="mb-2" md={12}><h4>請將這三種驗證碼按＂您個人的喜好＂排名　(最喜歡到最不喜歡)</h4></Col>
+                        <Col md={4} className="d-flex flex-row">
+                            <span>第一名：</span>
+                            <DropdownButton variant="outline-secondary" id="dropdown-basic-button" title={this.state.answer63[0] == ""? "請選擇": this.state.answer63[0]}>
+                            </DropdownButton>
+                        </Col>
+                        <Col md={4} className="d-flex flex-row">
+                            <span>第二名：</span>
+                            <DropdownButton variant="outline-secondary" id="dropdown-basic-button" title={this.state.answer63[1] == ""? "請選擇": this.state.answer63[1]}>
+                            </DropdownButton>
+                        </Col>
+                        <Col md={4} className="d-flex flex-row">
+                            <span>第三名：</span>
+                            <DropdownButton variant="outline-secondary" id="dropdown-basic-button" title={this.state.answer63[2] == ""? "請選擇": this.state.answer63[2]}>
+                            </DropdownButton>
+                        </Col>
+                    </Row>
                 </div>
                 {
                     this.state.empty &&
@@ -494,12 +585,6 @@ class Survey extends React.Component {
     }
 
     checkValid() {
-        if(this.state.questionId == 1 && this.state.answer1.length < 1){
-            return false
-        }
-        if(this.state.questionId == 2 && this.state.answer2.length < 1){
-            return false
-        }
         if(this.state.questionId == 3 && this.state.answer3 == -1){
             return false
         }
@@ -656,6 +741,12 @@ class Survey extends React.Component {
                 answer5: answer5
             })
         }
+    }
+
+    showSummary() {
+        this.setState({
+            questionId: -87
+        })
     }
 }
 

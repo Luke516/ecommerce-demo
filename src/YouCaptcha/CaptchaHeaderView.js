@@ -55,7 +55,7 @@ function CaptchaHeaderView(props) {
         <> 
         <Row className={(showAd&&originImgLoad)?"my-4 captcha-row":"title captcha-row"}>
             <div className={"youcaptcha-image-container"} style={{width: "110px"}}>
-                <img className={(props.success&&originImgLoad)? "slide" : "youcaptcha-hide"} src={props.result.origin} />
+                <img className={(props.success&&originImgLoad)? "youcaptcha-slide" : "youcaptcha-hide"} src={props.result.origin} />
                 <img className={(props.success&&originImgLoad)? "slideFade" : "youcaptcha-img"} src={loading? "": data.targetCaptcha.question} />
                 <div className={props.success? "check-shift" : ""} style={{width: "100px", height: "100px", zIndex: "200"}}>
                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" style={{display: props.success? "inline-block": "none", zIndex:"200"}}>

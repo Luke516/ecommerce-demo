@@ -42,7 +42,7 @@ export function translate(text) {
         "Portable Audio & Video":"行動視聽裝置",
         "Office Electronics":"辦公室用品",
         "Home Audio":"家庭音響",
-        "Headphones":"耳機",
+        "Headphones":"耳機/音響",
         "Cell Phones & Accessories":"手機/配件",
         "GPS, Finders & Accessories":"GPS定位裝置/配件",
         "Camera & Photo":"攝影器材",

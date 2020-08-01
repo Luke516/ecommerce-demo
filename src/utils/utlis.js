@@ -37,7 +37,7 @@ export function logEvent(username, event){
     events.push(data)
     logEvents()
   }
-  console.log(events.length)
+  // console.log(events.length)
 }
 
 export function logEvents(){

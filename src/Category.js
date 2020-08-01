@@ -5,6 +5,7 @@ import priceData from './data/prices2All.json';
 
 import TrackVisibility from 'react-on-screen';
 import queryString from 'query-string';
+import {withRouter} from 'react-router-dom'
 import { Container, Row, Tabs, Tab, Nav, Dropdown, Col, Carousel, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfo, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
@@ -47,11 +48,20 @@ class Category extends React.Component {
             subCategoryList[i].data = this.sortProducts(subCategoryData.data, orderMethod, order)
         }
 
+        logEvent(this.props.username,{
+            type: "reorder",
+            method: orderMethod + "_" + order
+        })
+
         this.setState({
             targetSubCategoryData: Object.assign(targetSubCategoryData),
             subCategoryList: subCategoryList.slice(),
             orderMethod,
             order
+        }, ()=>{
+            this.props.history.push({
+                search: '?QWQ=' + this.state.order
+            })
         })
     }
 
@@ -119,6 +129,28 @@ class Category extends React.Component {
         return allSubCategoryData
     }
 
+    handleBannerSelect(bannerId) {
+
+        logEvent(this.props.username,{
+            type: "banner select",
+            bannerId
+        })
+    }
+
+    handleBannerClick(e){
+        logEvent(this.props.username,{
+            type: "banner click"
+        })
+    }
+
+    handleBannerMouse(actionType, data) {
+        // console.log(actionType)
+        logEvent(this.props.username,{
+            type: "banner mouse" + actionType,
+            data
+        })
+    }
+
     getInitState() {
         let targetProductData = flatData[this.props.targetProductId]
         targetProductData.id = this.props.targetProductId
@@ -163,8 +195,13 @@ class Category extends React.Component {
       this.sortProducts = this.sortProducts.bind(this)
       this.reorderProducts = this.reorderProducts.bind(this)
       this.productClick = this.productClick.bind(this)
+      this.clickSubCategory = this.clickSubCategory.bind(this)
+      this.handleBannerSelect = this.handleBannerSelect.bind(this)
+      this.handleBannerClick = this.handleBannerClick.bind(this)
+      this.handleBannerMouse = this.handleBannerMouse.bind(this)
       
       let params = queryString.parse(this.props.location.search)
+    //   console.log(params)
       this.state = {
         ...this.getInitState(),
         subCategory: params.subCategory
@@ -176,8 +213,21 @@ class Category extends React.Component {
         logPositions()
         window.location.href = ('/Product?p=' + productId) 
     }
+
+    clickSubCategory(subCategory){
+        // console.log(subCategory)
+        // console.log(this.props.name)
+        // console.log(this.props.location.pathname)
+        if(this.props.location.pathname.split('/').length > 2){
+            this.props.history.replace(subCategory) 
+        }else{
+            this.props.history.replace(this.props.name + '/' + subCategory) 
+        }
+    }
   
     render (){
+        console.log(this.props.location.pathname.split('/')[2])
+
         let targetProductPrice = parseInt(this.state.targetProductData.price * 31)
         if(targetProductPrice % 100 < 20){
             targetProductPrice = targetProductPrice - (targetProductPrice%100) - 1;
@@ -212,14 +262,15 @@ class Category extends React.Component {
                         <h2 className="mb-4 mt-4">{translate(this.props.name)}</h2>
                     </div>
                 </div>
-                <Tab.Container defaultActiveKey={this.state.subCategoryList[0].name} id="uncontrolled-tab-example">
+                {/* <Tab.Container defaultActiveKey={this.state.subCategoryList[0].name} id="uncontrolled-tab-example"> */}
+                <Tab.Container defaultActiveKey={this.state.subCategoryList[0].name.split('/')[1]} activeKey={this.props.location.pathname.split('/')[2]} id="uncontrolled-tab-example">
                 <Nav variant="tabs" className="flex--column">
                     <Col md={10} style={{display: "flex", flexDirection: "row", flexWrap: "wrap"}}>
                     {
                         this.state.subCategoryList.map(subCategoryData => {
                             return (
-                            <Nav.Item key={subCategoryData.name} title={translate(subCategoryData.name.split('/')[1])} >
-                                <Nav.Link className={" btnq btnq-outline-primary"} eventKey={subCategoryData.name}>{translate(subCategoryData.name.split('/')[1])}</Nav.Link>
+                            <Nav.Item key={subCategoryData.name.split('/')[1]} title={translate(subCategoryData.name.split('/')[1])} >
+                                <Nav.Link className={" btnq btnq-outline-primary"} eventKey={subCategoryData.name.split('/')[1]} onClick={()=>{this.clickSubCategory(subCategoryData.name.split('/')[1])}}>{translate(subCategoryData.name.split('/')[1])}</Nav.Link>
                             </Nav.Item>
                             )
                         })
@@ -262,16 +313,16 @@ class Category extends React.Component {
                     this.state.subCategoryList.map((subCategoryData) => {
                         return (
                             this.state.targetSubCategoryData && subCategoryData.name == this.state.targetSubCategoryData.name?
-                            <Tab.Pane key={this.state.targetSubCategoryData.name} eventKey={this.state.targetSubCategoryData.name} title={translate(this.state.targetSubCategoryData.name.split('/')[1])} >
+                            <Tab.Pane key={this.state.targetSubCategoryData.name.split('/')[1]} eventKey={this.state.targetSubCategoryData.name.split('/')[1]} title={translate(this.state.targetSubCategoryData.name.split('/')[1])} >
                                 <TrackVisibility partialVisibility>
-                                    <ProductRow name={this.state.targetSubCategoryData.name} data={this.state.targetSubCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target targetProductId={this.props.targetProductId} controlProductId={this.props.controlProductId} orderMethod={this.state.orderMethod}/>
+                                    <ProductRow name={this.state.targetSubCategoryData.name} data={this.state.targetSubCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target targetProductId={this.props.targetProductId} controlProductId={this.props.controlProductId} orderMethod={this.state.orderMethod} active={this.props.location.pathname.split('/')[2] === this.state.targetSubCategoryData.name.split('/')[1]}/>
                                 </TrackVisibility>
                             </Tab.Pane>:
                             this.state.targetSubCategoryData && subCategoryData.displayName == "all"?
-                            <Tab.Pane key={subCategoryData.name} eventKey={subCategoryData.name} title={translate(subCategoryData.name.split('/')[1])} >
+                            <Tab.Pane key={subCategoryData.name.split('/')[1]} eventKey={subCategoryData.name.split('/')[1]} title={translate(subCategoryData.name.split('/')[1])} >
                                 <Container className="my-4 w-100 d-flex flex-row" style={{minHeight: "360px"}}>
-                                    <Carousel className="w-100" indicators={false}>
-                                        <Carousel.Item>
+                                    <Carousel className="w-100" indicators={false} onSelect={this.handleBannerSelect} onClick={this.handleBannerClick}>
+                                        <Carousel.Item onMouseEnter={()=>{this.handleBannerMouse("enter", this.state.targetProductData)}} onMouseLeave={()=>{this.handleBannerMouse("leave", this.state.targetProductData)}} >
                                             <Row className="mt-4 justify-content-center" style={{minHeight: "360px", minWidth: "320px"}}>
                                                 <Col sm={5} className={"d-flex justify-content-center flex-column"} 
                                                 style={{maxHeight: "320px", maxWidth: "320px", padding: "1rem"}}>
@@ -300,7 +351,7 @@ class Category extends React.Component {
                                                 </Col>
                                             </Row>
                                         </Carousel.Item>
-                                        <Carousel.Item>
+                                        <Carousel.Item onMouseEnter={()=>{this.handleBannerMouse("enter", this.state.controlProductData)}} onMouseLeave={()=>{this.handleBannerMouse("leave", this.state.controlProductData)}} >
                                             <Row className="mt-4 justify-content-center" style={{minHeight: "360px", minWidth: "320px"}}>
                                                 <Col sm={5} className={"d-flex justify-content-center flex-column"} 
                                                 style={{maxHeight: "320px", maxWidth: "320px", padding: "1rem"}}>
@@ -331,10 +382,10 @@ class Category extends React.Component {
                                         </Carousel.Item>
                                     </Carousel>
                                 </Container>
-                                <ProductRow name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target targetProductId={this.props.targetProductId} controlProductId={this.props.controlProductId} orderMethod={this.state.orderMethod} />
+                                <ProductRow name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target targetProductId={this.props.targetProductId} controlProductId={this.props.controlProductId} orderMethod={this.state.orderMethod} active={this.props.location.pathname.split('/')[2] === subCategoryData.name.split('/')[1]}/>
                             </Tab.Pane>:
-                            <Tab.Pane key={subCategoryData.name} eventKey={subCategoryData.name} title={translate(subCategoryData.name.split('/')[1])} >
-                                <ProductRow name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} orderMethod={this.state.orderMethod}/>
+                            <Tab.Pane key={subCategoryData.name.split('/')[1]} eventKey={subCategoryData.name.split('/')[1]} title={translate(subCategoryData.name.split('/')[1])} >
+                                <ProductRow name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} orderMethod={this.state.orderMethod} active={this.props.location.pathname.split('/')[2] === subCategoryData.name.split('/')[1]}/>
                             </Tab.Pane>
                         )
                     })
@@ -363,4 +414,4 @@ class Category extends React.Component {
     }
 }
 
-export default Category;
+export default withRouter(Category);

@@ -2,7 +2,9 @@ import React from 'react';
 import './App.css';
 import {withCookies} from 'react-cookie';
 import TrackVisibility from 'react-on-screen';
+import queryString from 'query-string';
 
+import { withRouter } from 'react-router-dom';
 import { Container, Row, Col, Carousel, Button, Card, CardDeck, InputGroup, Form, FormControl } from 'react-bootstrap';
 import ProductCell from './ProductCell'
 import {shuffle} from './utils/utlis'
@@ -14,6 +16,12 @@ class ProductRow extends React.Component {
         const {cookies} = this.props
         let reachEnd = false
         let count = 12 > this.props.data.length ? this.props.data.length : 12 
+
+        let params = queryString.parse(this.props.location.search)
+        if(params.c){
+            count = parseInt(params.c)
+            count = Math.min(count, this.props.data.length)
+        }
 
         return {
             count,
@@ -81,8 +89,12 @@ class ProductRow extends React.Component {
         this.setState({
             count,
             reachEnd
+        }, () => {
+            this.props.history.push({
+                search: '?c=' + this.state.count
+            })
         })
     }
 }
 
-export default withCookies(ProductRow)
+export default withRouter(withCookies(ProductRow))

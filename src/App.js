@@ -321,28 +321,28 @@ class App extends React.Component {
         <Route exact path="/" render={(location) => (
             // !this.state.redirect?
             // <Home targetProductId={this.state.targetProductId} addProductToCart={this.addProductToCart} showProduct={this.showProduct} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId}/>:
-            <Category name={this.state.targetCategory} data={data[this.state.targetCategory]} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId}/>
+            <Category name={this.state.targetCategory} data={data[this.state.targetCategory]} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username}/>
         )}/>
-        <Route exact path="/Men's Fashion" render={(location) => (
-            <Category name="Men's Fashion" data={data["Men's Fashion"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId}/>
+        <Route path="/Men's Fashion" render={(location) => (
+            <Category name="Men's Fashion" data={data["Men's Fashion"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username}/>
         )}/>
-        <Route exact path="/Women's Fashion" render={(location) => (
-            <Category name="Women's Fashion" data={data["Women's Fashion"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId}/>
+        <Route path="/Women's Fashion" render={(location) => (
+            <Category name="Women's Fashion" data={data["Women's Fashion"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username}/>
         )}/>
-        <Route exact path="/Home and Kitchen" render={(location) => (
-            <Category name="Home and Kitchen" data={data["Home and Kitchen"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId}/>
+        <Route path="/Home and Kitchen" render={(location) => (
+            <Category name="Home and Kitchen" data={data["Home and Kitchen"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username}/>
         )}/>
-        <Route exact path="/Electronics" render={(location) => (
-            <Category name="Electronics" data={data["Electronics"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId}/>
+        <Route path="/Electronics" render={(location) => (
+            <Category name="Electronics" data={data["Electronics"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username}/>
         )}/>
-        <Route exact path="/Beauty and Personal Care" render={(location) => (
-            <Category name="Beauty and Personal Care" data={data["Beauty and Personal Care"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId}/>
+        <Route path="/Beauty and Personal Care" render={(location) => (
+            <Category name="Beauty and Personal Care" data={data["Beauty and Personal Care"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username}/>
         )}/>
-        <Route exact path="/Luggage" render={(location) => (
-            <Category name="Luggage" data={data["Luggage"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId}/>
+        <Route path="/Luggage" render={(location) => (
+            <Category name="Luggage" data={data["Luggage"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username}/>
         )}/>
-        <Route exact path="/Health and Household" render={(location) => (
-            <Category name="Health and Household" data={data["Health and Household"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId}/>
+        <Route path="/Health and Household" render={(location) => (
+            <Category name="Health and Household" data={data["Health and Household"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username}/>
         )}/>
         <Route exact path="/Checkout" render={(location) => (
             <Checkout captchaId={this.state.captchaId} toggleCategoryNav={this.toggleCategoryNav}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} showSurvey={this.showSurvey} updateCart={this.updateCart} userLogin={this.state.userLogin}/>
@@ -706,7 +706,8 @@ class App extends React.Component {
     logEvents()
     logPositions()
     setTimeout(()=>{
-      window.location.href = 'Checkout'
+      window.parent.location.href = '/Checkout'
+      // window.history.back()
     }, 650)
   }
 }

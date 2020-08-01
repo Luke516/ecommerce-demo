@@ -1,3 +1,13 @@
+a {
+  color: #212529;
+  text-decoration: none !important; /* no underline */
+}
+
+.carousel-control-next,
+.carousel-control-prev {
+  filter: invert(25%)
+}
+
 .full-window {
   position: absolute;
   top: 0;

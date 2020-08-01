@@ -96,19 +96,21 @@ class ProductCell extends React.Component {
         price = formatter.format(price).split('.')[0];
         return (
             <Col className="my-3 mx-" xs={12} sm={6} md={4} lg={3} style={{cursor: "pointer"}} ref={(el) => this.domElement = el} >
-                <Card className="card-shadow" onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}
+                <Card className="card-shadow" onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} onClick={this.detailButtonClick}
                     style={{border: "0", padding: "0rem", height: this.props.hideOption?"400px":"480px", justifyContent: "space-between", alignItems: "center"}}>
-                    <div className="w-100"  onClick={this.detailButtonClick}>
+                    <div className="w-100">
                     {this.props.checkbox &&
                         <input id="1-2" onChange={this.changeAnswer} type="checkbox" className=""></input>
                     }
                     </div>
-                    <div onClick={this.detailButtonClick} className="d-flex justify-content-center" style={{maxHeight:"200px", maxWidth:"200px", overflow: "hidden"}}>
+                    <div className="d-flex justify-content-center" style={{maxHeight:"200px", maxWidth:"200px", overflow: "hidden"}}>
                         <img src={this.state.imageSourceUrl} style={{maxWidth: "200px", maxHeight:"200px", width: "auto", height: "auto"}} onError={this.imgError}></img>
                     </div>
                     <Card.Body className={"d-block w-100"} style={{justifyContent: "flex-end", flex: "none", padding: 0}}>
-                        <div onClick={this.detailButtonClick} style={{padding: "1rem"}}>
-                            <Card.Title style={{lineHeight: "1.5rem", height: "4.5rem", overflowY: "scroll", paddingLeft: this.state.hover? "3px": "0",  paddingRight: this.state.hover? "3px": "0"}}>{title}</Card.Title>
+                        <div style={{padding: "1rem"}}>
+                            <a href={"http://localhost:3000/Product?p=" + this.props.product.id}> 
+                                <Card.Title style={{ color: "#212529", lineHeight: "1.5rem", height: "4.5rem", overflowY: "scroll", paddingLeft: this.state.hover? "3px": "0",  paddingRight: this.state.hover? "3px": "0"}}>{title}</Card.Title>
+                            </a>
                             {
                                 !this.props.hideOption &&
                                 <h4 className="text-success text-right"><strong>{price}</strong></h4>
@@ -123,7 +125,7 @@ class ProductCell extends React.Component {
                         {
                             !this.props.hideOption &&
                             <Button size="lg" variant="primary" className="w-100" style={{borderTopLeftRadius: "0", borderTopRightRadius: "0"}}
-                                onClick={(e)=>{this.addProductToCart({...this.props.product, ...this.state})}}>
+                                onClick={(e)=>{e.stopPropagation(); this.addProductToCart({...this.props.product, ...this.state});}}>
                                 <span className="text-md"><FontAwesomeIcon className="mx-2" icon={faShoppingCart} />{translate("Add To Cart")}</span>
                             </Button>
                         }
@@ -159,7 +161,7 @@ class ProductCell extends React.Component {
         })
         logEvents()
         logPositions()
-        // window.location.href = ('/Product?p=' + this.props.product.id) 
+        window.location.href = ('/Product?p=' + this.props.product.id) 
     }
 
     isInViewport(element, offset = 0) {
