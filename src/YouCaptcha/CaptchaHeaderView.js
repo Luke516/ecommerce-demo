@@ -60,7 +60,7 @@ function CaptchaHeaderView(props) {
                 <div className={props.success? "check-shift" : ""} style={{width: "100px", height: "100px", zIndex: "200"}}>
                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" style={{display: props.success? "inline-block": "none", zIndex:"200"}}>
                         <polyline className={props.success? "path check" : ""} fill="none" stroke="#73AF55" strokeWidth="10" strokeLinecap="square" strokeMiterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
-                        <circle className={props.success? "path circle" : ""} cx="60" cy="62" r="50" stroke="#73AF55" stroke-width="10" strokeLinecap="square" strokeMiterlimit="10" fill-opacity="0" />
+                        <circle className={props.success? "path circle" : ""} cx="60" cy="62" r="50" stroke="#73AF55" strokeWidth="10" strokeLinecap="square" strokeMiterlimit="10" fillOpacity="0" />
                     </svg>  
                     {/* <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" style={{display: props.success? "inline-block": "none", zIndex:"200"}}>
                         <polyline className={props.success? "path check" : ""} fill="none" stroke="#73AF55" strokeWidth="10" strokeLinecap="square" strokeMiterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
@@ -74,7 +74,7 @@ function CaptchaHeaderView(props) {
             {/* {!showAd } */}
             <Fade in={!props.success} style={{visibility: showAd?"hidden":"visible"}}>
                 <div className="youcaptcha-description">
-                    <h5>請從以下的九宮格中，選出一個以上與左圖相同的物品</h5>
+                    <h5>請從九宮格中，選出所有與左圖包含相同的物品的圖片（至少一個）</h5>
                 </div>
             </Fade>
             {

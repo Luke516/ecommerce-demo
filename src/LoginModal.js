@@ -148,6 +148,7 @@ class LoginModal extends React.Component {
                             <div onClick={this.recaptchaCheck}>
                                 <div className={(this.props.usernameValid && this.props.passwordValid)? (this.props.username == "" || this.props.password == "")? "disabled-element": "enabled-element": "disabled-element"}>
                                     <Recaptcha sitekey="6LfG6rkUAAAAAOxhm3p9iOJZ-92gHJb_UGtsTxpE" 
+                                        hl="zh-TW"
                                         render="explicit" 
                                         onloadCallback={()=>{console.log("onload")}} 
                                         verifyCallback={this.otherCaptchaSuccess}  />

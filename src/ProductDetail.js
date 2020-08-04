@@ -294,7 +294,7 @@ export default class ProductDetail extends React.Component {
                 <Breadcrumb>
                     <Breadcrumb.Item href="/">{translate("home")}</Breadcrumb.Item>
                     <Breadcrumb.Item href={"/" + encodeURIComponent(productCategories[0])}>{translate(productCategories[0])}</Breadcrumb.Item>
-                    <Breadcrumb.Item href="/">{translate(productCategories[1])}</Breadcrumb.Item>
+                    {/* <Breadcrumb.Item href="/">{translate(productCategories[1])}</Breadcrumb.Item> */}
                     {/* {
                         productCategories.map((_category) => {
                             return <Breadcrumb.Item><a key={_category}>{translate(_category)}</a></Breadcrumb.Item>
