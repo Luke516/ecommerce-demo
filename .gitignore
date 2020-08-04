@@ -32,3 +32,4 @@ server/*.json
 server/*.pyc
 server/*.env
 server/old
+server/test
