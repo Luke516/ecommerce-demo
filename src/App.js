@@ -35,27 +35,27 @@ class App extends React.Component {
     let testId = cookies.get('testId')? cookies.get('testId') : "1";
     let curSetting = cookies.get('username')? cookies.get('username') : "";
     
-    let targetCategory = "Women's Fashion"
-    let targetProductId = "B07N7FSMKQ"
-    let controlProductId = "B07MHL5R18"
+    let targetCategory = "Luggage"
+    let targetProductId = "B06ZYHM4JY"
+    let controlProductId = "B00BMJSJG0"
     let captchaType = "ReCaptcha"
     if(testId == "1"){
-        targetCategory = "Women's Fashion"
-        targetProductId = "B07N7FSMKQ"
-        controlProductId = "B07MHL5R18"
+        targetCategory = "Luggage"
+        targetProductId = "B06ZYHM4JY"
+        controlProductId = "B00BMJSJG0"
         captchaType = "ReCaptcha"
     }
     if(testId == "2"){
         targetCategory = "Electronics"
         targetProductId = "B079GXWSWG"
         controlProductId = "B015CH1PJU"
-        captchaType = "YouCaptcha"
+        captchaType = "textCaptcha"
     }
     if(testId == "3"){
-        targetCategory = "Luggage"
-        targetProductId = "B00BMJSJG0"
-        controlProductId = "B06ZYHM4JY"
-        captchaType = "textCaptcha"
+        targetCategory = "Men's Fashion"
+        targetProductId = "B07M9QXCP7"
+        controlProductId = "B07HXZH7WD"
+        captchaType = "YouCaptcha"
     }
 
     let captchaIdList = productIdToCaptchaId[targetProductId]
@@ -375,18 +375,24 @@ class App extends React.Component {
     const { cookies } = this.props;
     product.name = flatData[product.id].name
     product.count = count
-    this.state.productsInCart.push(product)
-    for(let i=0; i<this.state.productsInCart.length - 1; i++){
-      let p = this.state.productsInCart[i]
+    let productsInCart = this.state.productsInCart
+    productsInCart.push({
+      "id": product.id,
+      "price": product.price,
+      "count": 1
+    })
+    for(let i=0; i<productsInCart.length - 1; i++){
+      let p = productsInCart[i]
       if(p.id === product.id){
-        this.state.productsInCart[i].count += product.count
-        this.state.productsInCart.pop()
+        // productsInCart[i].count += product.count
+        // productsInCart.pop() //QQWQQ
         break
       }
     }
-    cookies.set('products', JSON.stringify(this.state.productsInCart))
+    cookies.set('products', JSON.stringify(productsInCart))
     this.setState({
-      showSuccessDialog: count
+      showSuccessDialog: count,
+      productsInCart: productsInCart.slice()
     })
     
     logEvent(this.state.username,
@@ -499,27 +505,27 @@ class App extends React.Component {
     cookies.set('browsed', [])
     cookies.set('products', [])
 
-    let targetCategory = "Women's Fashion"
-    let targetProductId = "B07N7FSMKQ"
-    let controlProductId = "B07MHL5R18"
+    let targetCategory = "Luggage"
+    let targetProductId = "B06ZYHM4JY"
+    let controlProductId = "B00BMJSJG0"
     let captchaType = "ReCaptcha"
     if(testId == "1"){
-        targetCategory = "Women's Fashion"
-        targetProductId = "B07N7FSMKQ"
-        controlProductId = "B07MHL5R18"
+        targetCategory = "Luggage"
+        targetProductId = "B06ZYHM4JY"
+        controlProductId = "B00BMJSJG0"
         captchaType = "ReCaptcha"
     }
     if(testId == "2"){
         targetCategory = "Electronics"
         targetProductId = "B079GXWSWG"
         controlProductId = "B015CH1PJU"
-        captchaType = "YouCaptcha"
+        captchaType = "textCaptcha"
     }
     if(testId == "3"){
-        targetCategory = "Luggage"
-        targetProductId = "B00BMJSJG0"
-        controlProductId = "B06ZYHM4JY"
-        captchaType = "textCaptcha"
+        targetCategory = "Men's Fashion"
+        targetProductId = "B07M9QXCP7"
+        controlProductId = "B07HXZH7WD"
+        captchaType = "YouCaptcha"
     }
 
     let captchaIdList = productIdToCaptchaId[targetProductId]
