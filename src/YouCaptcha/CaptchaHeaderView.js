@@ -74,7 +74,7 @@ function CaptchaHeaderView(props) {
             {/* {!showAd } */}
             <Fade in={!props.success} style={{visibility: showAd?"hidden":"visible"}}>
                 <div className="youcaptcha-description">
-                    <h5>請從九宮格中，選出所有與左圖包含相同的物品的圖片（至少一個）</h5>
+                    <h5>請從九宮格中，選出所有與左圖包含相同的物品的圖片</h5>
                 </div>
             </Fade>
             {

@@ -2,6 +2,7 @@ import React from 'react';
 import { withCookies, Cookies } from 'react-cookie';
 import './App.css';
 import YouCaptchaApp from './YouCaptcha/YouCaptchaApp'
+import flatData from './data/flat_products_list_zh.json';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
@@ -19,7 +20,9 @@ class Checkout extends React.Component {
       let productsInCart = cookies.get('products')? cookies.get('products') : [];
       let totalPrice = 0.0;
       let totalCount = 0;
-      for(let product of productsInCart){
+      for(let p of productsInCart){
+        let product = flatData[p.id]
+        product.price = p.price
         let price = parseInt(product.price * 31)
         if(price % 100 < 20){
             price = price - (price%100) - 1;
@@ -30,9 +33,11 @@ class Checkout extends React.Component {
         else{
             price = price - price % 10
         }
-        product.displayPrice = price
-        product.checked = true
-        totalPrice = totalPrice + parseFloat(product.displayPrice) * 1//product.count
+        p.name = product.name
+        p.imageSourceUrl = product.url
+        p.displayPrice = price
+        p.checked = true
+        totalPrice = totalPrice + parseFloat(price) * 1//product.count
         totalCount = totalCount + 1//product.count
       }
       this.state = {
@@ -74,7 +79,9 @@ class Checkout extends React.Component {
           let totalCount = 0;
           for(let product of productsInCart){
             totalPrice = totalPrice + parseFloat(product.displayPrice) * 1//product.count
-            totalCount = totalCount + 1//product.count
+            if(product.checked){
+                totalCount = totalCount + 1//product.count
+            }
           }
           this.setState({
             productsInCart: productsInCart.slice(),
