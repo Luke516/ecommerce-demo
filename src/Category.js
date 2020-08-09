@@ -138,6 +138,7 @@ class Category extends React.Component {
     }
 
     handleBannerClick(e){
+        console.log("banner click")
         logEvent(this.props.username,{
             type: "banner click"
         })
@@ -209,6 +210,10 @@ class Category extends React.Component {
     }
 
     productClick(productId) {
+        logEvent(this.props.username,{
+            type: "banner product click",
+            productId
+        })
         logEvents()
         logPositions()
         window.location.href = ('/Product?p=' + productId) 
