@@ -25,7 +25,8 @@ yarn-error.log*
 # local files
 src/out2
 public/out2
-src/out6
+src/out*
+src/out7/*
 public/out*
 
 server/*.json
