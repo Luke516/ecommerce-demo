@@ -55,10 +55,12 @@ function CaptchaHeaderView(props) {
         <> 
         <Row className={(showAd&&originImgLoad)?"my-4 captcha-row":"title captcha-row"}>
             <div className={"youcaptcha-image-container"} style={{width: "110px"}}>
-                <img className={(props.success&&originImgLoad)? "youcaptcha-slide" : "youcaptcha-hide"} src={props.result.origin} />
+                <div className={(props.success&&originImgLoad)? "youcaptcha-slide" : "youcaptcha-hide"} >
+                    <img className={(props.success&&originImgLoad)? "youcaptcha-slide-img" : "youcaptcha-hide"} src={props.result.origin} />
+                </div>
                 <img className={(props.success&&originImgLoad)? "slideFade" : "youcaptcha-img"} src={loading? "": data.targetCaptcha.question} />
-                <div className={props.success? "check-shift" : ""} style={{width: "100px", height: "100px", zIndex: "200"}}>
-                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" style={{display: props.success? "inline-block": "none", zIndex:"200"}}>
+                <div className={props.success? "check-shift" : ""} style={{width: "100px", height: "100px", zIndex: "2000"}}>
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" style={{display: props.success? "inline-block": "none", zIndex:"2000"}}>
                         <polyline className={props.success? "path check" : ""} fill="none" stroke="#73AF55" strokeWidth="10" strokeLinecap="square" strokeMiterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
                         <circle className={props.success? "path circle" : ""} cx="60" cy="62" r="50" stroke="#73AF55" strokeWidth="10" strokeLinecap="square" strokeMiterlimit="10" fillOpacity="0" />
                     </svg>  

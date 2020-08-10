@@ -46,6 +46,13 @@ export function logEvents(){
   const url = serverUrl + "events/";
   events = []
 
+  if(!data){
+    return
+  }
+  if(data.length < 1){
+    return
+  }
+
   fetch(url, {
       method: 'post',
       headers: {
