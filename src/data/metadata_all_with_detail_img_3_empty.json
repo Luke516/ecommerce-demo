@@ -277,29 +277,17 @@
                 }
             },
             "Satellite Television": {
-                "B007YV0UQW": {
-                    "name": "Extreme 2 Way HD Digital 1Ghz High Performance Coax Cable Splitter BDS102H"
-                },
                 "B0127SBOXE": {
                     "name": "iMBAPrice\u00ae (Pack of 2) In-line DSL Splitter w/ Noise Filter"
                 },
                 "B00BLZDY6A": {
                     "name": "IMAGE 1 PC to 4 Monitors Splitter Box VGA/SVGA LCD CRT 4 Port Video"
                 },
-                "B00S56ZUUQ": {
-                    "name": "Extreme Broadband Manufacturing BDS104H 4 Way HD Digital High Performance Coax Cable Splitter"
-                },
                 "B017END61A": {
                     "name": "DTECH Powered 1 In 4 Out VGA Video Splitter Distribution Amplifier 500MHz Supports High Resolution up to 2048x1536"
                 },
                 "B00006B8BY": {
                     "name": "StarTech.com 4-Port VGA Video Splitter - 300 MHz- VGA Splitter - 4 port - 2048x1536 @ 80Hz"
-                },
-                "B000O8PRME": {
-                    "name": "Wilson Electronics 3 dB 2-Way Splitter: N-Female - 50 Ohm (859957)"
-                },
-                "B00CYMQVG4": {
-                    "name": "Amplifier, Cable TV RF Broadband 8dB Gain Four Output 5-1002Mhz w/ Power Adapter"
                 },
                 "B01CZAL4U2": {
                     "name": "VeLLBox DVI Splitter 1x4, 4-Port Splitter, 1in 4 Out DVI Splitter, Support Resolution up to 1080p, 5V/3A Universal Power Adapter, Grey"
@@ -338,9 +326,6 @@
                 "B01L8GG6PW": {
                     "name": "RCA to HDMI, GANA 1080P Mini RCA Composite CVBS AV to HDMI Video Audio Converter Adapter Supporting PAL/NTSC with USB Charge Cable for PC Laptop Xbox PS4 PS3 TV STB VHS VCR Camera DVD"
                 },
-                "B01AQ6OWAG": {
-                    "name": "SAMSUNG TV Remote Control BN59-01199F by Samsung"
-                },
                 "B01DU67QZM": {
                     "name": "Universal Remote Control for All Samsung LCD LED HDTV 3D Smart TVs"
                 },
@@ -350,29 +335,11 @@
                 "B00AQM8586": {
                     "name": "Plugable USB 3.0 to Ethernet Gigabit 10/100/1000 LAN Network Adapter (ASIX AX88179 chipset Compatible with Windows 10, 8.1, 8, 7, XP, Linux, OS X/macOS, Switch Game Console, Chrome OS)"
                 },
-                "B077J2YG19": {
-                    "name": "New Remote Control AKB75095307 Replacement fit for LG LED LCD TV 43UJ6500 43UJ6560 49UJ6500 49UJ6560 55UJ6520 55UJ6540 55UJ6580 60UJ6540"
-                },
                 "B004OVECU0": {
                     "name": "Logitech Harmony 650 Infrared All in One Remote Control, Universal Remote Logitech, Programmable Remote (Silver)"
                 },
-                "B01G7OX9WS": {
-                    "name": "Gvirtue Replacement Lost Remote Control Compatible with Roku 1, Roku 2, Roku 3, Roku 4, (HD, LT, XS, XD), Roku Express, Roku Premiere, Roku Ultra; Do NOT Support Roku Stick, Roku TV or Roku Game"
-                },
-                "B01H0GVCPI": {
-                    "name": "Logitech Harmony 950 Touch IR Remote Control for up to 15 Entertainment Devices"
-                },
                 "B00BQ5RYI4": {
                     "name": "Logitech Harmony Smart Control with Smartphone App and Simple All in One Remote - Black"
-                },
-                "B076ZZ9JJG": {
-                    "name": "Dish 54.0 Voice Command Remote Control for Hopper"
-                },
-                "B00IAKLM54": {
-                    "name": "Logitech Harmony Ultimate One \u2013 2.4\u201d Touch Screen Universal Remote for 15 Devices"
-                },
-                "B072C8XTC8": {
-                    "name": "Sony RMF-TX300U Smart TV LED 4K ULT"
                 },
                 "B01BZE7RFA": {
                     "name": "Original Sony LED Smart TV Remote Control RMT-TX100U Netflix"
@@ -780,18 +747,6 @@
                 }
             },
             "Electronic Dictionaries, Thesauri & Translators": {
-                "0877798095": {
-                    "name": "Merriam-Webster's Collegiate Dictionary"
-                },
-                "0877795304": {
-                    "name": "Merriam-Webster's Pocket Dictionary"
-                },
-                "0785242554": {
-                    "name": "Strong's Concise Concordance And Vine's Concise Dictionary Of The Bible Two Bible Reference Classics In One Handy Volume"
-                },
-                "1596950943": {
-                    "name": "Webster's Federal Street Press Thesaurus for Students, 3rd Edition, Paperback, Grades 6 and Up, 352 Pages"
-                },
                 "B00006IFTL": {
                     "name": "Franklin Merriam-Webster ((Speaking)) Spanish-English Dictionary (BES-1850)"
                 },
@@ -911,9 +866,6 @@
                 },
                 "B000YGO7HW": {
                     "name": "Fellowes Powershred 99Ci 100% Jam Proof Cross-Cut Paper Shredder"
-                },
-                "B000WB397I": {
-                    "name": "Fellowes Powershred 79Ci 100% Jam Proof Medium, Duty Cross, Cut Shredder, 16 Sheet Capacity, Black/Dark Silver"
                 },
                 "B00IOFD08C": {
                     "name": "Bonsaii EverShred C149-C 18-Sheet Heavy Duty Cross-Cut Paper/CD/Credit Card Shredder with 6 Gallon Pullout Basket and 4 Casters, 60 Minutes Running Time, Black"
@@ -1435,9 +1387,6 @@
                 },
                 "B07BB5FDS2": {
                     "name": "Kodak PRINTOMATIC Digital Instant Print Camera (Blue), Full Color Prints On ZINK 2x3 Sticky-Backed Photo Paper - Print Memories Instantly"
-                },
-                "B015R3WUNO": {
-                    "name": "Fujifilm Instax Mini 70 - Instant Film Camera (Blue)"
                 },
                 "B07FTZ259M": {
                     "name": "Polaroid Originals OneStep+ Black (9010), Bluetooth Connected Instant Film Camera"
@@ -3112,9 +3061,6 @@
                 "B00H7L352K": {
                     "name": "Travelers Club 20\" Chicago Spinner Expandable Carry-On Luggage"
                 },
-                "B00ON1Z8XQ": {
-                    "name": "Kenneth Cole Reaction Reverb 20\" Hardside Expandable 8-Wheel Spinner Carry-on Luggage, Light Silver"
-                },
                 "B07KJKL3XM": {
                     "name": "Ben Sherman Luggage Nottingham 20\" Embossed PAP 4-Wheel Carry-On"
                 },
@@ -3728,12 +3674,6 @@
                 }
             },
             "Luggage Carts": {
-                "B0020ND4QM": {
-                    "name": "TravelKart Travel Luggage Cart, Black"
-                },
-                "B00GAAQ6EI": {
-                    "name": "Cloudz EZ Roll Luggage Cart"
-                },
                 "B0020MMCNO": {
                     "name": "Travel Smart by Conair Heavy Duty Multi-Use Cart"
                 },
@@ -3742,9 +3682,6 @@
                 },
                 "B00D8BO4HI": {
                     "name": "CARRO PORTAMOCHILAS PLEGABLE 750 UN ASA NEGRO SAFTA"
-                },
-                "B008PVUBDW": {
-                    "name": "ZUCA Sport Frame with Built-in Seat (Choose Your Color), for Any Sport Insert Bag"
                 },
                 "B0010BPNZA": {
                     "name": "Travel Smart by Conair TS-34FFC Flat Folding Multi-Use Luggage Cart, Black"
@@ -3755,14 +3692,8 @@
                 "B078HMHRXB": {
                     "name": "Safta 2018 Luggage Cart, 85 cm, Multicolour (Rosa claro)"
                 },
-                "B07DMFJQ8Q": {
-                    "name": "Colint Colint Luggage Cart 90 centimeters Multicolour (Holz)"
-                },
                 "B00M06PPM0": {
                     "name": "Safta Trolley for school backpacks, foldable, light, resistant with extractable grip handle and wheels"
-                },
-                "B00NIWF2UA": {
-                    "name": "CARRO PORTAMOCHILAS 805 ROSA FLUOR"
                 },
                 "B01FX9F37C": {
                     "name": "BlueJan Luggage Cart"
@@ -4013,9 +3944,6 @@
                 },
                 "B076H7DJ2G": {
                     "name": "Kipling PASS PORT Passport Wallet, 14 cm, 0.01 liters, Black (True Black)"
-                },
-                "B01MQE1FHG": {
-                    "name": "Pacsafe Rfidsafe V150 Anti-Theft RFID Blocking Compact Passport Wallet, Black"
                 }
             },
             "Shoe Bags": {
@@ -4104,9 +4032,6 @@
                 },
                 "B071CL516W": {
                     "name": "Mens Toiletry Bag Dopp Kit by Bayfield Bags-Small Compact Minimalist Glossy Leather Shaving Kit For Toiletry Travel Bag (10x5x5) (burgundy) Men's Toiletries Bag, Organizer Grooming Kit For Men"
-                },
-                "B00UFOEL1U": {
-                    "name": "Lewis N Clark Electrolight Toiletry Kit for Travel, Gym, Bathroom, TSA Approved Waterproof Toiletry Bag with Hanging Straps and Non-Slip Bottom - Bright Blue"
                 },
                 "B01LBXIZ7E": {
                     "name": "Victorinox Lexicon 2.0 Parcel Zip-Around Toiletry Kit, Black"
@@ -4659,9 +4584,6 @@
                 }
             },
             "Sleep & Lounge": {
-                "B078MC6B29": {
-                    "name": "Burt's Bees Baby Baby Boy's Unisex Pajamas, Zip-Front Non-Slip Footed Sleeper Pjs, Organic Cotton"
-                },
                 "B072LPC22X": {
                     "name": "Under Armour Men's Athlete Recovery Sleepwear Pants"
                 },
@@ -6693,9 +6615,6 @@
                 "B00EVQ8M7C": {
                     "name": "Skechers  Men's After Burn Memory Fit - Reprint Shoe"
                 },
-                "B073C8WBTH": {
-                    "name": "Merrell Work Men's Jungle Moc CT"
-                },
                 "B000AYUMWW": {
                     "name": "Caterpillar Men's 2nd Shift 6\" Steel Toe Boot"
                 },
@@ -8017,17 +7936,11 @@
                 "B003BLPRL2": {
                     "name": "Crocs Men's and Women's Baya Clog"
                 },
-                "B001EJMYSM": {
-                    "name": "Dansko Women's Professional Mule"
-                },
                 "B071P3PR35": {
                     "name": "Crocs Men's and Women's On The Clock Work Slip Resistant Work Shoe | Great Nursing or Chef Shoe"
                 },
                 "B01KX336K4": {
                     "name": "LOEFFLER RANDALL Women's Lulu Mule"
-                },
-                "B07DX3QQF5": {
-                    "name": "Dansko Women's Wide Pro"
                 },
                 "B005DO5Y2M": {
                     "name": "Dansko Women's Sam Ankle-Strap Clog"
@@ -9416,9 +9329,6 @@
                 },
                 "B06XDMZS36": {
                     "name": "VOCHIC Women Skinny Metal Waist Dress Belt for Ladies Stretch Wedding Chain Gold"
-                },
-                "B000W23KRQ": {
-                    "name": "Uncle Mike's Mirage Plain Ultra Duty Belt with Hook and Loop Lining"
                 },
                 "B074HC857Q": {
                     "name": "TALLEFFORT Ladies Vintage Western Leather Belts for Women Genuine Leather Belt"

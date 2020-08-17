@@ -7,7 +7,7 @@ import flatData from './data/flat_products_list_zh.json';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faMinus, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 import { translate } from './utils/translate';
-import { shuffle } from './utils/utlis';
+import { shuffle, logEvent, logEvents, logPositions } from './utils/utlis';
 import ProductCell from './ProductCell'
 import { Container, Row, Col, Carousel, Button, Card, Breadcrumb } from 'react-bootstrap';
 
@@ -91,6 +91,20 @@ export default class ProductDetail extends React.Component {
         this.updateContent = this.updateContent.bind(this)
         this.addCount = this.addCount.bind(this)
         this.minusCount = this.minusCount.bind(this)
+    }
+
+    componentWillMount() {
+        logEvent(this.props.username,{
+            type: "detail open",
+            id: this.state.product.id
+        })
+    }
+
+    componentWillUnmount() {
+        logEvent(this.props.username,{
+            type: "detail close",
+            id: this.state.product.id
+        })
     }
 
     updateContent() {
