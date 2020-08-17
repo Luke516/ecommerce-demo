@@ -35,27 +35,27 @@ class App extends React.Component {
     let testId = cookies.get('testId')? cookies.get('testId') : "1";
     let curSetting = cookies.get('username')? cookies.get('username') : "";
     
-    let targetCategory = "Women's Fashion"
-    let targetProductId = "B07N7FSMKQ"
-    let controlProductId = "B07MHL5R18"
-    let captchaType = "YouCaptcha"
+    let targetCategory = "Luggage"
+    let targetProductId = "B06ZYHM4JY"
+    let controlProductId = "B00BMJSJG0"
+    let captchaType = "textCaptcha"
     if(testId == "1"){
-      targetCategory = "Women's Fashion"
-      targetProductId = "B07N7FSMKQ"
-      controlProductId = "B07MHL5R18"
+      targetCategory = "Luggage"
+      targetProductId = "B06ZYHM4JY"
+      controlProductId = "B00BMJSJG0"
       captchaType = "YouCaptcha"
     }
     if(testId == "2"){
-      targetCategory = "Luggage"
-      targetProductId = "B00BMJSJG0"
-      controlProductId = "B06ZYHM4JY"
-      captchaType = "ReCaptcha"
-    }
-    if(testId == "3"){
       targetCategory = "Electronics"
       targetProductId = "B015CH1PJU"
       controlProductId = "B079GXWSWG"
       captchaType = "ReCaptcha"
+    }
+    if(testId == "3"){
+      targetCategory = "Men's Fashion"
+      targetProductId = "B07M9QXCP7"
+      controlProductId = "B07HXZH7WD"
+      captchaType = "textCaptcha"
     }
 
     let captchaIdList = productIdToCaptchaId[targetProductId]
@@ -518,27 +518,27 @@ class App extends React.Component {
     cookies.set('browsed', [])
     cookies.set('products', [])
     
-    let targetCategory = "Women's Fashion"
-    let targetProductId = "B07N7FSMKQ"
-    let controlProductId = "B07MHL5R18"
-    let captchaType = "YouCaptcha"
+    let targetCategory = "Luggage"
+    let targetProductId = "B06ZYHM4JY"
+    let controlProductId = "B00BMJSJG0"
+    let captchaType = "textCaptcha"
     if(testId == "1"){
-      targetCategory = "Women's Fashion"
-      targetProductId = "B07N7FSMKQ"
-      controlProductId = "B07MHL5R18"
+      targetCategory = "Luggage"
+      targetProductId = "B06ZYHM4JY"
+      controlProductId = "B00BMJSJG0"
       captchaType = "YouCaptcha"
     }
     if(testId == "2"){
-      targetCategory = "Luggage"
-      targetProductId = "B00BMJSJG0"
-      controlProductId = "B06ZYHM4JY"
-      captchaType = "ReCaptcha"
-    }
-    if(testId == "3"){
       targetCategory = "Electronics"
       targetProductId = "B015CH1PJU"
       controlProductId = "B079GXWSWG"
       captchaType = "ReCaptcha"
+    }
+    if(testId == "3"){
+      targetCategory = "Men's Fashion"
+      targetProductId = "B07M9QXCP7"
+      controlProductId = "B07HXZH7WD"
+      captchaType = "textCaptcha"
     }
 
     let captchaIdList = productIdToCaptchaId[targetProductId]

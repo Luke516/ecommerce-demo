@@ -223,6 +223,10 @@ class Category extends React.Component {
         // console.log(subCategory)
         // console.log(this.props.name)
         // console.log(this.props.location.pathname)
+        logEvent(this.props.username,{
+            type: "category click",
+            subCategory
+        })
         if(this.props.location.pathname.split('/').length > 2){
             this.props.history.replace(subCategory) 
         }else{
