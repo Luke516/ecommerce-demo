@@ -38,7 +38,7 @@ class App extends React.Component {
     let targetCategory = "Luggage"
     let targetProductId = "B06ZYHM4JY"
     let controlProductId = "B00BMJSJG0"
-    let captchaType = "textCaptcha"
+    let captchaType = "YouCaptcha"
     if(testId == "1"){
       targetCategory = "Luggage"
       targetProductId = "B06ZYHM4JY"
@@ -521,7 +521,7 @@ class App extends React.Component {
     let targetCategory = "Luggage"
     let targetProductId = "B06ZYHM4JY"
     let controlProductId = "B00BMJSJG0"
-    let captchaType = "textCaptcha"
+    let captchaType = "YouCaptcha"
     if(testId == "1"){
       targetCategory = "Luggage"
       targetProductId = "B06ZYHM4JY"
