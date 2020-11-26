@@ -55,6 +55,7 @@ function InvisibleCaptchaView(props) {
                         // onClick={this.props.toggleCaptcha}
                         onClick={() => {
                             setCheckAnimation(true); 
+                            window.parent.postMessage("RRR");
                             setTimeout(() => {
                                 props.toggleCaptcha();
                             }, 1000);

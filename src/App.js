@@ -5,14 +5,7 @@ import productIdToCaptchaId from './data/productIdToCaptchaId.json'
 import flatData from './data/flat_products_list_zh.json';
 import accountsData from './data/accounts.json';
 
-import Category from './Category'
-import Checkout from './Checkout'
-import Admin from './Admin'
-import Survey from './Survey'
-import ProductDetail from './ProductDetail'
 import LoginModal from './LoginModal'
-import {translate} from './utils/translate'
-import {logEvent, logEvents, logPositions} from './utils/utlis'
 import {
   BrowserRouter as Router,
   Route,
@@ -89,8 +82,6 @@ class App extends React.Component {
     };
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleUserNameChange = this.handleUserNameChange.bind(this);
-    this.addProductToCart = this.addProductToCart.bind(this);
-    this.clearCart = this.clearCart.bind(this);
     this.handleNavbarToggle = this.handleNavbarToggle.bind(this);
     this.closeDialog = this.closeDialog.bind(this)
     this.userLogin = this.userLogin.bind(this);
@@ -101,7 +92,6 @@ class App extends React.Component {
     this.showProduct = this.showProduct.bind(this);
     this.toggleCategoryNav = this.toggleCategoryNav.bind(this);
     this.addBrowsedProducts = this.addBrowsedProducts.bind(this);
-    this.showSurvey = this.showSurvey.bind(this);
     this.nextTest = this.nextTest.bind(this);
     this.captchaSuccess = this.captchaSuccess.bind(this);
     this.updateCart = this.updateCart.bind(this);
@@ -109,8 +99,6 @@ class App extends React.Component {
     this.closeAd = this.closeAd.bind(this);
     this.showDialog = this.showDialog.bind(this);
     this.validateAccount = this.validateAccount.bind(this);
-    this.showCheckout = this.showCheckout.bind(this);
-    // console.log(data)
   }
 
   componentDidMount() {
@@ -118,176 +106,13 @@ class App extends React.Component {
       this.setState({
         showLogin: true
       })
-
-      logEvent(this.state.username,
-        {type: "showLogin"}
-      )
     }
-
-    setInterval(()=>{
-      logEvents()
-      logPositions()
-    }, 2500)
   }
 
   render (){
     const targetProductData = flatData[this.state.targetProductId]
     return (
-      <Router>
-      <div className=''>
-        <Navbar bg="light" expand="lg" className="shadow-sm px-4" style={{display: this.state.navbarToggle? "none": "flex"}}>
-          <Container>
-          <Navbar.Brand href="/">
-            <img
-              alt=""
-              src="shopping-cart.png"
-              width="30"
-              height="30"
-              className="d-inline-block align-top"
-            />{' '}
-            <span className="brand">KocoShop</span>
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav" className="justify-content-center">
-
-            <Nav>
-              <SplitButton className={ this.state.targetCategory=="Men's Fashion"? "mr-3 target-category": "mr-3" } tag={Link} href="Men's Fashion"
-                style={{display: this.state.targetCategory=="Men's FashionQQ"? "flex": "none"}}
-                variant={this.state.targetCategory=="Men's Fashion"?'':''}
-                title={translate(`Men's Fashion`)}>
-                {
-                  Object.keys(data["Men's Fashion"]).map((item, i) => (
-                    <Dropdown.Item key={i} eventKey={i} href={"Men's Fashion?subCategory=" + item} onClick={()=>{this.setState({selectedCategory: item})}}>
-                      {translate(item)}
-                    </Dropdown.Item>
-                  ))
-                }
-              </SplitButton>
-              <SplitButton className={ this.state.targetCategory=="Women's Fashion"? "mr-3 target-category": "mr-3" } tag={Link} href="Women's Fashion"
-                style={{display: this.state.targetCategory=="Women's FashionQQ"? "flex": "none"}}
-                variant={this.state.targetCategory=="Women's Fashion"?'':''}
-                title={translate(`Women's Fashion`)}>
-                {
-                  Object.keys(data["Women's Fashion"]).map((item, i) => (
-                    <Dropdown.Item key={i} eventKey={i} href={"Women's Fashion?subCategory=" + item}>{translate(item)}</Dropdown.Item>
-                  ))
-                }
-              </SplitButton>
-              <SplitButton className={ this.state.targetCategory=="Home and Kitchen"? "mr-3 target-category": "mr-3" } tag={Link} href="Home and Kitchen"
-                style={{display: this.state.targetCategory=="Home and KitchenQQ"? "flex": "none"}}
-                variant={this.state.targetCategory=="Home and Kitchen"?'':''}
-                title={translate(`Home and Kitchen`)}>
-                {
-                  Object.keys(data["Home and Kitchen"]).map((item, i) => (
-                    <Dropdown.Item key={i} eventKey={i} href={"Home and Kitchen?subCategory=" + item}>{translate(item)}</Dropdown.Item>
-                  ))
-                }
-              </SplitButton>
-              <SplitButton className={ this.state.targetCategory=="Electronics"? "mr-3 target-category": "mr-3" } tag={Link} href="Electronics"
-                style={{display: this.state.targetCategory=="ElectronicsQQ"? "flex": "none"}}
-                variant={this.state.targetCategory=="Electronics"?'':''}
-                title={translate(`Electronics`)}>
-                {
-                  Object.keys(data["Electronics"]).map((item, i) => (
-                    <Dropdown.Item key={i} eventKey={i} href={"Electronics?subCategory=" + item}>{translate(item)}</Dropdown.Item>
-                  ))
-                }
-              </SplitButton>
-              <SplitButton className={ this.state.targetCategory=="Beauty and Personal Care"? "mr-3 target-category": "mr-3" } tag={Link} href="Beauty and Personal Care"
-                style={{display: this.state.targetCategory=="Beauty and Personal CareQQ"? "flex": "none"}}
-                variant={this.state.targetCategory=="Beauty and Personal Care"?'':''}
-                title={translate(`Beauty and Personal Care`)}>
-                {
-                  Object.keys(data["Beauty and Personal Care"]).map((item, i) => (
-                    <Dropdown.Item key={i} eventKey={i} href={"Beauty and Personal Care?subCategory=" + item}>{translate(item)}</Dropdown.Item>
-                  ))
-                }
-              </SplitButton>
-              <SplitButton className={ this.state.targetCategory=="Luggage"? "mr-3 target-category": "mr-3" } tag={Link} href="Luggage"
-                style={{display: this.state.targetCategory=="LuggageQQ"? "flex": "none"}}
-                variant={this.state.targetCategory=="Luggage"?'':''}
-                title={translate(`Luggage`)}>
-                {
-                  Object.keys(data["Luggage"]).map((item, i) => (
-                    <Dropdown.Item key={i} eventKey={i} href={"Luggage?subCategory=" + item}>{translate(item)}</Dropdown.Item>
-                  ))
-                }
-              </SplitButton>
-              <SplitButton className={ this.state.targetCategory=="Health and Household"? "mr-3 target-category": "mr-3" } tag={Link} href="Health and Household"
-                style={{display: this.state.targetCategory=="Health and HouseholdQQ"? "flex": "none"}}
-                variant={this.state.targetCategory=="Health and Household"?'':''}
-                title={translate(`Health and Household`)}>
-                {
-                  Object.keys(data["Health and Household"]).map((item, i) => (
-                    <Dropdown.Item key={i} eventKey={i} href={"Health and Household?subCategory=" + item}>{translate(item)}</Dropdown.Item>
-                  ))
-                }
-              </SplitButton>
-            </Nav>
-          </Navbar.Collapse>
-          <div className="d-flex flex-row align-items-center">
-            {/* <OverlayTrigger
-              trigger="focus"
-              key={'bottom'}
-              placement={'bottom'}
-              overlay={
-                <Popover id={`popover-positioned-${'bottom'}`}>
-                  <ListGroup>
-                  {
-                    this.state.productsInCart.map((product, index) => {
-                        return (
-                        <ListGroup.Item>
-                          <Row>
-                            <Col style={{cursor: "pointer"}} onClick={() => this.clearCart(index)} lg={2}><FontAwesomeIcon icon={faTimes} /></Col>
-                            <Col lg={10}><strong key={product.id}>{product.name}</strong></Col>
-                          </Row>
-                        </ListGroup.Item>)
-                      }
-                    )
-                  }
-                  {
-                    this.state.productsInCart.length > 0?
-                    <>
-                      <ListGroup.Item action style={{padding: 0}} onClick={() => this.clearCart()}>
-                        <Button size="" variant="light" className="w-100">清空購物車</Button>
-                      </ListGroup.Item>
-                      <ListGroup.Item style={{padding: 0}}>
-                        <Button href="Checkout" size="" className="w-100">去結帳</Button>
-                      </ListGroup.Item>
-                    </>:
-                    <ListGroup.Item>
-                      您的購物車目前沒有商品
-                    </ListGroup.Item>
-                  }
-                  <ListGroup.Item>
-                    <Button onClick={this.nextTest}>下一個</Button>
-                  </ListGroup.Item>
-                  </ListGroup>
-                </Popover>
-              }
-            > */}
-              <Button className="mx" variant="" onMouseEnter={()=>{logEvents(); logPositions();}} onClick={this.showCheckout}>
-              <FontAwesomeIcon className="mx-2" icon={faShoppingCart}/>
-                購物車
-                <Badge className="mx-1" variant={this.state.productsInCart.length > 0? "primary" :"secondary"}>{this.state.productsInCart.length}</Badge>
-              </Button>
-            {/* </OverlayTrigger> */}
-            {
-              this.state.userLogin ? 
-              <>
-                <span className="ml-2 mr-4" href="#home">歡迎, {this.state.username}</span>
-                <Button variant="outline-primary" href="/" onClick={this.userLogout}>登出</Button>
-              </>:
-              <>
-              <Button className="ml-2" variant="outline-primary" onClick={() => {this.setState({showLogin: true}); logEvent(this.state.username,  {type: "showLogin"});}}>
-                登入
-              </Button>
-              <Button onClick={this.nextTest} style={{opacity: 0}}>下一個</Button>
-              </>
-            }
-          </div>
-          </Container>
-        </Navbar>
+      <div>
         <Alert variant="success" className="shadow-sm fadeOut" style={{position: "fixed", width: "40%", left: "30%", zIndex: "1200", textAlign: "center", display: this.state.showSuccessDialog > 0? "block" : "none"}}>
           <FontAwesomeIcon className="mx-2" icon={faCheck}/>
           已將<span className="mx-1">{this.state.showSuccessDialog}</span>件商品加入購物車
@@ -300,11 +125,10 @@ class App extends React.Component {
           captcha={this.state.captcha} captchaId={this.state.captchaId} captchaSuccess={this.captchaSuccess}
           captchaIdList={this.state.captchaIdList} userLogin={this.userLogin} wrongPassword={this.state.wrongPassword}
           />
-        {
           <Modal dialogClassName="" show={this.state.showAd} onHide={this.closeAd} centered>
             <Modal.Header closeButton>
             <Modal.Title>
-              {translate("Welcome") + "，" + this.state.username}
+              
             </Modal.Title>
           </Modal.Header>
             <Modal.Body className="d-flex flex-column" style={{ overflowY: 'auto', height: "400px"}}>
@@ -322,49 +146,7 @@ class App extends React.Component {
               </div>
             </Modal.Body>
           </Modal>
-        }
-        <Route exact path="/" render={(location) => (
-            // !this.state.redirect?
-            // <Home targetProductId={this.state.targetProductId} addProductToCart={this.addProductToCart} showProduct={this.showProduct} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId}/>:
-            <Category name={this.state.targetCategory} data={data[this.state.targetCategory]} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username}/>
-        )}/>
-        <Route path="/Men's Fashion" render={(location) => (
-            <Category name="Men's Fashion" data={data["Men's Fashion"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username}/>
-        )}/>
-        <Route path="/Women's Fashion" render={(location) => (
-            <Category name="Women's Fashion" data={data["Women's Fashion"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username}/>
-        )}/>
-        <Route path="/Home and Kitchen" render={(location) => (
-            <Category name="Home and Kitchen" data={data["Home and Kitchen"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username}/>
-        )}/>
-        <Route path="/Electronics" render={(location) => (
-            <Category name="Electronics" data={data["Electronics"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username}/>
-        )}/>
-        <Route path="/Beauty and Personal Care" render={(location) => (
-            <Category name="Beauty and Personal Care" data={data["Beauty and Personal Care"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username}/>
-        )}/>
-        <Route path="/Luggage" render={(location) => (
-            <Category name="Luggage" data={data["Luggage"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username}/>
-        )}/>
-        <Route path="/Health and Household" render={(location) => (
-            <Category name="Health and Household" data={data["Health and Household"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username}/>
-        )}/>
-        <Route exact path="/Checkout" render={(location) => (
-            <Checkout captchaId={this.state.captchaId} toggleCategoryNav={this.toggleCategoryNav}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} showSurvey={this.showSurvey} updateCart={this.updateCart} userLogin={this.state.userLogin}/>
-        )}/>
-        <Route exact path="/Product" render={(location) => (
-            this.state.curProduct?
-              <ProductDetail product={this.state.curProduct} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} targetCategory={this.state.targetCategory} username={this.state.username}/>
-            :<ProductDetail product={null} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} targetCategory={this.state.targetCategory} username={this.state.username}/>
-        )}/>
-        <Route exact path="/Admin" render={(location) => (
-            <Admin location={location.location} />
-        )}/>
-        <Route exact path="/Survey" render={(location) => (
-            <Survey targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} location={location.location} clearCart={this.clearCart} nextTest={this.nextTest} handleNavbarToggle={this.handleNavbarToggle} targetCategory={this.state.targetCategory}/>
-        )}/>
-      </div>
-      </Router>
+        </div>
     );
   }
 
@@ -372,44 +154,6 @@ class App extends React.Component {
     this.setState((prevState, props) => ({
         navbarToggle: !prevState.navbarToggle
     }));
-  }
-
-  addProductToCart(product, count = 1) {
-    console.log("add to cart:")
-    console.log(product)
-    const { cookies } = this.props;
-    product.name = flatData[product.id].name
-    product.count = count
-    let productsInCart = this.state.productsInCart
-    productsInCart.push({
-      "id": product.id,
-      "price": product.price,
-      "count": 1
-    })
-    for(let i=0; i<productsInCart.length - 1; i++){
-      let p = productsInCart[i]
-      if(p.id === product.id){
-        // productsInCart[i].count += product.count
-        // productsInCart.pop() //QQWQQ
-        break
-      }
-    }
-    cookies.set('products', JSON.stringify(productsInCart))
-    this.setState({
-      showSuccessDialog: count,
-      productsInCart: productsInCart.slice()
-    })
-    
-    logEvent(this.state.username,
-      {
-        product: product.id,
-        type: "addToCart"
-      })
-    setTimeout(() => {
-      this.setState({
-        showSuccessDialog: -1
-      })
-    }, 800)
   }
 
   clearCart(index = null) {
@@ -445,15 +189,9 @@ class App extends React.Component {
     this.setState({
       showLogin: true
     })
-    logEvent(this.state.username,
-      {type: "showLogin"}
-    )
   }
 
   closeDialog() {
-    logEvent(this.state.username,
-      {type: "closeDialog"}
-    )
     this.setState({
       showLogin: false,
       captchaVerified: false,
@@ -484,21 +222,6 @@ class App extends React.Component {
 
   addBrowsedProducts() {
 
-  }
-
-  showSurvey() {
-    logEvent(this.state.username,
-      {
-        type: "checkout",
-        products: this.state.productsInCart
-      })
-    this.setState({
-      navbarToggle: true
-    },()=>{
-      logEvents()
-      logPositions()
-      window.location.href = 'Survey';
-    })
   }
 
   nextTest() {
@@ -556,10 +279,6 @@ class App extends React.Component {
       redirect: true,
       wrongPassword: false,
       showLogin: true
-    }, ()=>{
-      logEvent(this.state.username,
-        {type: "showLogin"}
-      )
     })
   }
 
@@ -584,10 +303,6 @@ class App extends React.Component {
       })
     }
     if(captchaPass){
-      
-      logEvent(this.state.username,{
-        type: "captchaVerified"
-      })
       if(this.state.captchaType == "YouCaptcha"){
         if(this.userLogin()){
           this.setState({
@@ -600,16 +315,6 @@ class App extends React.Component {
           captchaVerified: true
         })
       }
-      // setTimeout(
-        
-      //   this.setState({
-      //     captchaVerified: true
-      //   }, ()=>{
-      //     if(this.state.captchaType == "YouCaptcha"){
-      //       this.userLogin()
-      //     }
-      //   }), 100
-      // )
     }
     return true
   }
@@ -633,9 +338,6 @@ class App extends React.Component {
         userLogin: true,
         redirect: false
       })
-      // if(this.state.captchaType !== "YouCaptcha"){
-      //   setTimeout(this.showAd, 500)
-      // }
       return true
     }
   }
@@ -661,9 +363,6 @@ class App extends React.Component {
       username: text,
       wrongPassword: false
     });
-    // if (text) {
-    //     this.setState({inputDanger: false});
-    // }
   }
 
   handlePasswordChange(e) {
@@ -673,9 +372,6 @@ class App extends React.Component {
       password: text,
       wrongPassword: false
     });
-    // if (text) {
-    //     this.setState({inputDanger: false});
-    // }
   }
 
   result(text) {
@@ -686,10 +382,6 @@ class App extends React.Component {
 
   handleClick(e) {
     e.preventDefault();
-    // if(this.state.captcha === this.captchaEnter.value){
-    // console.log("success")
-    // this.setState({captchaVerified: true})
-    // }
     this.captchaSuccess(true)
   }
 
@@ -718,17 +410,6 @@ class App extends React.Component {
       }
     }
     return false
-  }
-
-  showCheckout() {
-    if(this.state.productsInCart.length == 0) return
-
-    logEvents()
-    logPositions()
-    setTimeout(()=>{
-      window.parent.location.href = '/Checkout'
-      // window.history.back()
-    }, 650)
   }
 }
 
