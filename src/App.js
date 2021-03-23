@@ -11,12 +11,14 @@ import Admin from './Admin'
 import Survey from './Survey'
 import ProductDetail from './ProductDetail'
 import LoginModal from './LoginModal'
+import LoginView from './LoginView'
 import {translate} from './utils/translate'
 import {logEvent, logEvents, logPositions} from './utils/utlis'
 import {
   BrowserRouter as Router,
   Route,
-  Link
+  Link,
+  Redirect
 } from 'react-router-dom'
 import { withCookies, Cookies } from 'react-cookie';
 import { Col, Alert, Container, Row, Nav, Navbar, Button, SplitButton, Dropdown, Badge,
@@ -134,6 +136,7 @@ class App extends React.Component {
     const targetProductData = flatData[this.state.targetProductId]
     return (
       <Router>
+      {this.state.showLogin && <Redirect to={{pathname: "/Login"}} />}
       <div className=''>
         <Navbar bg="light" expand="lg" className="shadow-sm px-4" style={{display: this.state.navbarToggle? "none": "flex"}}>
           <Container>
@@ -226,46 +229,6 @@ class App extends React.Component {
             </Nav>
           </Navbar.Collapse>
           <div className="d-flex flex-row align-items-center">
-            {/* <OverlayTrigger
-              trigger="focus"
-              key={'bottom'}
-              placement={'bottom'}
-              overlay={
-                <Popover id={`popover-positioned-${'bottom'}`}>
-                  <ListGroup>
-                  {
-                    this.state.productsInCart.map((product, index) => {
-                        return (
-                        <ListGroup.Item>
-                          <Row>
-                            <Col style={{cursor: "pointer"}} onClick={() => this.clearCart(index)} lg={2}><FontAwesomeIcon icon={faTimes} /></Col>
-                            <Col lg={10}><strong key={product.id}>{product.name}</strong></Col>
-                          </Row>
-                        </ListGroup.Item>)
-                      }
-                    )
-                  }
-                  {
-                    this.state.productsInCart.length > 0?
-                    <>
-                      <ListGroup.Item action style={{padding: 0}} onClick={() => this.clearCart()}>
-                        <Button size="" variant="light" className="w-100">清空購物車</Button>
-                      </ListGroup.Item>
-                      <ListGroup.Item style={{padding: 0}}>
-                        <Button href="Checkout" size="" className="w-100">去結帳</Button>
-                      </ListGroup.Item>
-                    </>:
-                    <ListGroup.Item>
-                      您的購物車目前沒有商品
-                    </ListGroup.Item>
-                  }
-                  <ListGroup.Item>
-                    <Button onClick={this.nextTest}>下一個</Button>
-                  </ListGroup.Item>
-                  </ListGroup>
-                </Popover>
-              }
-            > */}
               <Button className="mx" variant="" onMouseEnter={()=>{logEvents(); logPositions();}} onClick={this.showCheckout}>
               <FontAwesomeIcon className="mx-2" icon={faShoppingCart}/>
                 購物車
@@ -292,14 +255,14 @@ class App extends React.Component {
           <FontAwesomeIcon className="mx-2" icon={faCheck}/>
           已將<span className="mx-1">{this.state.showSuccessDialog}</span>件商品加入購物車
         </Alert>
-        <LoginModal showLogin={this.state.showLogin} closeDialog={this.closeDialog} showDialog={this.showDialog} 
+        {/* <LoginModal showLogin={this.state.showLogin} closeDialog={this.closeDialog} showDialog={this.showDialog} 
           captchaVerified={this.state.captchaVerified} username={this.state.username} password={this.state.password}
           handleUserNameChange={this.handleUserNameChange} handlePasswordChange={this.handlePasswordChange}
           usernameValid={this.state.usernameValid} passwordValid={this.state.passwordValid}
           captchaType={this.state.captchaType} result={this.result} handleClick={this.handleClick}
           captcha={this.state.captcha} captchaId={this.state.captchaId} captchaSuccess={this.captchaSuccess}
           captchaIdList={this.state.captchaIdList} userLogin={this.userLogin} wrongPassword={this.state.wrongPassword}
-          />
+          /> */}
         {
           <Modal dialogClassName="" show={this.state.showAd} onHide={this.closeAd} centered>
             <Modal.Header closeButton>
@@ -362,6 +325,17 @@ class App extends React.Component {
         )}/>
         <Route exact path="/Survey" render={(location) => (
             <Survey targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} location={location.location} clearCart={this.clearCart} nextTest={this.nextTest} handleNavbarToggle={this.handleNavbarToggle} targetCategory={this.state.targetCategory}/>
+        )}/>
+        <Route exact path="/Login" render={(location) => (
+            // <LoginView targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} location={location.location} clearCart={this.clearCart} nextTest={this.nextTest} handleNavbarToggle={this.handleNavbarToggle} targetCategory={this.state.targetCategory}/>
+            <LoginView showLogin={this.state.showLogin} closeDialog={this.closeDialog} showDialog={this.showDialog} 
+              captchaVerified={this.state.captchaVerified} username={this.state.username} password={this.state.password}
+              handleUserNameChange={this.handleUserNameChange} handlePasswordChange={this.handlePasswordChange}
+              usernameValid={this.state.usernameValid} passwordValid={this.state.passwordValid}
+              captchaType={this.state.captchaType} result={this.result} handleClick={this.handleClick}
+              captcha={this.state.captcha} captchaId={this.state.captchaId} captchaSuccess={this.captchaSuccess}
+              captchaIdList={this.state.captchaIdList} userLogin={this.userLogin} wrongPassword={this.state.wrongPassword}
+              />
         )}/>
       </div>
       </Router>
@@ -600,16 +574,7 @@ class App extends React.Component {
           captchaVerified: true
         })
       }
-      // setTimeout(
-        
-      //   this.setState({
-      //     captchaVerified: true
-      //   }, ()=>{
-      //     if(this.state.captchaType == "YouCaptcha"){
-      //       this.userLogin()
-      //     }
-      //   }), 100
-      // )
+      
     }
     return true
   }

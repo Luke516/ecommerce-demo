@@ -22,6 +22,7 @@ let positions = []
 const serverUrl = "http://localhost:5000/"
 
 export function logEvent(username, event){
+  return; //QWQ
   const timestamp = Date.now();
   let data={
       username,
@@ -41,6 +42,7 @@ export function logEvent(username, event){
 }
 
 export function logEvents(){
+  return; //QWQ
   let data = events.slice()
   console.log("log events " + data.length)
   const url = serverUrl + "events/";
@@ -66,6 +68,7 @@ export function logEvents(){
 }
 
 export function logSurvey(data) {
+  return; //QWQ
   const url = serverUrl + "log/";
   fetch(url, {
       method: 'post',
@@ -116,6 +119,7 @@ export function logPosition(username, timestamp, event) {
 }
 
 export function logPositions() {
+  return; //QWQ
   console.log("log positions " + positions.length)
   let data = positions.slice()
   positions = []

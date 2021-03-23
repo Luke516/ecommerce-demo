@@ -1,0 +1,20 @@
+#login {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: white;
+}
+
+#login-view {
+    width: 500px;
+    margin: auto;
+    background-color: rgba(150, 150, 150, 0.15);
+}
+
+.brand-div {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
