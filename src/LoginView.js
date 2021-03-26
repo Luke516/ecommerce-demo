@@ -61,7 +61,7 @@ class LoginView extends React.Component {
                     <Modal.Body className="mt-2">
                         <Form className="d-flex flex-row justify-content-center">
                         <div className={(this.props.captchaVerified && this.props.captchaType == "YouCaptcha")
-                            ?"justify-content-center align-items-center ml-2 d-flex flex-column w-100 shrink mr-4 pr-4":"justify-content-center align-items-center ml-2 d-flex flex-column w-100 mr-4 pr-4"}>
+                            ?"justify-content-center align-items-center mx-3 d-flex flex-column w-100 shrink":"justify-content-center align-items-center mx-3 d-flex flex-column w-100"}>
                             <InputGroup className="d-flex align-items-center mb-3" style={{borderRadius:"0.25rem"}}>
                                 <InputGroup.Prepend>
                                     {/* <label htmlFor="basic-url">{translate("Username")}</label>    */}
@@ -119,7 +119,7 @@ class LoginView extends React.Component {
                                 <Button variant="google text-light" className="d-flex align-items-center google-login mr-2"><FontAwesomeIcon icon={faGoogle}/>Google<span></span></Button>
                                 <Button variant="facebook text-light" className="d-flex align-items-center facebook-login ml-2"><FontAwesomeIcon icon={faFacebookF}/>Facebook<span></span></Button>
                             </div> */}
-                            <Button className="px-2 my-2 w-25" onClick={this.props.userLogin}>{translate('Login Your Account')}</Button>
+                            <Button className="px-2 my-2 w-25" onClick={this.handleClick}>{translate('Login Your Account')}</Button>
                         </div>
                         {/* <div className={(this.props.captchaVerified && this.props.captchaType == "YouCaptcha")?"ww-50 scale":"ww-50"} style={{minHeight: this.props.captchaType == "YouCaptcha"? this.props.captchaVerified? "160px" :"120px":"80px"}}>
                             {this.props.captchaType == "textCaptcha" && 
@@ -157,8 +157,11 @@ class LoginView extends React.Component {
     }
 
     handleClick(e) {
+        console.log("handle click 1 QWQ!");
         e.preventDefault();
+        // this.props.userLogin();
         this.props.handleClick(e);
+        this.props.history.push("/");
         return;
         if(!this.props.captchaSuccess()){
             this.setState({

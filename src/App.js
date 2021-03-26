@@ -11,6 +11,7 @@ import Admin from './Admin'
 import Survey from './Survey'
 import ProductDetail from './ProductDetail'
 import LoginModal from './LoginModal'
+import CaptchaPopup from './YouCaptcha/CaptchaPopup';
 import LoginView from './LoginView'
 import {translate} from './utils/translate'
 import {logEvent, logEvents, logPositions} from './utils/utlis'
@@ -67,9 +68,13 @@ class App extends React.Component {
       navbarToggle: false,
       showCategoryNav: true,
       showLogin: false,
+      showCaptcha: false,
+      showContent: false,
       captchaVerified: false,
       targetCategory,
       targetProductId,
+      targetProductUrl : "",
+      targetRef: null,
       controlProductId,
       captchaId,
       captchaIdList,
@@ -130,6 +135,44 @@ class App extends React.Component {
       logEvents()
       logPositions()
     }, 2500)
+  }
+
+  insertTargetUrl = (url) => {
+    this.setState({
+      targetProductUrl: url,
+      showContent: true
+    });
+  }
+
+  setTargetRef = (ref) => {
+    // console.log("set ref QWQ");
+    // console.log(ref);
+    // this.setState({
+    //   targetRef: ref
+    // });
+    this.childRef = ref;
+  }
+
+  captchaSolved = () => {
+    this.scrollToTarget();
+  }
+
+  scrollToTarget = () => {
+    console.log("scroll QWQ");
+    // if(this.state.targetRef){
+    //   this.state.targetRef.current.scrollIntoView();
+    // }
+    console.log(this.childRef);
+    // if(this.childRef){
+    //   console.log("scroll QWQ!");
+    //   this.childRef.scrollIntoView();
+    // }
+    setTimeout(()=>{
+      document.getElementById("target").scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'center' });
+    },3000);
   }
 
   render (){
@@ -255,14 +298,7 @@ class App extends React.Component {
           <FontAwesomeIcon className="mx-2" icon={faCheck}/>
           已將<span className="mx-1">{this.state.showSuccessDialog}</span>件商品加入購物車
         </Alert>
-        {/* <LoginModal showLogin={this.state.showLogin} closeDialog={this.closeDialog} showDialog={this.showDialog} 
-          captchaVerified={this.state.captchaVerified} username={this.state.username} password={this.state.password}
-          handleUserNameChange={this.handleUserNameChange} handlePasswordChange={this.handlePasswordChange}
-          usernameValid={this.state.usernameValid} passwordValid={this.state.passwordValid}
-          captchaType={this.state.captchaType} result={this.result} handleClick={this.handleClick}
-          captcha={this.state.captcha} captchaId={this.state.captchaId} captchaSuccess={this.captchaSuccess}
-          captchaIdList={this.state.captchaIdList} userLogin={this.userLogin} wrongPassword={this.state.wrongPassword}
-          /> */}
+        {this.state.showCaptcha && <CaptchaPopup insertTargetUrl={this.insertTargetUrl} captchaSolved={this.captchaSolved}/>}
         {
           <Modal dialogClassName="" show={this.state.showAd} onHide={this.closeAd} centered>
             <Modal.Header closeButton>
@@ -287,38 +323,37 @@ class App extends React.Component {
           </Modal>
         }
         <Route exact path="/" render={(location) => (
-            // !this.state.redirect?
-            // <Home targetProductId={this.state.targetProductId} addProductToCart={this.addProductToCart} showProduct={this.showProduct} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId}/>:
-            <Category name={this.state.targetCategory} data={data[this.state.targetCategory]} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username}/>
+            this.state.showContent ? <Category name={this.state.targetCategory} data={data[this.state.targetCategory]} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username} targetProductUrl={this.state.targetProductUrl} setTargetRef={this.setTargetRef}/>
+            : <></>
         )}/>
         <Route path="/Men's Fashion" render={(location) => (
-            <Category name="Men's Fashion" data={data["Men's Fashion"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username}/>
+            <Category name="Men's Fashion" data={data["Men's Fashion"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username} targetProductUrl={this.state.targetProductUrl} setTargetRef={this.setTargetRef}/>
         )}/>
         <Route path="/Women's Fashion" render={(location) => (
-            <Category name="Women's Fashion" data={data["Women's Fashion"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username}/>
+            <Category name="Women's Fashion" data={data["Women's Fashion"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username} targetProductUrl={this.state.targetProductUrl} setTargetRef={this.setTargetRef}/>
         )}/>
         <Route path="/Home and Kitchen" render={(location) => (
-            <Category name="Home and Kitchen" data={data["Home and Kitchen"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username}/>
+            <Category name="Home and Kitchen" data={data["Home and Kitchen"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username} targetProductUrl={this.state.targetProductUrl} setTargetRef={this.setTargetRef}/>
         )}/>
         <Route path="/Electronics" render={(location) => (
-            <Category name="Electronics" data={data["Electronics"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username}/>
+            <Category name="Electronics" data={data["Electronics"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username} targetProductUrl={this.state.targetProductUrl} setTargetRef={this.setTargetRef}/>
         )}/>
         <Route path="/Beauty and Personal Care" render={(location) => (
-            <Category name="Beauty and Personal Care" data={data["Beauty and Personal Care"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username}/>
+            <Category name="Beauty and Personal Care" data={data["Beauty and Personal Care"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username} targetProductUrl={this.state.targetProductUrl} setTargetRef={this.setTargetRef}/>
         )}/>
         <Route path="/Luggage" render={(location) => (
-            <Category name="Luggage" data={data["Luggage"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username}/>
+            <Category name="Luggage" data={data["Luggage"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username} targetProductUrl={this.state.targetProductUrl} setTargetRef={this.setTargetRef}/>
         )}/>
         <Route path="/Health and Household" render={(location) => (
-            <Category name="Health and Household" data={data["Health and Household"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username}/>
+            <Category name="Health and Household" data={data["Health and Household"]} addProductToCart={this.addProductToCart} showProduct={this.showProduct}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} username={this.state.username} targetProductUrl={this.state.targetProductUrl} setTargetRef={this.setTargetRef}/>
         )}/>
         <Route exact path="/Checkout" render={(location) => (
             <Checkout captchaId={this.state.captchaId} toggleCategoryNav={this.toggleCategoryNav}  location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} showSurvey={this.showSurvey} updateCart={this.updateCart} userLogin={this.state.userLogin}/>
         )}/>
         <Route exact path="/Product" render={(location) => (
             this.state.curProduct?
-              <ProductDetail product={this.state.curProduct} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} targetCategory={this.state.targetCategory} username={this.state.username}/>
-            :<ProductDetail product={null} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} targetCategory={this.state.targetCategory} username={this.state.username}/>
+              <ProductDetail product={this.state.curProduct} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} targetCategory={this.state.targetCategory} username={this.state.username} targetProductUrl={this.state.targetProductUrl} setTargetRef={this.setTargetRef}/>
+            :<ProductDetail product={null} addProductToCart={this.addProductToCart} showProduct={this.showProduct} location={location.location} targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} targetCategory={this.state.targetCategory} username={this.state.username} targetProductUrl={this.state.targetProductUrl} setTargetRef={this.setTargetRef}/>
         )}/>
         <Route exact path="/Admin" render={(location) => (
             <Admin location={location.location} />
@@ -326,7 +361,7 @@ class App extends React.Component {
         <Route exact path="/Survey" render={(location) => (
             <Survey targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} location={location.location} clearCart={this.clearCart} nextTest={this.nextTest} handleNavbarToggle={this.handleNavbarToggle} targetCategory={this.state.targetCategory}/>
         )}/>
-        <Route exact path="/Login" render={(location) => (
+        <Route exact path="/Login" render={(history) => (
             // <LoginView targetProductId={this.state.targetProductId} controlProductId={this.state.controlProductId} location={location.location} clearCart={this.clearCart} nextTest={this.nextTest} handleNavbarToggle={this.handleNavbarToggle} targetCategory={this.state.targetCategory}/>
             <LoginView showLogin={this.state.showLogin} closeDialog={this.closeDialog} showDialog={this.showDialog} 
               captchaVerified={this.state.captchaVerified} username={this.state.username} password={this.state.password}
@@ -334,7 +369,7 @@ class App extends React.Component {
               usernameValid={this.state.usernameValid} passwordValid={this.state.passwordValid}
               captchaType={this.state.captchaType} result={this.result} handleClick={this.handleClick}
               captcha={this.state.captcha} captchaId={this.state.captchaId} captchaSuccess={this.captchaSuccess}
-              captchaIdList={this.state.captchaIdList} userLogin={this.userLogin} wrongPassword={this.state.wrongPassword}
+              captchaIdList={this.state.captchaIdList} userLogin={this.userLogin} wrongPassword={this.state.wrongPassword} history={history.history}
               />
         )}/>
       </div>
@@ -574,7 +609,7 @@ class App extends React.Component {
           captchaVerified: true
         })
       }
-      
+
     }
     return true
   }
@@ -650,12 +685,12 @@ class App extends React.Component {
   }
 
   handleClick(e) {
+    console.log("handle click QWQ!");
     e.preventDefault();
-    // if(this.state.captcha === this.captchaEnter.value){
-    // console.log("success")
-    // this.setState({captchaVerified: true})
-    // }
-    this.captchaSuccess(true)
+    this.setState({
+      showCaptcha: true
+    })
+    // this.captchaSuccess(true)
   }
 
   toggleCategoryNav() {

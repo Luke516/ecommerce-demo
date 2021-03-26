@@ -1,0 +1,84 @@
+.captcha-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
+    z-index: 100;
+    pointer-events: none;
+}
+
+.popup-content {
+    width: 720px;
+    height: 100%;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.verify-success-text {
+    width: 0px;
+    position: absolute;
+    background-color: white;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
+    overflow-x: hidden;
+}
+
+.challenge-text {
+    position: absolute;
+    width: 250px;
+    background-color: white;
+}
+
+.show-text {
+    animation: showTextAnimation 0.3s 0.1s linear forwards, fadeOutAnimation 1.5s 2.5s linear forwards;;
+}
+  
+@keyframes showTextAnimation {
+    0% {
+      width: 0px;
+    }
+    100% {
+        width: 250px;
+    }
+}
+
+.fadeOutBack {
+    animation: fadeOutAnimation 1.5s 2.5s linear forwards;
+}
+
+.fadeOutBackFast {
+    animation: fadeOutBackAnimation 0.1s 0.1s linear forwards, fadeOutAnimation 0.1s 0.1s linear forwards;
+}
+
+.fadeOutSlow {
+    animation: fadeOutAnimation 2.5s 4s linear forwards;
+}
+
+.fadeInSlow {
+    animation: fadeOutAnimation 2.5s 1.5s linear forwards;
+}
+
+.fadeInOut {
+    z-index: 100;
+    animation: fadeInAnimation 1s 1s linear forwards;
+}
+  
+@keyframes fadeOutBackAnimation {
+    0% {
+        border: none;
+        box-shadow: none;
+        background-color: rgba(255, 255, 255, 1);
+    }
+    100% {
+        border: none;
+        box-shadow: none;
+        background-color: rgba(255, 255, 255, 0);
+    }
+}

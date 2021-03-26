@@ -35,6 +35,7 @@
 }
 
 .device {
+    width: 402px;
     border: 1px solid rgba(182, 185, 188, 0.6);
     border-radius: 1rem;
     background-color: white;
@@ -56,7 +57,13 @@
 .selected {
     border-style: solid;
     border-color: #007bff;
-    border-width: 5px;
+    border-width: 4px;
+}
+
+.unselected {
+    border-style: solid;
+    border-color: transparent;
+    border-width: 4px;
 }
 
 .cell {

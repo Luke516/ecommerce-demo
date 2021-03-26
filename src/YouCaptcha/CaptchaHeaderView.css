@@ -69,7 +69,7 @@
 .check {
     stroke-dashoffset: -100;
     -webkit-animation: dash-check .9s 0s ease-in-out forwards;
-    animation: dash-check 1s 0s ease-in-out forwards;
+    animation: dash-check 1s 0.2s ease-in-out forwards;
 }
   
 @-webkit-keyframes dash {

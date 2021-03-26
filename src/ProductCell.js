@@ -45,6 +45,10 @@ class ProductCell extends React.Component {
         // if(this.props.target){
         //     logPositionTimer = setInterval(this.logPosition, 100)
         // }
+        
+        if(this.props.product.url && this.props.product.url.length > 0){
+            imageSourceUrl = this.props.product.url;
+        }
         this.state = {
             price: priceData[this.props.product.id][0],
             imageSourceUrl: imageSourceUrl,
@@ -95,7 +99,7 @@ class ProductCell extends React.Component {
         });
         price = formatter.format(price).split('.')[0];
         return (
-            <Col className="my-3 mx-" xs={12} sm={6} md={4} lg={3} style={{cursor: "pointer"}} ref={(el) => this.domElement = el} >
+            <Col id={(this.props.product.url && this.props.product.url.length > 0) && "target"} className="my-3 mx-" xs={12} sm={6} md={4} lg={3} style={{cursor: "pointer"}} ref={(this.props.product.url && this.props.product.url.length > 0) ? this.props.setTargetRef :(el) => this.domElement = el} >
                 <Card className="card-shadow" onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} onClick={this.detailButtonClick}
                     style={{border: "0", padding: "0rem", height: this.props.hideOption?"400px":"480px", justifyContent: "space-between", alignItems: "center"}}>
                     <div className="w-100">
@@ -115,12 +119,6 @@ class ProductCell extends React.Component {
                                 !this.props.hideOption &&
                                 <h4 className="text-success text-right"><strong>{price}</strong></h4>
                             }
-                            {/* {
-                                !this.props.hideOption &&
-                                <Button className="btn-light2 my-1 w-100" onClick={this.detailButtonClick}>
-                                    <FontAwesomeIcon className="mx-2" icon={faInfo} />{translate("Product Detail")}
-                                </Button>
-                            } */}
                         </div>
                         {
                             !this.props.hideOption &&

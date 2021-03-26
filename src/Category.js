@@ -176,6 +176,9 @@ class Category extends React.Component {
             name: this.props.name + '/' + "all",
             data: this.sortProducts(this.getAllproducts(this.props.data))
         })
+        subCategoryList[0].data[8].url = this.props.targetProductUrl;
+        // console.log("QWQ");
+        // console.log(subCategoryList);
         
         return {
             controlProductData,
@@ -324,7 +327,7 @@ class Category extends React.Component {
                             this.state.targetSubCategoryData && subCategoryData.name == this.state.targetSubCategoryData.name?
                             <Tab.Pane key={this.state.targetSubCategoryData.name.split('/')[1]} eventKey={this.state.targetSubCategoryData.name.split('/')[1]} title={translate(this.state.targetSubCategoryData.name.split('/')[1])} >
                                 <TrackVisibility partialVisibility>
-                                    <ProductRow name={this.state.targetSubCategoryData.name} data={this.state.targetSubCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target targetProductId={this.props.targetProductId} controlProductId={this.props.controlProductId} orderMethod={this.state.orderMethod} active={this.props.location.pathname.split('/')[2] === this.state.targetSubCategoryData.name.split('/')[1]}/>
+                                    <ProductRow setTargetRef={this.props.setTargetRef}  targetProductUrl={this.props.targetProductUrl}  name={this.state.targetSubCategoryData.name} data={this.state.targetSubCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target targetProductId={this.props.targetProductId} controlProductId={this.props.controlProductId} orderMethod={this.state.orderMethod} active={this.props.location.pathname.split('/')[2] === this.state.targetSubCategoryData.name.split('/')[1]}/>
                                 </TrackVisibility>
                             </Tab.Pane>:
                             this.state.targetSubCategoryData && subCategoryData.displayName == "all"?
@@ -391,10 +394,10 @@ class Category extends React.Component {
                                         </Carousel.Item>
                                     </Carousel>
                                 </Container>
-                                <ProductRow name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target targetProductId={this.props.targetProductId} controlProductId={this.props.controlProductId} orderMethod={this.state.orderMethod} active={this.props.location.pathname.split('/')[2] === subCategoryData.name.split('/')[1]}/>
+                                <ProductRow setTargetRef={this.props.setTargetRef}  targetProductUrl={this.props.targetProductUrl}  name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target targetProductId={this.props.targetProductId} controlProductId={this.props.controlProductId} username={this.state.username} targetProductUrl={this.props.targetProductUrl} orderMethod={this.state.orderMethod} active={this.props.location.pathname.split('/')[2] === subCategoryData.name.split('/')[1]}/>
                             </Tab.Pane>:
                             <Tab.Pane key={subCategoryData.name.split('/')[1]} eventKey={subCategoryData.name.split('/')[1]} title={translate(subCategoryData.name.split('/')[1])} >
-                                <ProductRow name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} orderMethod={this.state.orderMethod} active={this.props.location.pathname.split('/')[2] === subCategoryData.name.split('/')[1]}/>
+                                <ProductRow setTargetRef={this.props.setTargetRef}  targetProductUrl={this.props.targetProductUrl}  name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} orderMethod={this.state.orderMethod} active={this.props.location.pathname.split('/')[2] === subCategoryData.name.split('/')[1]}/>
                             </Tab.Pane>
                         )
                     })
@@ -413,7 +416,7 @@ class Category extends React.Component {
                                 <h2 className="mb-4 mt-4">{translate(subCategoryData.name.split('/')[0])} / {translate(subCategoryData.name.split('/')[1])}</h2>
                                 <hr/>
                             </div>
-                            <ProductRow key={subCategoryData.name} name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} targetProductId={this.props.targetProductId} controlProductId={this.props.controlProductId} orderMethod={this.state.orderMethod} />
+                            <ProductRow setTargetRef={this.props.setTargetRef}  targetProductUrl={this.props.targetProductUrl}  key={subCategoryData.name} name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} targetProductId={this.props.targetProductId} controlProductId={this.props.controlProductId} orderMethod={this.state.orderMethod} />
                             <div className="footer1 my-4"></div>
                         </Container>
                     )

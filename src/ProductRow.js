@@ -59,14 +59,14 @@ class ProductRow extends React.Component {
       }
       return (
         <>
-        <Row className="mt-2 Dd-flex flex-row align-items-end">
+        <Row className="mt-2 d-flex flex-row align-items-end">
             {
                 (this.props.name.includes("all") && this.props.orderMethod == "recommand") ?
                 this.props.data.slice(2, count).map(element => {
-                    return <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target={this.props.target} isVisible={this.props.isVisible } username={this.state.username} />
+                    return <ProductCell setTargetRef={this.props.setTargetRef} targetProductUrl={this.props.targetProductUrl}  key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target={this.props.target} isVisible={this.props.isVisible } username={this.state.username} />
                 }):
                 this.props.data.slice(0, count).map(element => {
-                    return <ProductCell key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target={this.props.target} isVisible={this.props.isVisible } username={this.state.username} />
+                    return <ProductCell setTargetRef={this.props.setTargetRef} targetProductUrl={this.props.targetProductUrl}  key={element.id} product={element} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target={this.props.target} isVisible={this.props.isVisible } username={this.state.username} />
                 })
             }
         </Row>
