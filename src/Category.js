@@ -176,7 +176,7 @@ class Category extends React.Component {
             name: this.props.name + '/' + "all",
             data: this.sortProducts(this.getAllproducts(this.props.data))
         })
-        subCategoryList[0].data[8].url = this.props.targetProductUrl;
+        subCategoryList[0].data[8].urlhaha = this.props.targetProductUrl;
         // console.log("QWQ");
         // console.log(subCategoryList);
         

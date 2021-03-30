@@ -37,7 +37,10 @@
 }
 
 .show-text {
-    animation: showTextAnimation 0.3s 0.1s linear forwards, fadeOutAnimation 1.5s 2.5s linear forwards;;
+    animation: showTextAnimation 0.3s 0.1s linear forwards, hideTextAnimation 0.3s 1.0s linear forwards;
+}
+.show-text2 {
+	animation: showTextAnimation 0.3s 0.1s linear forwards, fadeOutAnimation 1.5s 2.5s linear forwards;
 }
   
 @keyframes showTextAnimation {
@@ -45,12 +48,25 @@
       width: 0px;
     }
     100% {
-        width: 250px;
+			width: 250px;
     }
 }
 
+@keyframes hideTextAnimation {
+	0% {
+		width: 250px;
+	}
+	100% {
+		width: 0px;
+	}
+}
+
 .fadeOutBack {
-    animation: fadeOutAnimation 1.5s 2.5s linear forwards;
+    animation: fadeOutBackAnimation 1.5s 1s linear forwards;
+}
+
+.fadeOutBack2 {
+    animation: scrollToTargetAnimation 0.5s 2s linear forwards, fadeOutBackAnimation 1.5s 1s linear forwards;
 }
 
 .fadeOutBackFast {
@@ -58,7 +74,7 @@
 }
 
 .fadeOutSlow {
-    animation: fadeOutAnimation 2.5s 4s linear forwards;
+    animation: fadeOutAnimation 0.5s 3.2s linear forwards, rotateProductAnimation 0.8s 1.2s linear forwards;
 }
 
 .fadeInSlow {
@@ -67,7 +83,12 @@
 
 .fadeInOut {
     z-index: 100;
-    animation: fadeInAnimation 1s 1s linear forwards;
+    animation: fadeInAnimation 1s 2.2s linear forwards;
+}
+
+.fadeInOut2 {
+	z-index: 100;
+	animation: fadeInAnimation 1s 2.2s linear forwards, rotateProductReverseAnimation 0.8s 1.2s linear forwards;
 }
   
 @keyframes fadeOutBackAnimation {
@@ -81,4 +102,8 @@
         box-shadow: none;
         background-color: rgba(255, 255, 255, 0);
     }
+}
+
+.scrollToTarget {
+    animation: scrollToTargetAnimation 2s 1s linear forwards;
 }

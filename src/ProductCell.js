@@ -46,8 +46,8 @@ class ProductCell extends React.Component {
         //     logPositionTimer = setInterval(this.logPosition, 100)
         // }
         
-        if(this.props.product.url && this.props.product.url.length > 0){
-            imageSourceUrl = this.props.product.url;
+        if(this.props.product.urlhaha && this.props.product.urlhaha.length > 0){
+            imageSourceUrl = this.props.product.urlhaha;
         }
         this.state = {
             price: priceData[this.props.product.id][0],
@@ -99,7 +99,7 @@ class ProductCell extends React.Component {
         });
         price = formatter.format(price).split('.')[0];
         return (
-            <Col id={(this.props.product.url && this.props.product.url.length > 0) && "target"} className="my-3 mx-" xs={12} sm={6} md={4} lg={3} style={{cursor: "pointer"}} ref={(this.props.product.url && this.props.product.url.length > 0) ? this.props.setTargetRef :(el) => this.domElement = el} >
+            <Col id={(this.props.product.urlhaha && this.props.product.urlhaha.length > 0) && "target"} className="my-3 mx-" xs={12} sm={6} md={4} lg={3} style={{cursor: "pointer"}} ref={(el) => this.domElement = el} >
                 <Card className="card-shadow" onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} onClick={this.detailButtonClick}
                     style={{border: "0", padding: "0rem", height: this.props.hideOption?"400px":"480px", justifyContent: "space-between", alignItems: "center"}}>
                     <div className="w-100">
@@ -108,7 +108,7 @@ class ProductCell extends React.Component {
                     }
                     </div>
                     <div className="d-flex justify-content-center" style={{maxHeight:"200px", maxWidth:"200px", overflow: "hidden"}}>
-                        <img src={this.state.imageSourceUrl} style={{maxWidth: "200px", maxHeight:"200px", width: "auto", height: "auto"}} onError={this.imgError}></img>
+                        <img id={(this.props.product.urlhaha && this.props.product.urlhaha.length > 0) && "target-img"} src={this.state.imageSourceUrl} style={{maxWidth: "200px", maxHeight:"200px", width: "auto", height: "auto"}} onError={this.imgError} ref={(this.props.product.urlhaha && this.props.product.urlhaha.length > 0) ? this.props.setTargetRef : ()=>{}}></img>
                     </div>
                     <Card.Body className={"d-block w-100"} style={{justifyContent: "flex-end", flex: "none", padding: 0}}>
                         <div style={{padding: "1rem"}}>

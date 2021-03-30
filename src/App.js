@@ -27,6 +27,8 @@ import { Col, Alert, Container, Row, Nav, Navbar, Button, SplitButton, Dropdown,
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes, faShoppingCart, faCheck } from '@fortawesome/free-solid-svg-icons'
 
+import Keyframes from '@keyframes/core';
+
 class App extends React.Component {
 
   constructor(props) {
@@ -92,7 +94,8 @@ class App extends React.Component {
       redirect: cookies.get('username')? cookies.get('username') != "" ? false: true: true,
       showAd: false,
       wrongPassword: false,
-      testId
+      testId,
+      targetOffset: 0
     };
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleUserNameChange = this.handleUserNameChange.bind(this);
@@ -151,6 +154,13 @@ class App extends React.Component {
     //   targetRef: ref
     // });
     this.childRef = ref;
+
+    console.log("set ref QWQ");
+    console.log(this.childRef);
+  }
+
+  setSourceRef = (ref) => {
+    this.childRef2 = ref;
   }
 
   captchaSolved = () => {
@@ -162,17 +172,40 @@ class App extends React.Component {
     // if(this.state.targetRef){
     //   this.state.targetRef.current.scrollIntoView();
     // }
-    console.log(this.childRef);
+    var targetElement = document.getElementById("target-img").getBoundingClientRect();
+    var sourceElement = this.childRef2.getBoundingClientRect();
+
+    console.log(sourceElement);
+    console.log(targetElement);
+
+    let targetOffset = targetElement.left - sourceElement.left;
+    let widthDiff = targetElement.width - sourceElement.width;
+    console.log(targetOffset);
+
+    // this.setState({
+    //   targetOffset
+    // });
+
+    Keyframes.define({
+      name: 'scrollToTargetAnimation',
+      from: {
+        marginLeft: `${0}`
+      },
+      to: {
+        marginLeft: `${targetOffset*2 + widthDiff}px`
+      }
+    });
+
     // if(this.childRef){
     //   console.log("scroll QWQ!");
     //   this.childRef.scrollIntoView();
     // }
     setTimeout(()=>{
-      document.getElementById("target").scrollIntoView({ 
+      document.getElementById("target-img").scrollIntoView({ 
         behavior: 'smooth',
         block: 'center',
         inline: 'center' });
-    },3000);
+    },2000);
   }
 
   render (){
@@ -298,7 +331,7 @@ class App extends React.Component {
           <FontAwesomeIcon className="mx-2" icon={faCheck}/>
           已將<span className="mx-1">{this.state.showSuccessDialog}</span>件商品加入購物車
         </Alert>
-        {this.state.showCaptcha && <CaptchaPopup insertTargetUrl={this.insertTargetUrl} captchaSolved={this.captchaSolved}/>}
+        {this.state.showCaptcha && <CaptchaPopup insertTargetUrl={this.insertTargetUrl} captchaSolved={this.captchaSolved} setSourceRef={this.setSourceRef} targetOffset={this.state.targetOffset}/>}
         {
           <Modal dialogClassName="" show={this.state.showAd} onHide={this.closeAd} centered>
             <Modal.Header closeButton>
