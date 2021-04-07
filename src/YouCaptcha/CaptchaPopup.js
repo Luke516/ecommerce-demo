@@ -17,6 +17,9 @@ function CaptchaPopup(props) {
 	const [originalUrl, setOriginalUrl] = useState("");
 	const [marginOffset, setMarginOffset] = useState(5);
 
+	const [transXOffset, settransXOffset] = useState(0);
+	const [transYOffset, settransYOffset] = useState(0);
+
 	const originalImageUrlDict = {
 		B000A6XGY6: "https://youcaptcha.s3-us-west-2.amazonaws.com/seed/Sports+%26+Outdoors/Sports+%26+Fitness/Other+Sports/B000A6XGY6.jpg",
 		B000F4AVPA: "https://youcaptcha.s3-us-west-2.amazonaws.com/seed/Pet Supplies/Dogs/Toys/B000F4AVPA.jpg",
@@ -59,32 +62,11 @@ function CaptchaPopup(props) {
 					loadImage(originalImgUrl2);
 					props.insertTargetUrl(originalImgUrl2);
 
-					let rotationId = originalImgUrl.split(element)[1].split(".")[1];
-					console.log("rotationId: " + rotationId);
-					let rotationAngle = (parseInt(rotationId) * 8) - 60;
-					console.log("rotationAngle: " + rotationAngle);
+					// let rotationId = originalImgUrl.split(element)[1].split(".")[2];
+					// console.log("rotationId: " + rotationId);
+					// let rotationAngle = (parseInt(rotationId) * 8) - 60;
+					// console.log("rotationAngle: " + rotationAngle);
 
-					Keyframes.define({
-						name: 'rotateProductAnimation',
-						from: {
-							transform: `rotate(0deg)`,
-							borderRadius: `0`
-						},
-						to: {
-							transform: `rotate(${rotationAngle}deg)`,
-							borderRadius: `50%`
-						}
-					});
-
-					Keyframes.define({
-						name: 'rotateProductReverseAnimation',
-						from: {
-							transform: `rotate(0deg)`
-						},
-						to: {
-							transform: `rotate(${-rotationAngle}deg)`
-						}
-					});
 				}
 			});
     });
@@ -134,6 +116,43 @@ function CaptchaPopup(props) {
       else{
         // alert("yes");
 				setSolved(true);
+
+				let xOffset = -(parseFloat(res.data.result.trn_x.N));
+				let yOffset = -(parseFloat(res.data.result.trn_y.N));
+
+				let rotationAngle = (parseInt(res.data.result.rot.N));
+				console.log("rotationAngle: " + rotationAngle);
+
+				const sinTheta = Math.sin(-rotationAngle / 180 * Math.PI);
+				const cosTheta = Math.cos(-rotationAngle / 180 * Math.PI);
+
+				let xOffset2 = -(yOffset * sinTheta + xOffset * cosTheta);
+				let yOffset2 = (yOffset * cosTheta - xOffset * sinTheta);
+
+				Keyframes.define({
+					name: 'rotateProductAnimation',
+					from: {
+						transform: `rotate(0deg) translateX(${0}px) translateY(${0}px)`,
+						borderRadius: `0`
+					},
+					to: {
+						transform: `translateX(${0}px) translateY(${0}px) rotate(${rotationAngle}deg)`,
+						borderRadius: `0%`
+					}
+				});
+
+				Keyframes.define({
+					name: 'rotateProductReverseAnimation',
+					from: {
+						transform: `rotate(0deg)`,
+						borderRadius: `0`
+					},
+					to: {
+						transform: `rotate(${-rotationAngle}deg)`,
+						borderRadius: `0%`
+					}
+				});
+
 				props.captchaSolved();
       }
     }).catch((e)=>{
@@ -181,74 +200,74 @@ function CaptchaPopup(props) {
 						<LoadingSpinner/>
 						<span>Loading...</span>
 					</div>:
-					<div className={"device "+ (solved?"fadeOutBack2":"")} style={{marginLeft: `${marginOffset}px`}}>
-						<div className="mt-3 mb-1 mx-1 d-flex flex-column">
-							<div className="d-flex flex-row">
-								<div className={"mx-1 youcaptcha-image-container " + (solved?"fadeOutSlow":"")} style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left -${size*4}px top -${size}px`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}  ref={props.setSourceRef}>
-									<div className={"m-0 loading-placeholder " + (loading? "show": "hide")}></div>
-									<div className={"d-flex justify-content-center  " + (solved? "fadeInOut2":"")} style={{position: "absolute", width: "120px", height: "120px", backgroundColor: "white", opacity: 0}}>
-										<img className={solved? "fadeInOut	":""} src={originalUrl} style={{opacity: 0, maxWidth: "120px", maxHeight: "120px"}}/>	
+						<div className={"device "+ (solved?"fadeOutBack2":"")} style={{marginLeft: `${marginOffset}px`}}>
+							<div className="mt-3 mb-1 mx-1 d-flex flex-column">
+								<div className="d-flex flex-row">
+									<div className={"mx-1 youcaptcha-image-container " + (solved?"fadeOutSlow":"")} style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left -${size*4}px top -${size}px`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}  ref={props.setSourceRef}>
+										<div className={"m-0 loading-placeholder " + (loading? "show": "hide")}></div>
+										<div className={"d-flex justify-content-center  " + (solved? "fadeInOut2QWQ":"")} style={{position: "absolute", width: "120px", height: "120px", backgroundColor: "white", opacity: 0}}>
+											<img className={solved? "fadeInOutQWQ	":""} src={originalUrl} style={{opacity: 0, maxWidth: "120px", maxHeight: "120px"}}/>	
+										</div>
+										<div className={solved? "" : ""} style={{width: "120px", height: "120px", zIndex: "2"}}>
+											<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" style={{display: solved? "inline-block": "none", zIndex:"2000"}}>
+													<polyline className={solved? "path check" : ""} fill="none" stroke="rgba(115, 175, 85, 0.7)" strokeWidth="10" strokeLinecap="square" strokeMiterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
+											</svg> 
+										</div>
 									</div>
-									<div className={solved? "" : ""} style={{width: "120px", height: "120px", zIndex: "2"}}>
-                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" style={{display: solved? "inline-block": "none", zIndex:"2000"}}>
-                        <polyline className={solved? "path check" : ""} fill="none" stroke="rgba(115, 175, 85, 0.7)" strokeWidth="10" strokeLinecap="square" strokeMiterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
-                    </svg> 
-         					</div>
-								</div>
-								<div className={"youcaptcha-description" + (solved? "hide-text": "")}>
-									<div className={"challenge-text "  + (solved? "fadeOutBackFast":"")}><h5>請從以下的九宮格中，選出與左圖相同的物品</h5></div>
-									<div className={"verify-success-text " + (solved? "show-text":"")}><h5>認證成功！</h5></div>
+									<div className={"youcaptcha-description" + (solved? "hide-text": "")}>
+										<div className={"challenge-text "  + (solved? "fadeOutBackFast":"")}><h5>請從以下的九宮格中，選出與左圖相同的物品</h5></div>
+										<div className={"verify-success-text " + (solved? "show-text":"")}><h5>認證成功！</h5></div>
+									</div>
 								</div>
 							</div>
-						</div>
-						<Collapse in={!solved}>
-						<div>
-						<div className="mt-3 mb-1 mx-1 d-flex flex-column">
-								<div className="mt-1 d-flex flex-row">
-									<div className={"mr-1 p-0 "+(selected[0]? "selected": "unselected")} onClick={()=>{select(0)}}>
-										<div className="" style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left 0 top 0`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}>
+							<Collapse in={!solved}>
+							<div>
+							<div className="mt-3 mb-1 mx-1 d-flex flex-column">
+									<div className="mt-1 d-flex flex-row">
+										<div className={"mr-1 p-0 "+(selected[0]? "selected": "unselected")} onClick={()=>{select(0)}}>
+											<div className="" style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left 0 top 0`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}>
+											<div className={"m-0 loading-placeholder " + (loading? "show": "hide")}></div></div></div>
+										<div className={"mx-0 p-0 "+(selected[1]? "selected": "unselected")} onClick={()=>{select(1)}}>
+											<div className="" style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left 0 top -${size}px`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}>
+											<div className={"m-0 loading-placeholder " + (loading? "show": "hide")}></div></div></div>
+										<div className={"ml-1 p-0 "+(selected[2]? "selected": "unselected")} onClick={()=>{select(2)}}>
+											<div className="" style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left -${size}px top 0`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}>
+											<div className={"m-0 loading-placeholder " + (loading? "show": "hide")}></div></div></div>
+									</div>
+									<div className="mt-1 d-flex flex-row">
+										<div className={"mr-1 p-0 "+(selected[3]? "selected": "unselected")} onClick={()=>{select(3)}}>
+											<div className="" style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left -${size}px top -${size}px`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}>
+											<div className={"m-0 loading-placeholder " + (loading? "show": "hide")}></div></div></div>
+										<div className={"mx-0 p-0 "+(selected[4]? "selected": "unselected")} onClick={()=>{select(4)}}>
+											<div className="" style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left -${size*2}px top 0`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}>
+											<div className={"m-0 loading-placeholder " + (loading? "show": "hide")}></div></div></div>
+										<div className={"ml-1 p-0 "+(selected[5]? "selected": "unselected")} onClick={()=>{select(5)}}>
+											<div className="" style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left -${size*2}px top -${size}px`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}>
+											<div className={"m-0 loading-placeholder " + (loading? "show": "hide")}></div></div></div>
+									</div>
+									<div className="mt-1 d-flex flex-row">
+									<div className={"mr-1 p-0 "+(selected[6]? "selected": "unselected")} onClick={()=>{select(6)}}>
+										<div className="" style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left -${size*3}px top 0`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}>
 										<div className={"m-0 loading-placeholder " + (loading? "show": "hide")}></div></div></div>
-									<div className={"mx-0 p-0 "+(selected[1]? "selected": "unselected")} onClick={()=>{select(1)}}>
-										<div className="" style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left 0 top -${size}px`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}>
+									<div className={"mx-0 p-0 "+(selected[7]? "selected": "unselected")} onClick={()=>{select(7)}}>
+										<div className="" style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left -${size*3}px top -${size}px`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}>
 										<div className={"m-0 loading-placeholder " + (loading? "show": "hide")}></div></div></div>
-									<div className={"ml-1 p-0 "+(selected[2]? "selected": "unselected")} onClick={()=>{select(2)}}>
-										<div className="" style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left -${size}px top 0`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}>
+									<div className={"ml-1 p-0 "+(selected[8]? "selected": "unselected")} onClick={()=>{select(8)}}>
+										<div className="" style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left -${size*4}px top 0`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}>
 										<div className={"m-0 loading-placeholder " + (loading? "show": "hide")}></div></div></div>
-								</div>
-								<div className="mt-1 d-flex flex-row">
-									<div className={"mr-1 p-0 "+(selected[3]? "selected": "unselected")} onClick={()=>{select(3)}}>
-										<div className="" style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left -${size}px top -${size}px`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}>
-										<div className={"m-0 loading-placeholder " + (loading? "show": "hide")}></div></div></div>
-									<div className={"mx-0 p-0 "+(selected[4]? "selected": "unselected")} onClick={()=>{select(4)}}>
-										<div className="" style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left -${size*2}px top 0`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}>
-										<div className={"m-0 loading-placeholder " + (loading? "show": "hide")}></div></div></div>
-									<div className={"ml-1 p-0 "+(selected[5]? "selected": "unselected")} onClick={()=>{select(5)}}>
-										<div className="" style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left -${size*2}px top -${size}px`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}>
-										<div className={"m-0 loading-placeholder " + (loading? "show": "hide")}></div></div></div>
-								</div>
-								<div className="mt-1 d-flex flex-row">
-								<div className={"mr-1 p-0 "+(selected[6]? "selected": "unselected")} onClick={()=>{select(6)}}>
-									<div className="" style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left -${size*3}px top 0`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}>
-									<div className={"m-0 loading-placeholder " + (loading? "show": "hide")}></div></div></div>
-								<div className={"mx-0 p-0 "+(selected[7]? "selected": "unselected")} onClick={()=>{select(7)}}>
-									<div className="" style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left -${size*3}px top -${size}px`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}>
-									<div className={"m-0 loading-placeholder " + (loading? "show": "hide")}></div></div></div>
-								<div className={"ml-1 p-0 "+(selected[8]? "selected": "unselected")} onClick={()=>{select(8)}}>
-									<div className="" style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left -${size*4}px top 0`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}>
-									<div className={"m-0 loading-placeholder " + (loading? "show": "hide")}></div></div></div>
-								</div>
-						</div>
-						<div className="mt-1 mb-3 d-flex flex-row justify-content-between">
-							<div className="ml-3 text-muted cell" onClick={getChallenge}>
-								<i className="fas fa-sync-alt"></i>
+									</div>
 							</div>
-							<Button variant="secondary" className="mr-3" onClick={submit}>
-								送出
-							</Button>
+							<div className="mt-1 mb-3 d-flex flex-row justify-content-between">
+								<div className="ml-3 text-muted cell" onClick={getChallenge}>
+									<i className="fas fa-sync-alt"></i>
+								</div>
+								<Button variant="secondary" className="mr-3" onClick={submit}>
+									送出
+								</Button>
+							</div>
+							</div>
+							</Collapse>
 						</div>
-						</div>
-						</Collapse>
-					</div>
 				}
 			</div>
     </div>

@@ -66,7 +66,7 @@
 }
 
 .fadeOutBack2 {
-    animation: scrollToTargetAnimation 0.5s 2s linear forwards, fadeOutBackAnimation 1.5s 1s linear forwards;
+    animation: scrollToTargetAnimation 1s 1.5s linear forwards, fadeOutBackAnimation 1.5s 1s linear forwards, shrinkAnimation3 0.8s 0.8s linear forwards;
 }
 
 .fadeOutBackFast {
@@ -74,7 +74,7 @@
 }
 
 .fadeOutSlow {
-    animation: fadeOutAnimation 0.5s 3.2s linear forwards, rotateProductAnimation 0.8s 1.2s linear forwards;
+    animation: fadeOutAnimation 2s 2s ease-in forwards, rotateProductAnimation 1s 1.5s linear forwards;
 }
 
 .fadeInSlow {
@@ -83,7 +83,7 @@
 
 .fadeInOut {
     z-index: 100;
-    animation: fadeInAnimation 1s 2.2s linear forwards;
+    animation: fadeInAnimation 1s 2.2s linear forwards, innerScaleAnimation 0.5s 2s linear forwards;
 }
 
 .fadeInOut2 {
@@ -106,4 +106,17 @@
 
 .scrollToTarget {
     animation: scrollToTargetAnimation 2s 1s linear forwards;
+}
+
+
+@keyframes shrinkAnimation3 {
+  0% {
+    width: 402px;
+    /* overflow-x: hidden; */
+  }
+  100% {
+    width: 120px;
+		/* height: 120px; */
+    /* overflow-x: hidden; */
+  }
 }

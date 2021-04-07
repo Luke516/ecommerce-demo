@@ -176,7 +176,7 @@ class Category extends React.Component {
             name: this.props.name + '/' + "all",
             data: this.sortProducts(this.getAllproducts(this.props.data))
         })
-        subCategoryList[0].data[8].urlhaha = this.props.targetProductUrl;
+        // subCategoryList[0].data[6].urlhaha = this.props.targetProductUrl; //insert target QWQ
         // console.log("QWQ");
         // console.log(subCategoryList);
         
@@ -336,16 +336,19 @@ class Category extends React.Component {
                                     <Carousel className="w-100" indicators={false} onSelect={this.handleBannerSelect} onClick={this.handleBannerClick}>
                                         <Carousel.Item onMouseEnter={()=>{this.handleBannerMouse("enter", this.state.targetProductData)}} onMouseLeave={()=>{this.handleBannerMouse("leave", this.state.targetProductData)}} >
                                             <Row className="mt-4 justify-content-center" style={{minHeight: "360px", minWidth: "320px"}}>
-                                                <Col sm={5} className={"d-flex justify-content-center flex-column"} 
+                                                <div className={"d-flex justify-content-center flex-column"} 
                                                 style={{maxHeight: "320px", maxWidth: "320px", padding: "1rem"}}>
                                                     <div className="d-flex"></div>
                                                     <img
-                                                    src={this.state.targetProductData.url}
-                                                    alt="First slide"
-                                                    style={{maxWidth: "320px", maxHeight:"320px", width: "auto", height: "auto"}}
+                                                    // src={this.state.targetProductData.url}
+                                                        id = "target-img"
+                                                        ref = {this.props.setTargetRef}
+                                                        src = {this.props.targetProductUrl}
+                                                        alt="First slide"
+                                                        style={{maxWidth: "320px", maxHeight:"320px", width: "auto", height: "auto"}}
                                                     />
                                                     <div className="d-flex" ></div>
-                                                </Col>
+                                                </div>
                                                 <Col sm={6} className="d-flex flex-column text-center" style={{justifyContent: "center"}}>
                                                      <div>   
                                                         <h2 style={{height: "5rem", overflowY: "hidden"}}>{this.state.targetProductData.name}</h2>
@@ -363,13 +366,14 @@ class Category extends React.Component {
                                                 </Col>
                                             </Row>
                                         </Carousel.Item>
-                                        <Carousel.Item onMouseEnter={()=>{this.handleBannerMouse("enter", this.state.controlProductData)}} onMouseLeave={()=>{this.handleBannerMouse("leave", this.state.controlProductData)}} >
+                                        {/* <Carousel.Item onMouseEnter={()=>{this.handleBannerMouse("enter", this.state.controlProductData)}} onMouseLeave={()=>{this.handleBannerMouse("leave", this.state.controlProductData)}} >
                                             <Row className="mt-4 justify-content-center" style={{minHeight: "360px", minWidth: "320px"}}>
                                                 <Col sm={5} className={"d-flex justify-content-center flex-column"} 
                                                 style={{maxHeight: "320px", maxWidth: "320px", padding: "1rem"}}>
                                                     <div className="d-flex"></div>
                                                     <img
-                                                    src={this.state.controlProductData.url}
+                                                    //src={this.state.controlProductData.url}
+                                                    src = {this.props.targetProductUrl}
                                                     alt="First slide"
                                                     style={{maxWidth: "320px", maxHeight:"320px", width: "auto", height: "auto"}}
                                                     />
@@ -391,7 +395,7 @@ class Category extends React.Component {
                                                     </div>
                                                 </Col>
                                             </Row>
-                                        </Carousel.Item>
+                                        </Carousel.Item> */}
                                     </Carousel>
                                 </Container>
                                 <ProductRow setTargetRef={this.props.setTargetRef}  targetProductUrl={this.props.targetProductUrl}  name={subCategoryData.name} data={subCategoryData.data} addProductToCart={this.props.addProductToCart} showProduct={this.props.showProduct} target targetProductId={this.props.targetProductId} controlProductId={this.props.controlProductId} username={this.state.username} targetProductUrl={this.props.targetProductUrl} orderMethod={this.state.orderMethod} active={this.props.location.pathname.split('/')[2] === subCategoryData.name.split('/')[1]}/>
