@@ -62,19 +62,23 @@
 }
 
 .fadeOutBack {
-    animation: fadeOutBackAnimation 1.5s 1s linear forwards;
+    animation: fadeOutBackAnimation 1.8s 1.2s linear forwards;
 }
 
 .fadeOutBack2 {
-    animation: scrollToTargetAnimation 1s 1.5s linear forwards, fadeOutBackAnimation 1.5s 1s linear forwards, shrinkAnimation3 0.8s 0.8s linear forwards;
+    animation: scrollToTargetAnimation 1.2s 1.2s linear forwards, fadeOutBackAnimation 1.5s 1s linear forwards, shrinkAnimation3 1.2s 1.2s linear forwards;
 }
 
 .fadeOutBackFast {
     animation: fadeOutBackAnimation 0.1s 0.1s linear forwards, fadeOutAnimation 0.1s 0.1s linear forwards;
 }
 
+.fadeOutFast {
+	animation: fadeOutAnimation 1s 1s ease-in forwards;
+}
+
 .fadeOutSlow {
-    animation: fadeOutAnimation 2s 2s ease-in forwards, rotateProductAnimation 1s 1.5s linear forwards;
+    animation: fadeOutAnimation 2s 2s ease-in forwards, rotateProductAnimation 1.2s 1.2s linear forwards;
 }
 
 .fadeInSlow {

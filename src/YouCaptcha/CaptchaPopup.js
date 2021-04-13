@@ -38,14 +38,25 @@ function CaptchaPopup(props) {
 
   const getChallenge = ()=> {
     setLoading(true);
-    let url = `https://11rp38z9gg.execute-api.us-west-2.amazonaws.com/20210315?client=${1}`;
-    axios.get(url).then((res) => {
+    // let url = `https://11rp38z9gg.execute-api.us-west-2.amazonaws.com/20210315?client=${1}`;
+		let url = `https://oic9qtjg54.execute-api.us-west-2.amazonaws.com/prod`;
+    axios.post(url, { client: 1, owner: 1, productIndex: 0, difficulty: 0 }).then((res) => {
       if (res.status !== 200)
           throw new Error(`Unexpected response code: ${res.status}`);
 
       return res.data;
-    }).then((data)=>{
-      let jsonData = JSON.parse(data.body)
+    })
+		// fetch(url, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Accept': 'application/json',
+    //     'Content-Type': 'application/json'
+    //   },      
+    //   body: JSON.stringify({client: 1, owner: 1, productIndex: 0, difficulty: 0 })
+    // })
+		.then((data)=>{
+			console.log(data);
+      let jsonData = data;//JSON.parse(data)
       setChallengeUrl(jsonData["challengeImgUrl"]["S"].replace("eu-west", "us-west"));
       let tmpImg = new Image();
       tmpImg.src = jsonData["challengeImgUrl"]["S"].replace("eu-west", "us-west");
@@ -115,45 +126,57 @@ function CaptchaPopup(props) {
       }
       else{
         // alert("yes");
-				setSolved(true);
+		setSolved(true);
 
-				let xOffset = -(parseFloat(res.data.result.trn_x.N));
-				let yOffset = -(parseFloat(res.data.result.trn_y.N));
+		let xOffset = -(parseFloat(res.data.result.trn_x.N));
+		let yOffset = -(parseFloat(res.data.result.trn_y.N));
 
-				let rotationAngle = (parseInt(res.data.result.rot.N));
-				console.log("rotationAngle: " + rotationAngle);
+		let xScale = (parseFloat(res.data.result.scl_x.N));
+		let yScale = (parseFloat(res.data.result.scl_y.N));
 
-				const sinTheta = Math.sin(-rotationAngle / 180 * Math.PI);
-				const cosTheta = Math.cos(-rotationAngle / 180 * Math.PI);
+		let rotationAngle = (parseInt(res.data.result.rot.N));
+		console.log("rotationAngle: " + rotationAngle);
 
-				let xOffset2 = -(yOffset * sinTheta + xOffset * cosTheta);
-				let yOffset2 = (yOffset * cosTheta - xOffset * sinTheta);
+		const sinTheta = Math.sin(-rotationAngle / 180 * Math.PI);
+		const cosTheta = Math.cos(-rotationAngle / 180 * Math.PI);
 
-				Keyframes.define({
-					name: 'rotateProductAnimation',
-					from: {
-						transform: `rotate(0deg) translateX(${0}px) translateY(${0}px)`,
-						borderRadius: `0`
-					},
-					to: {
-						transform: `translateX(${0}px) translateY(${0}px) rotate(${rotationAngle}deg)`,
-						borderRadius: `0%`
-					}
-				});
+		let xOffset2 = -(yOffset * sinTheta + xOffset * cosTheta);
+		let yOffset2 = (yOffset * cosTheta - xOffset * sinTheta);
 
-				Keyframes.define({
-					name: 'rotateProductReverseAnimation',
-					from: {
-						transform: `rotate(0deg)`,
-						borderRadius: `0`
-					},
-					to: {
-						transform: `rotate(${-rotationAngle}deg)`,
-						borderRadius: `0%`
-					}
-				});
+		var targetElement = document.getElementById("target-img").getBoundingClientRect();
 
-				props.captchaSolved();
+		let widthScale = targetElement.width / 120;
+		let heightScale = targetElement.height / 120;
+		let biggerScale = widthScale > heightScale? widthScale: heightScale;
+
+		let xScale2 = ((biggerScale / xScale) / 1.28);
+		let yScale2 = ((biggerScale / yScale) / 1.28);
+
+		Keyframes.define({
+			name: 'rotateProductAnimation',
+			from: {
+				transform: `translateX(${0}px) translateY(${0}px) scale(1, 1) rotate(0deg)`,
+				borderRadius: `0`
+			},
+			to: {
+				transform: `translateX(${xOffset * xScale2}px) translateY(${yOffset * yScale2}px) scale(${xScale2}, ${yScale2}) rotate(${rotationAngle}deg)`,
+				borderRadius: `0%`
+			}
+		});
+
+		Keyframes.define({
+			name: 'rotateProductReverseAnimation',
+			from: {
+				transform: `rotate(0deg)`,
+				borderRadius: `0`
+			},
+			to: {
+				transform: `rotate(${-rotationAngle}deg)`,
+				borderRadius: `0%`
+			}
+		});
+
+		props.captchaSolved();
       }
     }).catch((e)=>{
       console.log(e);
@@ -201,14 +224,14 @@ function CaptchaPopup(props) {
 						<span>Loading...</span>
 					</div>:
 						<div className={"device "+ (solved?"fadeOutBack2":"")} style={{marginLeft: `${marginOffset}px`}}>
-							<div className="mt-3 mb-1 mx-1 d-flex flex-column">
+							<div className="mt-1 mb-1 mx-1 d-flex flex-column">
 								<div className="d-flex flex-row">
 									<div className={"mx-1 youcaptcha-image-container " + (solved?"fadeOutSlow":"")} style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left -${size*4}px top -${size}px`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}  ref={props.setSourceRef}>
 										<div className={"m-0 loading-placeholder " + (loading? "show": "hide")}></div>
 										<div className={"d-flex justify-content-center  " + (solved? "fadeInOut2QWQ":"")} style={{position: "absolute", width: "120px", height: "120px", backgroundColor: "white", opacity: 0}}>
 											<img className={solved? "fadeInOutQWQ	":""} src={originalUrl} style={{opacity: 0, maxWidth: "120px", maxHeight: "120px"}}/>	
 										</div>
-										<div className={solved? "" : ""} style={{width: "120px", height: "120px", zIndex: "2"}}>
+										<div className={solved? "fadeOutFast" : ""} style={{width: "120px", height: "120px", zIndex: "2"}}>
 											<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" style={{display: solved? "inline-block": "none", zIndex:"2000"}}>
 													<polyline className={solved? "path check" : ""} fill="none" stroke="rgba(115, 175, 85, 0.7)" strokeWidth="10" strokeLinecap="square" strokeMiterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
 											</svg> 

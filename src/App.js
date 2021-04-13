@@ -203,11 +203,11 @@ class App extends React.Component {
       name: 'scrollToTargetAnimation',
       from: {
         marginLeft: `${0}`,
-        transform: `scale(${1.0}, ${1.0})`
+        // transform: `scale(${1.0}, ${1.0})`
       },
       to: {
         marginLeft: `${targetOffset*2 + widthDiff}px`,
-        transform: `scale(${biggerScale}, ${biggerScale})`
+        // transform: `scale(${biggerScale}, ${biggerScale})`
       }
     });
 

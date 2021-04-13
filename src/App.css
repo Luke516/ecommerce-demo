@@ -256,15 +256,6 @@ input[type=radio]
   opacity: 1;
 }
 
-@keyframes fadeOutAnimation {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
 .scale {
   animation: scaleAnimation 0.6s linear forwards;
   animation-delay: 0.6s;
