@@ -233,7 +233,7 @@ class App extends React.Component {
         behavior: 'smooth',
         block: 'center',
         inline: 'center' });
-    },2000);
+    },1500);
   }
 
   render (){

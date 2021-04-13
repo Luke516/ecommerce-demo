@@ -40,7 +40,7 @@ function CaptchaPopup(props) {
     setLoading(true);
     // let url = `https://11rp38z9gg.execute-api.us-west-2.amazonaws.com/20210315?client=${1}`;
 		let url = `https://oic9qtjg54.execute-api.us-west-2.amazonaws.com/prod`;
-    axios.post(url, { client: 1, owner: 1, productIndex: 0, difficulty: 0 }).then((res) => {
+    axios.post(url, { client: 1, owner: 1, productIndex: 1, difficulty: 0 }).then((res) => {
       if (res.status !== 200)
           throw new Error(`Unexpected response code: ${res.status}`);
 
