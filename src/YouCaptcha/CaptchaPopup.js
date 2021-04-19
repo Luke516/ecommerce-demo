@@ -227,7 +227,7 @@ function CaptchaPopup(props) {
 					// </div>:
 					<div className={"device "+ (solved?"fadeOutBack2":"")} style={{marginLeft: `${marginOffset}px`}}>
 						<div className="mt-1 mb-1 mx-1 d-flex flex-column">
-							<div className="d-flex flex-row">
+							<div className={(solved? "marginShrink	":"") + "d-flex flex-row"} style={{marginTop: "0.75rem"}}>
 								<div className={"mx-1 youcaptcha-image-container " + (solved?"fadeOutSlow":"")} style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left -${size*4}px top -${size}px`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}  ref={props.setSourceRef}>
 									{/* {loading && <div className="w-100 h-100 d-flex justify-content-center align-items-center"><LoadingSpinner/></div>} */}
 									<div className={"d-flex justify-content-center align-items-center " + (solved? "fadeInOut2QWQ":"")} style={{position: "absolute", width: "120px", height: "120px", backgroundColor: "white", opacity: loading? 1:0}}>

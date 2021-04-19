@@ -105,6 +105,10 @@
 	z-index: 100;
 	animation: fadeInAnimation 1s 2.2s linear forwards, rotateProductReverseAnimation 0.8s 1.2s linear forwards;
 }
+
+.marginShrink {
+    animation: topMarginShrinkAnimation 0.2s 0s ease-in-out forwards;
+}
   
 @keyframes fadeOutBackAnimation {
     0% {
@@ -131,6 +135,16 @@
         background-color: rgba(0, 0, 0, 0);
     }
 }
+
+@keyframes topMarginShrinkAnimation {
+    0% {
+        margin-top: 0.75rem;
+    }
+    100% {
+        margin-top: 0;
+    }
+}
+
 
 .scrollToTarget {
     animation: scrollToTargetAnimation 2s 1s linear forwards;
