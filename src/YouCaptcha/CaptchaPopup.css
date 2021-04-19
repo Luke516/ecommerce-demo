@@ -7,6 +7,7 @@
     background-color: white;
     z-index: 100;
     pointer-events: none;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .popup-content {
@@ -45,10 +46,16 @@
   
 @keyframes showTextAnimation {
     0% {
-      width: 0px;
+        width: 0px;
+        opacity: 0;
+    }
+    80%{
+        width: 250px;
+        opacity: 0.2;
     }
     100% {
-			width: 250px;
+	    width: 250px;
+        opacity: 1;
     }
 }
 
@@ -61,12 +68,16 @@
 	}
 }
 
+.fadeOutModalBack {
+    animation: fadeOutModalBackAnimation 2.5s 1.2s ease-in-out forwards;
+}
+
 .fadeOutBack {
     animation: fadeOutBackAnimation 2.5s 1.2s ease-in-out forwards;
 }
 
 .fadeOutBack2 {
-    animation: scrollToTargetAnimation 0.8s 1.2s linear forwards, fadeOutBackAnimation 1.5s 1s linear forwards, shrinkAnimation3 0.8s 1.2s linear forwards;
+    animation: scrollToTargetAnimation 0.4s 1.0s linear forwards, fadeOutBackAnimation 1.5s 1s linear forwards, shrinkAnimation3 0.3s 1.0s linear forwards;
 }
 
 .fadeOutBackFast {
@@ -78,7 +89,7 @@
 }
 
 .fadeOutSlow {
-    animation: fadeOutAnimation 1.5s 2s ease-in-out forwards, rotateProductAnimation 0.8s 1.2s linear forwards;
+    animation: fadeOutAnimation 0.6s 1.8s ease-in-out forwards, rotateProductAnimation 0.6s 1.2s ease-in-out forwards;
 }
 
 .fadeInSlow {
@@ -108,6 +119,19 @@
     }
 }
 
+@keyframes fadeOutModalBackAnimation {
+    0% {
+        border: none;
+        box-shadow: none;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+    100% {
+        border: none;
+        box-shadow: none;
+        background-color: rgba(0, 0, 0, 0);
+    }
+}
+
 .scrollToTarget {
     animation: scrollToTargetAnimation 2s 1s linear forwards;
 }
@@ -119,7 +143,7 @@
     /* overflow-x: hidden; */
   }
   100% {
-    width: 120px;
+    width: 128px;
 		/* height: 120px; */
     /* overflow-x: hidden; */
   }
