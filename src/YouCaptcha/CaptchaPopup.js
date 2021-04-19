@@ -154,14 +154,23 @@ function CaptchaPopup(props) {
 		let xScale3 = ((biggerScale / 1) / 1.28);
 		let yScale3 = ((biggerScale / 1) / 1.28);
 
+		let targetYcenter = (targetElement.top + targetElement.bottom) / 2;
+		let globalYoffset = 0;
+		if(targetYcenter < window.innerHeight / 2){
+			console.log(targetYcenter);
+			console.log(window.innerHeight / 2);
+			globalYoffset = parseInt((window.innerHeight / 2) - targetYcenter)
+			console.log("globalYoffset : " + globalYoffset);
+		}
+
 		Keyframes.define({
 			name: 'rotateProductAnimation',
 			from: {
-				transform: `scale(1, 1) rotate(0deg) translateX(${0}px) translateY(${0}px)`,
+				transform: `translateY(0px) scale(1, 1) rotate(0deg) translateX(${0}px) translateY(${0}px)`,
 				borderRadius: `0`
 			},
 			to: {
-				transform: `scale(${xScale2}, ${yScale2}) rotate(${rotationAngle}deg) translateX(${xOffset}px) translateY(${yOffset}px) `,
+				transform: `translateY(${-globalYoffset}px) scale(${xScale2}, ${yScale2}) rotate(${rotationAngle}deg) translateX(${xOffset}px) translateY(${yOffset}px) `,
 				borderRadius: `0%`
 			}
 		});
