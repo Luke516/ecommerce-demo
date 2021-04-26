@@ -29,6 +29,7 @@
     align-items: center;
     white-space: nowrap;
     overflow-x: hidden;
+    flex-direction: column;
 }
 
 .challenge-text {
@@ -38,7 +39,10 @@
 }
 
 .show-text {
-    animation: showTextAnimation 0.3s 0.3s linear forwards, hideTextAnimation 0.3s 1.1s linear forwards;
+    animation: showTextAnimation 0.3s 0.3s linear forwards;
+}
+.hide-text {
+    animation: hideTextAnimation 0.3s 0.1s linear forwards;
 }
 .show-text2 {
 	animation: showTextAnimation 0.3s 0.3s linear forwards, fadeOutAnimation 1.5s 2.5s linear forwards;

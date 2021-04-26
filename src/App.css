@@ -224,7 +224,7 @@ input[type=radio]
 }
 
 .fadeIn2 {
-  animation: fadeInAnimation2 0.3s 0.6s linear forwards;
+  animation: fadeInAnimation2 0.3s 0.6s ease-in-out forwards;
   opacity: 0;
 }
 

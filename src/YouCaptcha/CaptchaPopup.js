@@ -12,8 +12,9 @@ import Keyframes from '@keyframes/core';
 function CaptchaPopup(props) {
 	const [loading, setLoading] = useState(true);
 	const [solved, setSolved] = useState(false);
+	const [startTransition, setStartTransition] = useState(false);
 	const [selected, setSelected] = useState([false, false, false, false, false, false, false, false, false]);
-  const [challengeUrl, setChallengeUrl] = useState("");
+  	const [challengeUrl, setChallengeUrl] = useState("");
 	const [originalUrl, setOriginalUrl] = useState("");
 	const [marginOffset, setMarginOffset] = useState(5);
 
@@ -226,20 +227,20 @@ function CaptchaPopup(props) {
 	}
 
   return (
-    <div className={"captcha-popup " + (solved?"fadeOutModalBack":"")} style={{pointerEvents: solved?"none":"auto"}}>
-			<div className="popup-content">
+    <div className={"captcha-popup " + (startTransition?"fadeOutModalBack":"")} style={{pointerEvents: startTransition?"none":"auto"}}>
+			<div className="popup-content fadeIn2 ">
 				{
 					// loading ?
 					// <div>
 					// 	<LoadingSpinner/>
 					// 	<span>Loading...</span>
 					// </div>:
-					<div className={"device "+ (solved?"fadeOutBack2":"")} style={{marginLeft: `${marginOffset}px`}}>
+					<div className={"device "+ (startTransition?"fadeOutBack2":"")} style={{marginLeft: `${marginOffset}px`}}>
 						<div className="mt-1 mb-1 mx-1 d-flex flex-column">
-							<div className={(solved? "marginShrink	":"") + "d-flex flex-row"} style={{marginTop: "0.75rem"}}>
-								<div className={"mx-1 youcaptcha-image-container " + (solved?"fadeOutSlow":"")} style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left -${size*4}px top -${size}px`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}  ref={props.setSourceRef}>
+							<div className={(startTransition? "marginShrink	":"") + "d-flex flex-row"} style={{marginTop: "0.75rem"}}>
+								<div className={"mx-1 youcaptcha-image-container " + (startTransition?"fadeOutSlow":"")} style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left -${size*4}px top -${size}px`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}  ref={props.setSourceRef}>
 									{/* {loading && <div className="w-100 h-100 d-flex justify-content-center align-items-center"><LoadingSpinner/></div>} */}
-									<div className={"d-flex justify-content-center align-items-center " + (solved? "fadeInOut2QWQ":"")} style={{position: "absolute", width: "120px", height: "120px", backgroundColor: "white", opacity: loading? 1:0}}>
+									<div className={"d-flex justify-content-center align-items-center " + (startTransition? "fadeInOut2QWQ":"")} style={{position: "absolute", width: "120px", height: "120px", backgroundColor: "white", opacity: loading? 1:0}}>
 										{
 											loading? 
 											<LoadingSpinner/> :
@@ -252,15 +253,21 @@ function CaptchaPopup(props) {
 									<div className="youcaptcha-description">
 										<span>Loading...</span>
 									</div>:
-									<div className={"youcaptcha-description" + (solved? "hide-text": "")}>
+									<div className={"youcaptcha-description"}>
 										<div className={"challenge-text "  + (solved? "fadeOutBackFast":"")}><h5>請從以下的九宮格中，選出與左圖相同的物品</h5></div>
-										<div className={"verify-success-text " + (solved? "show-text":"")}>
-											<div className={solved? "fadeOutFast" : ""} style={{width: "60px", height: "60px", zIndex: "2"}}>
-												<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" style={{display: solved? "inline-block": "none", zIndex:"2000"}}>
-														<polyline className={solved? "path check" : ""} fill="none" stroke="rgba(115, 175, 85, 0.7)" strokeWidth="10" strokeLinecap="square" strokeMiterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
-												</svg> 
+										<div className={"verify-success-text " + (solved? "show-text ":"") + (startTransition? "hide-text": "")}>
+											<div className="d-flex justify-content-center align-items-center flex-row">
+												<div className={startTransition? "fadeOutFast" : ""} style={{width: "40px", height: "40px", zIndex: "2"}}>
+													<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" style={{display: solved? "inline-block": "none", zIndex:"2000"}}>
+															<polyline className={solved? "path check" : ""} fill="none" stroke="rgba(115, 175, 85, 0.7)" strokeWidth="10" strokeLinecap="square" strokeMiterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
+													</svg> 
+												</div>
+												<h5 className="m-0">認證成功！</h5>
 											</div>
-											<h5>認證成功！</h5>
+											<div className="d-flex w-100 justify-content-center flex-row mt-2">
+												<Button className="mx-1" onClick={()=>{setStartTransition(true)}}>看看解答</Button>
+												<Button className="mx-1">略過</Button>
+											</div>
 										</div>
 									</div>
 								}
