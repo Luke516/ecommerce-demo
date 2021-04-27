@@ -42,7 +42,7 @@
     animation: showTextAnimation 0.3s 0.3s linear forwards;
 }
 .hide-text {
-    animation: hideTextAnimation 0.3s 0.1s linear forwards;
+    animation: hideTextAnimation 0.3s 0.5s linear forwards;
 }
 .show-text2 {
 	animation: showTextAnimation 0.3s 0.3s linear forwards, fadeOutAnimation 1.5s 2.5s linear forwards;
@@ -73,15 +73,15 @@
 }
 
 .fadeOutModalBack {
-    animation: fadeOutModalBackAnimation 2.5s 1.2s ease-in-out forwards;
+    animation: fadeOutModalBackAnimation 2.5s 0.6s ease-in-out forwards;
 }
 
 .fadeOutBack {
-    animation: fadeOutBackAnimation 2.5s 1.2s ease-in-out forwards;
+    animation: fadeOutBackAnimation 2.5s 0.6s ease-in-out forwards;
 }
 
 .fadeOutBack2 {
-    animation: scrollToTargetAnimation 0.3s 1.1s linear forwards, fadeOutBackAnimation 1s 1.2s linear forwards, shrinkAnimation3 0.3s 1.1s linear forwards;
+    animation: scrollToTargetAnimation 0.3s 0.6s linear forwards, fadeOutBackAnimation 1s 0.6s linear forwards, shrinkAnimation3 0.3s 0.5s linear forwards;
 }
 
 .fadeOutBackFast {
@@ -89,29 +89,29 @@
 }
 
 .fadeOutFast {
-	animation: fadeOutAnimation 1s 1s ease-in-out forwards;
+	animation: fadeOutAnimation 1s 0.4s ease-in-out forwards;
 }
 
 .fadeOutSlow {
-    animation: fadeOutAnimation 0.8s 2s ease-in-out forwards, rotateProductAnimation 0.4s 1.5s ease-in-out forwards;
+    animation: fadeOutAnimation 0.8s 1.4s ease-in-out forwards, rotateProductAnimation 0.4s 0.9s ease-in-out forwards;
 }
 
 .fadeInSlow {
-    animation: fadeOutAnimation 2.5s 1.5s linear forwards;
+    animation: fadeOutAnimation 2.5s 0.9s linear forwards;
 }
 
 .fadeInOut {
     z-index: 100;
-    animation: fadeInAnimation 1s 2.2s linear forwards, innerScaleAnimation 0.5s 2s linear forwards;
+    animation: fadeInAnimation 1s 1.6s linear forwards, innerScaleAnimation 0.5s 1.4s linear forwards;
 }
 
 .fadeInOut2 {
 	z-index: 100;
-	animation: fadeInAnimation 1s 2.2s linear forwards, rotateProductReverseAnimation 0.8s 1.2s linear forwards;
+	animation: fadeInAnimation 1s 1.6s linear forwards, rotateProductReverseAnimation 0.8s 0.6s linear forwards;
 }
 
 .marginShrink {
-    animation: topMarginShrinkAnimation 0.2s 0s ease-in-out forwards;
+    animation: topMarginShrinkAnimation 0.2s 0.6s ease-in-out forwards;
 }
   
 @keyframes fadeOutBackAnimation {

@@ -343,7 +343,7 @@ class Category extends React.Component {
                                                     // src={this.state.targetProductData.url}
                                                         id = "target-img"
                                                         ref = {this.props.setTargetRef}
-                                                        src = {this.props.targetProductUrl}
+                                                        src = {this.props.targetProductUrl.length > 0? this.props.targetProductUrl: this.state.targetProductData.url}
                                                         alt="First slide"
                                                         style={{maxWidth: "320px", maxHeight:"320px", width: "auto", height: "auto"}}
                                                     />
