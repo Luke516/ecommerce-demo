@@ -84,6 +84,10 @@
     animation: scrollToTargetAnimation 0.3s 0.6s linear forwards, fadeOutBackAnimation 1s 0.6s linear forwards, shrinkAnimation3 0.3s 0.5s linear forwards;
 }
 
+.fadeOutAll {
+    animation: fadeOutAllAnimation 0.6s 0.1s linear forwards;
+}
+
 .fadeOutBackFast {
     animation: fadeOutBackAnimation 0.1s 0.1s linear forwards, fadeOutAnimation 0.1s 0.1s linear forwards;
 }
@@ -142,10 +146,12 @@
 
 @keyframes topMarginShrinkAnimation {
     0% {
-        margin-top: 0.75rem;
+        margin-top: 0.25rem;
+        margin-bottom: 0.25rem;
     }
     100% {
         margin-top: 0;
+        margin-bottom: 0;
     }
 }
 
@@ -165,4 +171,20 @@
 		/* height: 120px; */
     /* overflow-x: hidden; */
   }
+}
+
+  
+@keyframes fadeOutAllAnimation {
+    0% {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    90% {
+        opacity: 0;
+        pointer-events: auto;
+    }
+    100% {
+        opacity: 0;
+        pointer-events: none;
+    }
 }

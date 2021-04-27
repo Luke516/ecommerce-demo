@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Collapse, Row, Button } from 'react-bootstrap';
+import { Container, Collapse, Row, Button, Modal } from 'react-bootstrap';
 import axios from 'axios';
 import LoadingSpinner from '../layout/LoadingSpinner';
 import './CaptchaPopup.css'
@@ -14,6 +14,7 @@ function CaptchaPopup(props) {
 	const [solved, setSolved] = useState(false);
 	const [fallback, setFallback] = useState(false);
 	const [closeModal, setCloseModal] = useState(false);
+	const [dissmissModal, setDismiss] = useState(false);
 	const [startTransition, setStartTransition] = useState(false);
 	const [productIndex, setProductIndex] = useState(0);
 	const [selected, setSelected] = useState([false, false, false, false, false, false, false, false, false]);
@@ -107,6 +108,12 @@ function CaptchaPopup(props) {
     setSelected(tmp.slice());
   }
 
+  	const dismissLater = () => {
+		  setTimeout(()=>{
+			  setDismiss(true);
+		  }, 800)
+	  }
+
 	useEffect(() => {
 		if(challengeUrl.length < 1){
 			getChallenge();
@@ -115,7 +122,7 @@ function CaptchaPopup(props) {
 			console.log("animate QWQ");
 			setTimeout(animate, 50);
 		}
-  }, [props.targetOffset, marginOffset]);
+  	}, [props.targetOffset, marginOffset]);
 
 	let clientId = "1";
   let originSize = 224;
@@ -248,7 +255,10 @@ function CaptchaPopup(props) {
 	}
 
   return (
-    <div className={"captcha-popup " + (closeModal?"fadeOutModalBack":"")} style={{pointerEvents: closeModal?"none":"auto"}}>
+	// <Modal show={!closeModal} onHide={()=>{}}>
+    dissmissModal?
+	<></>
+	:<div className={"captcha-popup " + (closeModal?"fadeOutModalBack":"")} style={{pointerEvents: closeModal?"none":"auto"}}>
 		<div className="popup-content fadeIn2 ">
 			{
 				// loading ?
@@ -256,9 +266,9 @@ function CaptchaPopup(props) {
 				// 	<LoadingSpinner/>
 				// 	<span>Loading...</span>
 				// </div>:
-				<div className={"device "+ ((startTransition && !fallback)?"fadeOutBack2":"")} style={{marginLeft: `${fallback? 0: marginOffset}px`}}>
+				<div className={"device "+ ((startTransition && !fallback)?"fadeOutBack2":(closeModal)?"fadeOutAll":"")} style={{marginLeft: `${fallback? 0: marginOffset}px`}}>
 					<div className="mt-1 mb-1 mx-1 d-flex flex-column">
-						<div className={((startTransition && !fallback)? "marginShrink	":"") + "d-flex flex-row"} style={{marginTop: "0.75rem"}}>
+						<div className={((startTransition && !fallback)? "marginShrink	":"") + "d-flex flex-row my-1"}>
 							<div className={"mx-1 youcaptcha-image-container " + (startTransition?fallback?"":"fadeOutSlow":"")} style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left -${size*4}px top -${size}px`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}  ref={props.setSourceRef}>
 								{/* {loading && <div className="w-100 h-100 d-flex justify-content-center align-items-center"><LoadingSpinner/></div>} */}
 								<div className={"d-flex justify-content-center align-items-center " + ((startTransition && fallback)? "fadeIn	":"")} style={{position: "absolute", width: "120px", height: "120px", backgroundColor: "white", opacity: loading? 1:0}}>
@@ -290,15 +300,17 @@ function CaptchaPopup(props) {
 														<h5 className="m-0">認證成功！</h5>
 													</div>
 													<div className={"w-100 justify-content-center align-items-center flex-column " + (startTransition? "fadeIn" : "")} style={{display:startTransition?"flex":"none", position: "absolute", top:"0", left: "0", height: "120px", backgroundColor: "white"}}>
-														<h5 className="m-0">{originalName}</h5>
+														<div>
+															<h5 className="m-0">{originalName}</h5>
+														</div>
 														<div className="d-flex w-100 justify-content-center flex-row mt-2">
-														<Button className="mx-1" onClick={()=>{setCloseModal(true)}}>去看看</Button>
-														<Button variant="secondary" className="mx-1">略過</Button>
+														<Button className="mx-1" onClick={()=>{setCloseModal(true); dismissLater();}}>去看看</Button>
+														<Button variant="secondary" className="mx-1" onClick={()=>{setCloseModal(true); dismissLater();}}>略過</Button>
 													</div>
 													</div>
 													<div className="d-flex w-100 justify-content-center flex-row mt-2">
 														<Button className="mx-1" onClick={()=>{setStartTransition(true)}}>看看解答</Button>
-														<Button variant="secondary" className="mx-1">略過</Button>
+														<Button variant="secondary" className="mx-1" onClick={()=>{setCloseModal(true); dismissLater();}}>略過</Button>
 													</div>
 												</div>
 											}
@@ -314,7 +326,7 @@ function CaptchaPopup(props) {
 											</div>
 											<div className="d-flex w-100 justify-content-center flex-row mt-2">
 												<Button className="mx-1" onClick={()=>{setStartTransition(true); setCloseModal(true);}}>看看解答</Button>
-												<Button variant="secondary" className="mx-1">略過</Button>
+												<Button variant="secondary" className="mx-1" onClick={()=>{setCloseModal(true); dismissLater();}}>略過</Button>
 											</div>
 										</div>
 									}
@@ -359,7 +371,7 @@ function CaptchaPopup(props) {
 								<div className={"m-0 loading-placeholder " + (loading? "show": "hide")}></div></div></div>
 							</div>
 					</div>
-					<div className="mt-1 mb-3 d-flex flex-row justify-content-between">
+					<div className="my-2 d-flex flex-row justify-content-between">
 						<div className="ml-3 text-muted cell" onClick={getChallenge}>
 							<i className="fas fa-sync-alt"></i>
 						</div>
@@ -373,6 +385,7 @@ function CaptchaPopup(props) {
 			}
 		</div>
     </div>
+	// </Modal>
   );
 }
 
