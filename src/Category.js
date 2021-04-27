@@ -269,11 +269,11 @@ class Category extends React.Component {
         if(!this.state.subCategory){
             return (
                 <Container>
-                {/*  QWQ <div className="d-flex align-items-center">
+                 <div className="d-flex align-items-center">
                     <div className="w-50">
                         <h2 className="mb-4 mt-4">{translate(this.props.name)}</h2>
                     </div>
-                </div> */}
+                </div>
                 {/* <Tab.Container defaultActiveKey={this.state.subCategoryList[0].name} id="uncontrolled-tab-example"> */}
                 <Tab.Container defaultActiveKey={this.state.subCategoryList[0].name.split('/')[1]} activeKey={this.props.location.pathname.split('/')[2]} id="uncontrolled-tab-example">
                 <Nav variant="tabs" className="flex--column">

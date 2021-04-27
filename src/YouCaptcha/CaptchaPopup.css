@@ -188,3 +188,7 @@
         pointer-events: none;
     }
 }
+
+.youcaptcha-modal-dialog > .modal-content {
+    border: 0 !important;
+}

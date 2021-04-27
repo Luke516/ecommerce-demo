@@ -7,6 +7,8 @@ import styled, { keyframes }  from 'styled-components';
 
 import {getCaptcha} from '../api/api'
 import Keyframes from '@keyframes/core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSyncAlt } from '@fortawesome/free-solid-svg-icons'
 
 
 function CaptchaPopup(props) {
@@ -87,7 +89,7 @@ function CaptchaPopup(props) {
 				setOriginalUrl(originalImgUrl2);
 				setOriginalName(originalName);
 				loadImage(originalImgUrl2);
-				if(randProductIndex === 0 || randProductIndex ===3){
+				if(randProductIndex === 0 || randProductIndex === 1){
 					props.insertTargetUrl("");
 					setFallback(true);
 				}
@@ -255,7 +257,7 @@ function CaptchaPopup(props) {
 	}
 
   return (
-	// <Modal show={!closeModal} onHide={()=>{}}>
+	<Modal show={!dissmissModal} backdrop={false} animation={false} dialogClassName="youcaptcha-modal-dialog" onHide={()=>{}}>{
     dissmissModal?
 	<></>
 	:<div className={"captcha-popup " + (closeModal?"fadeOutModalBack":"")} style={{pointerEvents: closeModal?"none":"auto"}}>
@@ -282,7 +284,7 @@ function CaptchaPopup(props) {
 							{
 								loading? 
 								<div className="youcaptcha-description">
-									<span>Loading...</span>
+									<h5>Loading...</h5>
 								</div>:
 								<div className={"youcaptcha-description"}>
 									<div className={"challenge-text "  + (solved? "fadeOutBackFast":"")} style={{display: startTransition? "none": "flex"}}><h5>請從以下的九宮格中，選出與左圖相同的物品</h5></div>
@@ -290,8 +292,8 @@ function CaptchaPopup(props) {
 										fallback?
 										<div className={"verify-success-text " + (solved? "show-text ":"")} style={{width: "0"}}>
 											{
-												<div>
-													<div className={"d-flex justify-content-center align-items-center flex-row " + (startTransition? "fadeOutFast" : "")}>
+												<div className="w-100 h-100 d-flex flex-column">
+													<div className={"d-flex justify-content-center align-items-center flex-row flex-grow-1 " + (startTransition? "fadeOutFast" : "")}>
 														<div className={startTransition? "fadeOutFastQWQ" : ""} style={{width: "40px", height: "40px", zIndex: "2"}}>
 															<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" style={{display: solved? "inline-block": "none", zIndex:"2000"}}>
 																<polyline className={solved? "path check" : ""} fill="none" stroke="rgba(115, 175, 85, 0.7)" strokeWidth="10" strokeLinecap="square" strokeMiterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
@@ -300,8 +302,8 @@ function CaptchaPopup(props) {
 														<h5 className="m-0">認證成功！</h5>
 													</div>
 													<div className={"w-100 justify-content-center align-items-center flex-column " + (startTransition? "fadeIn" : "")} style={{display:startTransition?"flex":"none", position: "absolute", top:"0", left: "0", height: "120px", backgroundColor: "white"}}>
-														<div>
-															<h5 className="m-0">{originalName}</h5>
+														<div className="w-100 d-flex flex-grow-1 align-items-center justify-content-center" style={{whiteSpace: "normal"}}>
+															<h5 className="m-0" style={{textAlign: "center"}}>{originalName.substring(0,40)}</h5>
 														</div>
 														<div className="d-flex w-100 justify-content-center flex-row mt-2">
 														<Button className="mx-1" onClick={()=>{setCloseModal(true); dismissLater();}}>去看看</Button>
@@ -316,7 +318,7 @@ function CaptchaPopup(props) {
 											}
 										</div>:
 										<div className={"verify-success-text " + (solved? startTransition? "hide-text " : "show-text ":"")} style={{width: startTransition? "250px": solved? "0": "0"}}>
-											<div className="d-flex justify-content-center align-items-center flex-row">
+											<div className="d-flex justify-content-center align-items-center flex-row flex-grow-1">
 												<div className={startTransition? "fadeOutFast" : ""} style={{width: "40px", height: "40px", zIndex: "2"}}>
 													<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" style={{display: solved? "inline-block": "none", zIndex:"2000"}}>
 														<polyline className={solved? "path check" : ""} fill="none" stroke="rgba(115, 175, 85, 0.7)" strokeWidth="10" strokeLinecap="square" strokeMiterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
@@ -336,7 +338,7 @@ function CaptchaPopup(props) {
 					</div>
 					<Collapse in={!solved && !loading}>
 					<div>
-					<div className="mt-3 mb-1 mx-1 d-flex flex-column">
+					<div className="my-1 mx-1 d-flex flex-column">
 							<div className="mt-1 d-flex flex-row">
 								<div className={"mr-1 p-0 "+(selected[0]? "selected": "unselected")} onClick={()=>{select(0)}}>
 									<div className="" style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left 0 top 0`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}>
@@ -372,9 +374,9 @@ function CaptchaPopup(props) {
 							</div>
 					</div>
 					<div className="my-2 d-flex flex-row justify-content-between">
-						<div className="ml-3 text-muted cell" onClick={getChallenge}>
-							<i className="fas fa-sync-alt"></i>
-						</div>
+						<Button variant="secondary" className="ml-3 text-muted cell" onClick={getChallenge}>
+							<FontAwesomeIcon icon={faSyncAlt} style={{cursor: "pointer", color: "white", marginLeft:"8px", marginRight:"8px"}} />
+						</Button>
 						<Button variant="secondary" className="mr-3" onClick={submit}>
 							送出
 						</Button>
@@ -385,7 +387,7 @@ function CaptchaPopup(props) {
 			}
 		</div>
     </div>
-	// </Modal>
+	}</Modal>
   );
 }
 
