@@ -13,6 +13,7 @@ import { faSyncAlt } from '@fortawesome/free-solid-svg-icons'
 
 function CaptchaPopup(props) {
 	const [loading, setLoading] = useState(true);
+	const [submitting, setSubmitting] = useState(false);
 	const [solved, setSolved] = useState(false);
 	const [fallback, setFallback] = useState(false);
 	const [closeModal, setCloseModal] = useState(false);
@@ -116,9 +117,9 @@ function CaptchaPopup(props) {
   }
 
   	const dismissLater = () => {
-		  setTimeout(()=>{
-			  setDismiss(true);
-		  }, 2500)
+		//   setTimeout(()=>{
+		// 	  setDismiss(true);
+		//   }, 2500) QWQ
 	  }
 
 	useEffect(() => {
@@ -152,7 +153,7 @@ function CaptchaPopup(props) {
       count = count * 2;
     }
     console.log(sum);
-
+	setSubmitting(true);
     let url = `https://ofnef7j6nk.execute-api.us-west-2.amazonaws.com/20210316?client=${1}&ans=${sum}`;
     axios.get(url).then((res) => {
       console.log(res);
@@ -163,6 +164,7 @@ function CaptchaPopup(props) {
       else{
         // alert("yes");
 		setSolved(true);
+		setSubmitting(false);
 
 		console.log(sourceRef);
 
@@ -425,7 +427,11 @@ function CaptchaPopup(props) {
 							<FontAwesomeIcon icon={faSyncAlt} style={{cursor: "pointer", color: "white", marginLeft:"8px", marginRight:"8px"}} />
 						</Button>
 						<Button variant="secondary" className="mr-3" onClick={submit}>
-							送出
+							{
+								submitting?
+								<LoadingSpinner size="sm"/>
+								:<>送出</>
+							}
 						</Button>
 					</div>
 					</div>

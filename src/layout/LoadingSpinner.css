@@ -18,8 +18,23 @@
     width: 2.5px;
     height: 8px;
     border-radius: 20%;
-    background: gray;
+    background: rgb(177, 177, 177);
   }
+
+  .lds-spinner.sm {
+    width: 24px;
+    height: 24px;
+  }
+  .lds-spinner.sm div {
+    transform-origin: 12px 12px;
+  }
+  .lds-spinner.sm div:after {
+    top: 1.5px;
+    left: 10.5px;
+    width: 2px;
+    height: 6px;
+  }
+
   .lds-spinner div:nth-child(1) {
     transform: rotate(0deg);
     animation-delay: -1.1s;
@@ -73,7 +88,7 @@
       opacity: 1;
     }
     100% {
-      opacity: 0;
+      opacity: 0.25;
     }
   }
   
