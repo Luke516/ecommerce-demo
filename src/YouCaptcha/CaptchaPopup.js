@@ -270,7 +270,9 @@ function CaptchaPopup(props) {
 		props.captchaSolved();
 
 		if(fallback){
-			setStartTransition(true);
+			setTimeout(()=>{
+				setStartTransition(true);
+			}, 1000);
 		}
       }
     }).catch((e)=>{
@@ -363,7 +365,7 @@ function CaptchaPopup(props) {
 														<Button variant="secondary" className="mx-1" onClick={()=>{setCloseModal(true); dismissLater();}}>略過</Button>
 													</div>
 													</div>
-													<div className="d-flex w-100 justify-content-center flex-row mt-2">
+													<div className="d-flex w-100 justify-content-center flex-row mt-2" style={{visibility: "hidden"}}>
 														<Button className="mx-1" onClick={()=>{setStartTransition(true)}}>看看解答</Button>
 														<Button variant="secondary" className="mx-1" onClick={()=>{setCloseModal(true); dismissLater();}}>略過</Button>
 													</div>
