@@ -95,7 +95,7 @@ function CaptchaPopup(props) {
 				setOriginalUrl(originalImgUrl2);
 				setOriginalName(originalName);
 				loadImage(originalImgUrl2);
-				if(randProductIndex === 10 || randProductIndex === 11){ //QWQ87
+				if(randProductIndex === 0 || randProductIndex === 1){
 					props.insertTargetUrl("");
 					setFallback(true);
 				}
@@ -117,9 +117,9 @@ function CaptchaPopup(props) {
   }
 
   	const dismissLater = () => {
-		//   setTimeout(()=>{
-		// 	  setDismiss(true);
-		//   }, 2500) QWQ
+		  setTimeout(()=>{
+			  setDismiss(true);
+		  }, 2500) 
 	  }
 
 	useEffect(() => {
@@ -268,6 +268,10 @@ function CaptchaPopup(props) {
 		});
 
 		props.captchaSolved();
+
+		if(fallback){
+			setStartTransition(true);
+		}
       }
     }).catch((e)=>{
       console.log(e);
