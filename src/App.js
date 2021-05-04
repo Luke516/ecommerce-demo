@@ -172,44 +172,43 @@ class App extends React.Component {
     // if(this.state.targetRef){
     //   this.state.targetRef.current.scrollIntoView();
     // }
-    var targetElement = document.getElementById("target-img").getBoundingClientRect();
-    var sourceElement = this.childRef2.getBoundingClientRect();
+    // var targetElement = document.getElementById("target-img").getBoundingClientRect();
+    // var sourceElement = this.childRef2.getBoundingClientRect();
 
-    console.log(sourceElement);
-    console.log(targetElement);
+    // console.log(sourceElement);
+    // console.log(targetElement);
 
-    let sourceWidthAfter = 120;
+    // let sourceWidthAfter = 120;
 
-    let sourceElementLeft = sourceElement.left + ((sourceElement.width - sourceWidthAfter) / 2);
-    let sourceElementWidth = sourceWidthAfter; 
+    // let sourceElementLeft = sourceElement.left + ((sourceElement.width - sourceWidthAfter) / 2);
+    // let sourceElementWidth = sourceWidthAfter; 
 
-    let targetOffset = targetElement.left - sourceElement.left;
-    let widthDiff = targetElement.width - sourceElement.width;
+    // let targetOffset = targetElement.left - sourceElement.left;
+    // let widthDiff = targetElement.width - sourceElement.width;
 
-    console.log(targetOffset);
-    targetOffset = targetOffset - ((402 - 120) / 2);
+    // console.log(targetOffset);
+    // targetOffset = targetOffset - ((402 - 120) / 2);
 
-    console.log(targetOffset);
+    // console.log(targetOffset);
 
-    let widthScale = targetElement.width / sourceElement.width;
-    let heightScale = targetElement.height / sourceElement.height;
-    let biggerScale = widthScale > heightScale? widthScale: heightScale;
+    // let widthScale = targetElement.width / sourceElement.width;
+    // let heightScale = targetElement.height / sourceElement.height;
+    // let biggerScale = widthScale > heightScale? widthScale: heightScale;
 
     // this.setState({
     //   targetOffset
     // });
-
-    Keyframes.define({
-      name: 'scrollToTargetAnimation',
-      from: {
-        marginLeft: `${0}`,
-        // transform: `scale(${1.0}, ${1.0})`
-      },
-      to: {
-        marginLeft: `${targetOffset*2 + widthDiff}px`,
-        // transform: `scale(${biggerScale}, ${biggerScale})`
-      }
-    });
+    // Keyframes.define({
+    //   name: 'scrollToTargetAnimation',
+    //   from: {
+    //     marginLeft: `${0}`,
+    //     // transform: `scale(${1.0}, ${1.0})`
+    //   },
+    //   to: {
+    //     marginLeft: `${widthDiff}px`,
+    //     // transform: `scale(${biggerScale}, ${biggerScale})`
+    //   }
+    // });
 
     // let widthScale2 = widthScale > heightScale? 1.0: (heightScale / widthScale);
     // let heightScale2 = widthScale > heightScale? (widthScale / heightScale ): 1.0;

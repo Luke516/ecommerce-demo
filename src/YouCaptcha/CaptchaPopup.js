@@ -24,6 +24,7 @@ function CaptchaPopup(props) {
 	const [originalUrl, setOriginalUrl] = useState("");
 	const [originalName, setOriginalName] = useState("");
 	const [marginOffset, setMarginOffset] = useState(5);
+	const [sourceRef, setSourceRef] = useState(null);
 
 	const [transXOffset, settransXOffset] = useState(0);
 	const [transYOffset, settransYOffset] = useState(0);
@@ -40,6 +41,10 @@ function CaptchaPopup(props) {
 		B000F4AVPA: "Chuckit! Ultra Ball",
 		B0001YW09E: "ONYX Adult Universal Type 2 USCG Approved Life Jacket",
 		B00006LHR8: "Digi International 70001851 230Kbps Ethernet Device Server"
+	}
+
+	const setSourceRef2 = (ref) => {
+		setSourceRef(ref);
 	}
 
   const onChallengeLoad = () => {
@@ -89,7 +94,7 @@ function CaptchaPopup(props) {
 				setOriginalUrl(originalImgUrl2);
 				setOriginalName(originalName);
 				loadImage(originalImgUrl2);
-				if(randProductIndex === 0 || randProductIndex === 1){
+				if(randProductIndex === 10 || randProductIndex === 11){ //QWQ87
 					props.insertTargetUrl("");
 					setFallback(true);
 				}
@@ -113,7 +118,7 @@ function CaptchaPopup(props) {
   	const dismissLater = () => {
 		  setTimeout(()=>{
 			  setDismiss(true);
-		  }, 800)
+		  }, 2500)
 	  }
 
 	useEffect(() => {
@@ -159,6 +164,27 @@ function CaptchaPopup(props) {
         // alert("yes");
 		setSolved(true);
 
+		console.log(sourceRef);
+
+		var targetElement = document.getElementById("target-img").getBoundingClientRect();
+		var sourceElement = sourceRef.getBoundingClientRect();
+
+		console.log(sourceElement);
+    	console.log(targetElement);
+
+		let sourceWidthAfter = 120;
+
+		let sourceElementLeft = sourceElement.left + ((sourceElement.width - sourceWidthAfter) / 2);
+		let sourceElementWidth = sourceWidthAfter; 
+
+		let targetOffset = ((targetElement.left + targetElement.right) - (sourceElement.left + sourceElement.right))/2;
+		let widthDiff = targetElement.width - sourceElement.width;
+
+		// console.log(targetOffset);
+		//targetOffset = targetOffset - ((402 - 120) / 2);
+		// console.log(targetOffset);
+
+
 		let xOffset = -(parseFloat(res.data.result.trn_x.N));
 		let yOffset = -(parseFloat(res.data.result.trn_y.N));
 
@@ -173,8 +199,6 @@ function CaptchaPopup(props) {
 
 		let xOffset2 = -(yOffset * sinTheta + xOffset * cosTheta);
 		let yOffset2 = (yOffset * cosTheta - xOffset * sinTheta);
-
-		var targetElement = document.getElementById("target-img").getBoundingClientRect();
 
 		let widthScale = targetElement.width / 120;
 		let heightScale = targetElement.height / 120;
@@ -194,6 +218,29 @@ function CaptchaPopup(props) {
 			console.log("globalYoffset : " + globalYoffset);
 		}
 
+		// Keyframes.define({
+		// 	name: 'scrollToTargetAnimation',
+		// 	from: {
+		// 	  marginLeft: `${0}`,
+		// 	  // transform: `scale(${1.0}, ${1.0})`
+		// 	},
+		// 	to: {
+		// 	  marginLeft: `${targetOffset*2 + widthDiff}px`,
+		// 	}
+		//   });
+
+		Keyframes.define({
+			name: 'scrollToTargetAnimation',
+			from: {
+			  marginLeft: `${0}`,
+			  // transform: `scale(${1.0}, ${1.0})`
+			},
+			to: {
+			  marginLeft: `${(-(402 - 120) / 1)}px`,
+			  // transform: `scale(${biggerScale}, ${biggerScale})`
+			}
+		});
+
 		Keyframes.define({
 			name: 'rotateProductAnimation',
 			from: {
@@ -201,8 +248,8 @@ function CaptchaPopup(props) {
 				borderRadius: `0`
 			},
 			to: {
-				transform: `translateY(${-globalYoffset}px) scale(${xScale2}, ${yScale2}) rotate(${rotationAngle}deg) translateX(${xOffset}px) translateY(${yOffset}px) `,
-				borderRadius: `0%`
+				transform: `translateX(${targetOffset}px) translateY(${-globalYoffset}px) scale(${xScale2}, ${yScale2}) rotate(${rotationAngle}deg) translateX(${xOffset}px) translateY(${yOffset}px) `,
+				borderRadius: `1rem`
 			}
 		});
 
@@ -271,7 +318,7 @@ function CaptchaPopup(props) {
 				<div className={"device "+ ((startTransition && !fallback)?"fadeOutBack2":(closeModal)?"fadeOutAll":"")} style={{marginLeft: `${fallback? 0: marginOffset}px`}}>
 					<div className="mt-1 mb-1 mx-1 d-flex flex-column">
 						<div className={((startTransition && !fallback)? "marginShrink	":"") + "d-flex flex-row my-1"}>
-							<div className={"mx-1 youcaptcha-image-container " + (startTransition?fallback?"":"fadeOutSlow":"")} style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left -${size*4}px top -${size}px`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}  ref={props.setSourceRef}>
+							<div className={"mx-1 youcaptcha-image-container " + (startTransition?fallback?"":"fadeOutSlow":"")} style={{backgroundImage: `url(${challengeUrl})`, backgroundPosition: `left -${size*4}px top -${size}px`, backgroundSize: `${size*5}px ${size*2}px`, width: `${size}px`, height: `${size}px`}}  ref={setSourceRef2}>
 								{/* {loading && <div className="w-100 h-100 d-flex justify-content-center align-items-center"><LoadingSpinner/></div>} */}
 								<div className={"d-flex justify-content-center align-items-center " + ((startTransition && fallback)? "fadeIn	":"")} style={{position: "absolute", width: "120px", height: "120px", backgroundColor: "white", opacity: loading? 1:0}}>
 									{
@@ -327,7 +374,7 @@ function CaptchaPopup(props) {
 												<h5 className="m-0">認證成功！</h5>
 											</div>
 											<div className="d-flex w-100 justify-content-center flex-row mt-2">
-												<Button className="mx-1" onClick={()=>{setStartTransition(true); setCloseModal(true);}}>看看解答</Button>
+												<Button className="mx-1" onClick={()=>{setStartTransition(true); setCloseModal(true); dismissLater();}}>看看解答</Button>
 												<Button variant="secondary" className="mx-1" onClick={()=>{setCloseModal(true); dismissLater();}}>略過</Button>
 											</div>
 										</div>
