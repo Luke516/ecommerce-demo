@@ -95,7 +95,7 @@ function CaptchaPopup(props) {
 				setOriginalUrl(originalImgUrl2);
 				setOriginalName(originalName);
 				loadImage(originalImgUrl2);
-				if(randProductIndex === 0 || randProductIndex === 1){
+				if(randProductIndex === 1){
 					props.insertTargetUrl("");
 					setFallback(true);
 				}
@@ -119,7 +119,7 @@ function CaptchaPopup(props) {
   	const dismissLater = () => {
 		  setTimeout(()=>{
 			  setDismiss(true);
-		  }, 2500) 
+		  }, 2900) 
 	  }
 
 	useEffect(() => {
@@ -164,7 +164,6 @@ function CaptchaPopup(props) {
       else{
         // alert("yes");
 		setSolved(true);
-		setSubmitting(false);
 
 		console.log(sourceRef);
 
@@ -272,6 +271,7 @@ function CaptchaPopup(props) {
 		if(fallback){
 			setTimeout(()=>{
 				setStartTransition(true);
+				setSubmitting(false);
 			}, 1000);
 		}
       }
